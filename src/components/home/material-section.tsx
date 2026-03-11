@@ -1,16 +1,13 @@
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/reveal";
 
 /**
  * Material — teak.
  *
- * Inverted section (dark background) with full-width image.
- * Uses vinkl-regal-1 (800x800) cropped for wood grain detail.
+ * Inverted section (dark background). Text only.
  */
 export function MaterialSection() {
   const t = useTranslations("home.material");
-  const tImg = useTranslations("images");
 
   return (
     <section className="border-t-2 border-terracotta bg-bg-deep px-5 py-16 text-ink-inverse md:px-10 md:py-24 lg:px-16 lg:py-32">
@@ -39,18 +36,6 @@ export function MaterialSection() {
           </div>
         </div>
 
-        {/* Material close-up */}
-        <Reveal>
-          <div className="relative mt-12 aspect-[4/3] overflow-hidden md:mt-16 md:aspect-[16/9]">
-            <Image
-              src="/images/vinkl-regal-1.webp"
-              alt={tImg("material")}
-              fill
-              sizes="100vw"
-              className="object-cover object-center"
-            />
-          </div>
-        </Reveal>
       </div>
     </section>
   );

@@ -17,7 +17,7 @@ export function AboutArchitecture() {
       <Reveal>
         <div className="relative mx-5 aspect-[21/9] overflow-hidden md:mx-10 lg:mx-0">
           <Image
-            src="/images/vinkl-regal-1.webp"
+            src="/images/vinkl-regal-4.webp"
             alt={tImg("architecture")}
             fill
             sizes="100vw"

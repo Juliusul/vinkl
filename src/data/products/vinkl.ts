@@ -38,12 +38,6 @@ export const vinklProduct: Product = {
       height: 1600,
     },
     {
-      url: "/images/vinkl-regal-1.webp",
-      altText: "VINKL teak corner shelf front view with books and plant",
-      width: 800,
-      height: 800,
-    },
-    {
       url: "/images/vinkl-regal-4.webp",
       altText: "VINKL shelves mounted at various wall angles",
       width: 1600,

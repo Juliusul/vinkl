@@ -10,7 +10,7 @@ import { Reveal } from "@/components/ui/reveal";
  */
 
 const SCENARIO_IMAGES = [
-  "/images/vinkl-regal-1.webp",
+  "/images/vinkl-regal-4.webp",
   "/images/vinkl-regal-3.webp",
   "/images/vinkl-regal-5.webp",
 ] as const;
