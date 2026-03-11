@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ProductGallery } from "./product-gallery";
+import { AddToCartButton } from "./add-to-cart-button";
 import type { Product } from "@/types";
 
 interface ProductHeroProps {
@@ -64,13 +65,13 @@ export function ProductHero({ product }: ProductHeroProps) {
             </p>
 
             {/* Add to cart */}
-            <button
-              data-product-cta
-              disabled={!product.available}
+            <AddToCartButton
+              variantId={product.variants[0]?.id ?? ""}
+              available={product.available}
               className="mt-6 w-full bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink-primary"
             >
               {t("addToCart")}
-            </button>
+            </AddToCartButton>
 
             {/* Shipping note */}
             <p className="mt-4 text-center text-xs text-ink-tertiary">

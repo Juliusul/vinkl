@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useCart } from "@/contexts/cart-context";
 
 /**
  * Sticky add-to-cart bar — mobile conversion safety net.
@@ -15,12 +16,19 @@ import { useTranslations } from "next-intl";
  */
 export function AddToCartBar() {
   const t = useTranslations("vinkl.hero");
+  const tCart = useTranslations("cart");
+  const { addItem, isAdding } = useCart();
   const [visible, setVisible] = useState(false);
+  const [variantId, setVariantId] = useState<string | null>(null);
 
   useEffect(() => {
     // Look for the main add-to-cart button by data attribute
     const mainCta = document.querySelector("[data-product-cta]");
     if (!mainCta) return;
+
+    // Read the variant ID from the button's data attribute or from the DOM
+    const vid = mainCta.getAttribute("data-variant-id");
+    if (vid) setVariantId(vid);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -34,9 +42,14 @@ export function AddToCartBar() {
     return () => observer.disconnect();
   }, []);
 
+  async function handleClick() {
+    if (!variantId || isAdding) return;
+    await addItem(variantId);
+  }
+
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-50 border-t border-border-default bg-bg-cream/95 px-5 py-3 backdrop-blur-sm transition-transform duration-[--duration-moderate] ease-[--ease-out] lg:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-border-default bg-bg-cream/95 px-5 py-3 backdrop-blur-sm transition-transform duration-[--duration-moderate] ease-[--ease-out] lg:hidden ${
         visible ? "translate-y-0" : "translate-y-full"
       }`}
     >
@@ -45,8 +58,12 @@ export function AddToCartBar() {
           <span className="text-sm font-medium text-ink-primary">VINKL</span>
           <span className="text-xs text-ink-secondary">{t("price")}</span>
         </div>
-        <button className="bg-ink-primary px-6 py-3 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta active:scale-[0.98]">
-          {t("addToCart")}
+        <button
+          onClick={handleClick}
+          disabled={isAdding}
+          className="bg-ink-primary px-6 py-3 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta active:scale-[0.98] disabled:opacity-60"
+        >
+          {isAdding ? tCart("adding") : t("addToCart")}
         </button>
       </div>
     </div>

@@ -13,7 +13,13 @@
       "Bash(node -e \"const pkg = require\\(''C:/Users/ju/Documents/WINKL/package-lock.json''\\); console.log\\(''name:'', pkg.name\\);\")",
       "mcp__Claude_Preview__preview_start",
       "Bash(node -e \"const sharp = require\\(''next/dist/compiled/sharp''\\); [''vinkl-regal-1'',''vinkl-regal-2'',''vinkl-regal-3'',''vinkl-regal-4'',''vinkl-regal-5''].forEach\\(async f => { const m = await sharp\\(''public/images/''+f+''.webp''\\).metadata\\(\\); console.log\\(f, m.width+''x''+m.height\\) }\\)\")",
-      "Bash(node -e \"const sharp = require\\(''sharp''\\); [''vinkl-regal-1'',''vinkl-regal-2'',''vinkl-regal-3'',''vinkl-regal-4'',''vinkl-regal-5''].forEach\\(async f => { const m = await sharp\\(''public/images/''+f+''.webp''\\).metadata\\(\\); console.log\\(f, m.width+''x''+m.height\\) }\\)\")"
+      "Bash(node -e \"const sharp = require\\(''sharp''\\); [''vinkl-regal-1'',''vinkl-regal-2'',''vinkl-regal-3'',''vinkl-regal-4'',''vinkl-regal-5''].forEach\\(async f => { const m = await sharp\\(''public/images/''+f+''.webp''\\).metadata\\(\\); console.log\\(f, m.width+''x''+m.height\\) }\\)\")",
+      "Bash(npx vercel --version)",
+      "Bash(npx vercel whoami)",
+      "Bash(npx vercel --yes --name vinkl)",
+      "Bash(npx vercel inspect vinkl.vercel.app)",
+      "Bash(npx next build)",
+      "Bash(taskkill //F //IM node.exe)"
     ]
   }
 }

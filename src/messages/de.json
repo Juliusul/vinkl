@@ -94,7 +94,7 @@
       "name": "VINKL",
       "tagline": "Das Regal, das sich deinen Wänden anpasst.",
       "price": "299 €",
-      "addToCart": "In den Warenkorb — 299 €",
+      "addToCart": "In den Warenkorb",
       "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe"
     },
     "story": {
@@ -219,6 +219,17 @@
     "essentialOnly": "Nur essentiell",
     "settings": "Einstellungen",
     "saveSelection": "Auswahl speichern"
+  },
+  "cart": {
+    "title": "Warenkorb",
+    "empty": "Dein Warenkorb ist leer.",
+    "subtotal": "Zwischensumme",
+    "checkout": "Zur Kasse",
+    "remove": "Entfernen",
+    "shipping": "Versand wird an der Kasse berechnet",
+    "close": "Schliessen",
+    "continueShopping": "Weiter einkaufen",
+    "adding": "Wird hinzugefügt..."
   },
   "notFound": {
     "title": "Seite nicht gefunden",

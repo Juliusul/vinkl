@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/utils/format-price";
+import { AddToCartButton } from "@/components/product/add-to-cart-button";
 import type { Product } from "@/types";
 import type { Locale } from "@/config/i18n";
 
@@ -90,12 +91,13 @@ export function ObjectDetail({ product }: ObjectDetailProps) {
             )}
 
             {/* Add to cart */}
-            <button
-              disabled={!product.available}
+            <AddToCartButton
+              variantId={product.variants[0]?.id ?? ""}
+              available={product.available}
               className="mt-8 w-full bg-ink-primary px-6 py-3.5 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink-primary lg:w-auto"
             >
               {product.available ? t("addToCart") : t("soldOut")}
-            </button>
+            </AddToCartButton>
           </div>
         </div>
       </div>

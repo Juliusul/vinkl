@@ -9,6 +9,8 @@ import type { Locale } from "@/config/i18n";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/ui/cookie-consent";
+import { CartProvider } from "@/contexts/cart-context";
+import { CartDrawer } from "@/components/cart/cart-drawer";
 import "../globals.css";
 
 // ── Static params for all locales ──
@@ -76,9 +78,12 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
     <html lang={locale}>
       <body className="flex min-h-screen flex-col bg-bg-cream text-ink-primary font-sans antialiased">
         <NextIntlClientProvider>
-          <Header navItems={navItems} />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <CartProvider>
+            <Header navItems={navItems} />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <CartDrawer />
+          </CartProvider>
           <CookieConsent />
         </NextIntlClientProvider>
       </body>

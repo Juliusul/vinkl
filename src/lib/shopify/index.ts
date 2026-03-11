@@ -13,6 +13,7 @@ import type { Cart } from "@/types/cart";
 import type {
   ShopifyProductsResponse,
   ShopifyProductResponse,
+  ShopifyCartResponse,
   ShopifyCartCreateResponse,
   ShopifyCartLinesAddResponse,
   ShopifyCartLinesUpdateResponse,
@@ -20,6 +21,7 @@ import type {
 } from "./types";
 import { storefront } from "./client";
 import { PRODUCTS_QUERY, PRODUCT_BY_HANDLE_QUERY } from "./queries";
+import { CART_QUERY } from "./queries/cart";
 import {
   CART_CREATE_MUTATION,
   CART_LINES_ADD_MUTATION,
@@ -69,6 +71,17 @@ export async function getProduct(
 }
 
 // ── Cart ──
+
+export async function getCart(cartId: string): Promise<Cart | null> {
+  try {
+    const data = await storefront<ShopifyCartResponse>(CART_QUERY, { cartId });
+    if (!data.cart) return null;
+    return mapCart(data.cart);
+  } catch {
+    // Cart expired or invalid — return null so caller can create fresh
+    return null;
+  }
+}
 
 export async function createCart(): Promise<Cart> {
   const data = await storefront<ShopifyCartCreateResponse>(

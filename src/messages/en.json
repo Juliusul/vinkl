@@ -94,7 +94,7 @@
       "name": "VINKL",
       "tagline": "The shelf that adapts to your walls.",
       "price": "€299",
-      "addToCart": "Add to cart — €299",
+      "addToCart": "Add to cart",
       "shipping": "Free shipping in DE · 30-day returns"
     },
     "story": {
@@ -219,6 +219,17 @@
     "essentialOnly": "Essential only",
     "settings": "Settings",
     "saveSelection": "Save selection"
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "shipping": "Shipping calculated at checkout",
+    "close": "Close",
+    "continueShopping": "Continue shopping",
+    "adding": "Adding..."
   },
   "notFound": {
     "title": "Page not found",
