@@ -1,0 +1,228 @@
+{
+  "images": {
+    "hero": "VINKL teak corner wall shelf with books and plant",
+    "featured": "VINKL teak corner shelf in modern interior",
+    "adapts": "VINKL floating corner shelf styled interior",
+    "material": "VINKL corner shelf detail view teak wood grain",
+    "productMain": "VINKL teak corner shelf styled with books",
+    "productAngle": "VINKL floating corner shelf with books and decor",
+    "productFront": "VINKL teak corner shelf front view with books and plant",
+    "productVariants": "VINKL shelves mounted at various wall angles",
+    "productDetail": "VINKL corner shelf detail view corner mount",
+    "architecture": "VINKL teak corner shelf — material and form"
+  },
+  "common": {
+    "nav": {
+      "objects": "Objects",
+      "journal": "Journal",
+      "about": "About",
+      "cart": "Cart"
+    },
+    "actions": {
+      "addToCart": "Add to cart",
+      "readMore": "Read more",
+      "viewAll": "View all",
+      "backToObjects": "Back to Objects",
+      "discover": "Discover"
+    },
+    "legal": {
+      "imprint": "Imprint",
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions"
+    },
+    "meta": {
+      "language": "Language"
+    }
+  },
+  "home": {
+    "hero": {
+      "line1": "Your walls",
+      "line2": "aren't straight.",
+      "line3": "Our shelves know that.",
+      "cta": "View shelf",
+      "scroll": "Scroll to explore"
+    },
+    "philosophy": {
+      "label": "Philosophy",
+      "heading": "Perfection isn't the goal. Adaptation is.",
+      "body": "Every room has character. Crooked walls, uneven angles, corners that have settled over time. VINKL designs objects that live with these imperfections — not against them."
+    },
+    "featured": {
+      "label": "First Object",
+      "name": "The Teak Shelf",
+      "description": "Solid teak. Continuously adjustable. Adapts to every corner.",
+      "cta": "View object"
+    },
+    "adapts": {
+      "label": "Concept",
+      "heading": "Adapts.",
+      "headingLine2": "To every wall.",
+      "body": "No two walls are alike. The teak shelf compensates for irregularities — continuously, invisibly, precisely."
+    },
+    "angle": {
+      "label": "Precision",
+      "range": "Stepless.",
+      "body": "No fixed angle. No limit. The shelf adapts — to every corner your home has."
+    },
+    "material": {
+      "label": "Material",
+      "heading": "Teak",
+      "body": "Grown in Southeast Asia. Aged with dignity. A wood that becomes more beautiful the longer you own it."
+    },
+    "future": {
+      "heading": "One object, for now.",
+      "body": "More to follow."
+    }
+  },
+  "objects": {
+    "title": "Objects",
+    "empty": "No objects available.",
+    "from": "from"
+  },
+  "product": {
+    "details": "Details",
+    "materials": "Materials",
+    "dimensions": "Dimensions",
+    "addToCart": "Add to cart",
+    "soldOut": "Sold out",
+    "notFound": "Object not found.",
+    "backToObjects": "All objects"
+  },
+  "vinkl": {
+    "hero": {
+      "type": "Wall Shelf",
+      "name": "VINKL",
+      "tagline": "The shelf that adapts to your walls.",
+      "price": "€299",
+      "addToCart": "Add to cart — €299",
+      "shipping": "Free shipping in DE · 30-day returns"
+    },
+    "story": {
+      "label": "Why this shelf",
+      "heading": "Built for rooms that aren't perfect.",
+      "body": "Old apartments. Crooked corners. Walls that fail the spirit level. We didn't want a shelf that demands perfection — we wanted one that understands reality. VINKL adapts: continuously, invisibly, without compromise.",
+      "quote": "Not a perfect shelf for perfect walls. An honest shelf for honest rooms."
+    },
+    "specs": {
+      "label": "Technical Details",
+      "dimensionsLabel": "Dimensions",
+      "dimensionsValue": "80 × 25 × 30 cm",
+      "weightLabel": "Weight",
+      "weightValue": "4.8 kg",
+      "materialLabel": "Material",
+      "materialValue": "Solid teak, oiled",
+      "rangeLabel": "Adjustment",
+      "rangeValue": "Stepless, any angle",
+      "mountingLabel": "Mounting",
+      "mountingValue": "Concealed wall mount · Anchors included",
+      "loadLabel": "Load Capacity",
+      "loadValue": "Up to 15 kg"
+    },
+    "use": {
+      "label": "Application",
+      "heading": "One shelf. Every angle.",
+      "body": "The integrated mechanism compensates for any wall angle — invisibly, adjustable without tools. Whether old-building charm or new-build precision: VINKL fits.",
+      "altbauLabel": "Old building",
+      "altbauAngle": "87°",
+      "altbauDesc": "Crooked walls, full of character.",
+      "neubauLabel": "New build",
+      "neubauAngle": "90°",
+      "neubauDesc": "Straight walls, clean lines.",
+      "dachLabel": "Sloped ceiling",
+      "dachAngle": "93°",
+      "dachDesc": "Where others give up."
+    }
+  },
+  "journal": {
+    "meta": {
+      "title": "Journal — VINKL",
+      "description": "Observations on spaces, angles, and the gap between blueprints and reality."
+    },
+    "hero": {
+      "heading": "Thoughts that aren't straight.",
+      "intro": "VINKL Journal isn't a blog. It's a collection of observations — about spaces, angles, and the gap between blueprints and reality."
+    },
+    "entries": {
+      "entry1": {
+        "tag": "Observation",
+        "title": "90° — A Beautiful Idea",
+        "abstract": "In theory, every wall meets at a right angle. In practice, the space between floor and wall rarely hits 90 degrees. What that means for furniture — and why most manufacturers pretend otherwise."
+      },
+      "entry2": {
+        "tag": "Position",
+        "title": "Tolerance Is Not Weakness",
+        "abstract": "In architecture, tolerance means: the permissible deviation from the ideal. In the furniture industry, it usually means: tough luck. On the difference between adapting and giving up."
+      },
+      "entry3": {
+        "tag": "Material",
+        "title": "Teak. Not Veneer.",
+        "abstract": "Solid wood isn't a trend. It's a decision. Why we use teak, where it comes from, and why a material that ages honestly is better than one that pretends it doesn't."
+      },
+      "entry4": {
+        "tag": "Principle",
+        "title": "Your Wall Is Not the Problem",
+        "abstract": "Furniture is designed for ideal rooms. Rooms are never ideal. That's not the room's fault — it's the furniture's."
+      },
+      "entry5": {
+        "tag": "Guide",
+        "title": "Measuring Angles, Understanding Angles",
+        "abstract": "A short guide to measuring your walls. No sales copy. No upselling. Just a protractor and the truth."
+      }
+    },
+    "closing": "New entries appear when we have something to say. Not on a content schedule."
+  },
+  "about": {
+    "meta": {
+      "title": "About VINKL",
+      "description": "We design furniture for spaces that actually exist."
+    },
+    "hero": {
+      "heading": "We design for spaces",
+      "headingLine2": "that actually exist."
+    },
+    "origin": {
+      "label": "Why",
+      "heading": "Most furniture has a problem.",
+      "body1": "It assumes your home is perfect. Straight walls. Right angles. Level floors.",
+      "body2": "But apartments aren't technical drawings. They have character. Irregularities. History.",
+      "body3": "VINKL started with a simple question: What if the furniture adapts — not the room?"
+    },
+    "philosophy": {
+      "label": "Position",
+      "heading": "Adaptation is not a compromise.",
+      "body": "We don't believe in perfect products for perfect rooms. We believe in intelligent objects that can handle reality. Every VINKL object is designed to respond to deviation — precisely, invisibly, without compromising aesthetics."
+    },
+    "architecture": {
+      "label": "Architecture",
+      "heading": "Built, not decorated.",
+      "body": "VINKL objects aren't decoration. They're interventions in space — functional, materially honest, reduced. We think from the wall out, not from the trend. From the angle, not from the lifestyle."
+    },
+    "vision": {
+      "label": "Outlook",
+      "heading": "One object, for now.",
+      "body": "VINKL isn't a one-product company. It's the beginning of a collection. Every future object will share the same principle: adaptation to built reality. No seasonal trends. No collaborations for visibility's sake. Objects that stay."
+    },
+    "manifesto": {
+      "line1": "Not for the showroom.",
+      "line2": "For the crooked wall on the third floor."
+    }
+  },
+  "cookies": {
+    "title": "Cookie Settings",
+    "body": "We use cookies and similar technologies to analyse the use of our website and to improve our offering. For more information, please see our",
+    "privacyLink": "Privacy Policy",
+    "essential": "Essential",
+    "alwaysActive": "Always active",
+    "analytics": "Analytics",
+    "marketing": "Marketing",
+    "acceptAll": "Accept all",
+    "essentialOnly": "Essential only",
+    "settings": "Settings",
+    "saveSelection": "Save selection"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The requested page does not exist.",
+    "backHome": "Back to home"
+  }
+}

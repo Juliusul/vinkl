@@ -1,0 +1,228 @@
+{
+  "images": {
+    "hero": "VINKL Eckregal aus Teak mit Büchern und Pflanze",
+    "featured": "VINKL Teak-Eckregal in moderner Wohnumgebung",
+    "adapts": "VINKL schwebendes Eckregal modern eingerichtet",
+    "material": "VINKL Eckregal Detailansicht Holzstruktur Teak",
+    "productMain": "VINKL Teak-Eckregal gestylt mit Büchern",
+    "productAngle": "VINKL schwebendes Eckregal mit Büchern und Deko",
+    "productFront": "VINKL Eckregal aus Teak Frontalansicht mit Büchern und Pflanze",
+    "productVariants": "VINKL Regale in verschiedenen Wandwinkeln montiert",
+    "productDetail": "VINKL Eckregal Detailansicht Eckmontage",
+    "architecture": "VINKL Eckregal aus Teak — Material und Form"
+  },
+  "common": {
+    "nav": {
+      "objects": "Objekte",
+      "journal": "Journal",
+      "about": "Über uns",
+      "cart": "Warenkorb"
+    },
+    "actions": {
+      "addToCart": "In den Warenkorb",
+      "readMore": "Weiterlesen",
+      "viewAll": "Alle ansehen",
+      "backToObjects": "Zurück zu Objekte",
+      "discover": "Entdecken"
+    },
+    "legal": {
+      "imprint": "Impressum",
+      "privacy": "Datenschutz",
+      "terms": "AGB"
+    },
+    "meta": {
+      "language": "Sprache"
+    }
+  },
+  "home": {
+    "hero": {
+      "line1": "Deine Wände",
+      "line2": "sind nicht gerade.",
+      "line3": "Unsere Regale wissen das.",
+      "cta": "Zum Regal",
+      "scroll": "Weiterscrollen"
+    },
+    "philosophy": {
+      "label": "Philosophie",
+      "heading": "Perfektion ist kein Ziel. Anpassung schon.",
+      "body": "Jeder Raum hat Charakter. Schiefe Wände, ungleiche Winkel, gewachsene Ecken. VINKL entwirft Objekte, die mit diesen Eigenheiten leben — nicht gegen sie."
+    },
+    "featured": {
+      "label": "Erstes Objekt",
+      "name": "Das Teak-Regal",
+      "description": "Massives Teak. Stufenlos verstellbar. Passt sich jeder Ecke an.",
+      "cta": "Objekt ansehen"
+    },
+    "adapts": {
+      "label": "Konzept",
+      "heading": "Passt sich an.",
+      "headingLine2": "An jede Wand.",
+      "body": "Keine Wand ist wie die andere. Das Teak-Regal gleicht Unebenheiten aus — stufenlos, unsichtbar, präzise."
+    },
+    "angle": {
+      "label": "Präzision",
+      "range": "Stufenlos.",
+      "body": "Kein fester Winkel. Kein Limit. Das Regal passt sich an — an jede Ecke, die dein Zuhause hat."
+    },
+    "material": {
+      "label": "Material",
+      "heading": "Teak",
+      "body": "Gewachsen in Südostasien. Gealtert mit Würde. Ein Holz, das schöner wird, je länger du es hast."
+    },
+    "future": {
+      "heading": "Ein Objekt, vorerst.",
+      "body": "Weitere folgen."
+    }
+  },
+  "objects": {
+    "title": "Objekte",
+    "empty": "Keine Objekte verfügbar.",
+    "from": "ab"
+  },
+  "product": {
+    "details": "Details",
+    "materials": "Materialien",
+    "dimensions": "Abmessungen",
+    "addToCart": "In den Warenkorb",
+    "soldOut": "Ausverkauft",
+    "notFound": "Objekt nicht gefunden.",
+    "backToObjects": "Alle Objekte"
+  },
+  "vinkl": {
+    "hero": {
+      "type": "Wandregal",
+      "name": "VINKL",
+      "tagline": "Das Regal, das sich deinen Wänden anpasst.",
+      "price": "299 €",
+      "addToCart": "In den Warenkorb — 299 €",
+      "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe"
+    },
+    "story": {
+      "label": "Warum dieses Regal",
+      "heading": "Gebaut für Räume, die nicht perfekt sind.",
+      "body": "Altbauwohnungen. Schiefe Ecken. Wände, die bei der Wasserwaage Nein sagen. Wir wollten kein Regal, das Perfektion braucht — sondern eines, das Realität versteht. VINKL passt sich an: stufenlos, unsichtbar, ohne Kompromiss.",
+      "quote": "Kein perfektes Regal für perfekte Wände. Ein ehrliches Regal für ehrliche Räume."
+    },
+    "specs": {
+      "label": "Technische Details",
+      "dimensionsLabel": "Abmessungen",
+      "dimensionsValue": "80 × 25 × 30 cm",
+      "weightLabel": "Gewicht",
+      "weightValue": "4,8 kg",
+      "materialLabel": "Material",
+      "materialValue": "Massives Teakholz, geölt",
+      "rangeLabel": "Verstellung",
+      "rangeValue": "Stufenlos, jeder Winkel",
+      "mountingLabel": "Montage",
+      "mountingValue": "Verdeckte Wandmontage · Dübel inklusive",
+      "loadLabel": "Tragkraft",
+      "loadValue": "Bis 15 kg"
+    },
+    "use": {
+      "label": "Anwendung",
+      "heading": "Ein Regal. Jeder Winkel.",
+      "body": "Der integrierte Mechanismus gleicht jeden Wandwinkel aus — unsichtbar, ohne Werkzeug nachstellbar. Ob Altbau-Charme oder Neubau-Präzision: VINKL sitzt.",
+      "altbauLabel": "Altbau",
+      "altbauAngle": "87°",
+      "altbauDesc": "Schiefe Wände, voller Charakter.",
+      "neubauLabel": "Neubau",
+      "neubauAngle": "90°",
+      "neubauDesc": "Gerade Wände, saubere Linien.",
+      "dachLabel": "Dachschräge",
+      "dachAngle": "93°",
+      "dachDesc": "Dort, wo andere aufgeben."
+    }
+  },
+  "journal": {
+    "meta": {
+      "title": "Journal — VINKL",
+      "description": "Beobachtungen über Räume, Winkel und die Lücke zwischen Bauplan und Wirklichkeit."
+    },
+    "hero": {
+      "heading": "Gedanken, die nicht gerade sind.",
+      "intro": "VINKL Journal ist kein Blog. Es ist eine Sammlung von Beobachtungen — über Räume, Winkel und die Lücke zwischen Bauplan und Wirklichkeit."
+    },
+    "entries": {
+      "entry1": {
+        "tag": "Beobachtung",
+        "title": "90° — Eine schöne Idee",
+        "abstract": "In der Theorie hat jede Wand einen rechten Winkel. In der Praxis stehen zwischen Boden und Wand selten 90 Grad. Was das für Möbel bedeutet — und warum die meisten Hersteller so tun, als wäre es anders."
+      },
+      "entry2": {
+        "tag": "Haltung",
+        "title": "Toleranz ist keine Schwäche",
+        "abstract": "In der Architektur bedeutet Toleranz: die zulässige Abweichung vom Ideal. In der Möbelbranche bedeutet sie meistens: Pech gehabt. Über den Unterschied zwischen Anpassen und Aufgeben."
+      },
+      "entry3": {
+        "tag": "Material",
+        "title": "Teak. Kein Furnier.",
+        "abstract": "Massivholz ist kein Trend. Es ist eine Entscheidung. Warum wir Teak verwenden, woher es kommt, und warum ein Material, das altert, ehrlicher ist als eines, das so tut, als würde es das nicht."
+      },
+      "entry4": {
+        "tag": "Prinzip",
+        "title": "Deine Wand ist nicht das Problem",
+        "abstract": "Möbel werden für ideale Räume entworfen. Räume sind nie ideal. Das ist kein Fehler des Raums — es ist ein Fehler der Möbel."
+      },
+      "entry5": {
+        "tag": "Anleitung",
+        "title": "Winkel messen, Winkel verstehen",
+        "abstract": "Ein kurzer Leitfaden zum Ausmessen deiner Wände. Kein Verkaufstext. Kein Upselling. Nur ein Geodreieck und die Wahrheit."
+      }
+    },
+    "closing": "Neue Einträge erscheinen, wenn wir etwas zu sagen haben. Nicht nach Redaktionsplan."
+  },
+  "about": {
+    "meta": {
+      "title": "Über VINKL",
+      "description": "Wir entwerfen Möbel für Räume, die es wirklich gibt."
+    },
+    "hero": {
+      "heading": "Wir entwerfen für Räume,",
+      "headingLine2": "die es wirklich gibt."
+    },
+    "origin": {
+      "label": "Warum",
+      "heading": "Die meisten Möbel haben ein Problem.",
+      "body1": "Sie setzen voraus, dass dein Zuhause perfekt ist. Gerade Wände. Rechte Winkel. Ebene Böden.",
+      "body2": "Aber Wohnungen sind keine technischen Zeichnungen. Sie haben Charakter. Unebenheiten. Geschichte.",
+      "body3": "VINKL entstand aus einer simplen Frage: Was, wenn das Möbel sich anpasst — und nicht der Raum?"
+    },
+    "philosophy": {
+      "label": "Haltung",
+      "heading": "Anpassung ist kein Kompromiss.",
+      "body": "Wir glauben nicht an perfekte Produkte für perfekte Räume. Wir glauben an intelligente Objekte, die mit Realität umgehen können. Jedes VINKL-Objekt wird so entworfen, dass es auf Abweichung reagiert — präzise, unsichtbar, ohne Kompromiss an der Ästhetik."
+    },
+    "architecture": {
+      "label": "Architektur",
+      "heading": "Gebaut, nicht dekoriert.",
+      "body": "VINKL-Objekte sind keine Dekoration. Sie sind Eingriffe in den Raum — funktional, material-ehrlich, reduziert. Wir denken von der Wand aus, nicht vom Trend. Vom Winkel, nicht vom Lifestyle."
+    },
+    "vision": {
+      "label": "Ausblick",
+      "heading": "Ein Objekt, vorerst.",
+      "body": "VINKL ist kein Ein-Produkt-Unternehmen. Es ist der Beginn einer Kollektion. Jedes kommende Objekt wird dasselbe Prinzip teilen: Anpassung an die gebaute Realität. Keine saisonalen Trends. Keine Kollaborationen um der Sichtbarkeit willen. Objekte, die bleiben."
+    },
+    "manifesto": {
+      "line1": "Nicht für den Showroom.",
+      "line2": "Für die schiefe Wand im dritten Stock."
+    }
+  },
+  "cookies": {
+    "title": "Cookie-Einstellungen",
+    "body": "Wir verwenden Cookies und ähnliche Technologien, um die Nutzung unserer Website zu analysieren und unser Angebot zu verbessern. Weitere Informationen findest du in unserer",
+    "privacyLink": "Datenschutzerklärung",
+    "essential": "Essentiell",
+    "alwaysActive": "Immer aktiv",
+    "analytics": "Analyse",
+    "marketing": "Marketing",
+    "acceptAll": "Alle akzeptieren",
+    "essentialOnly": "Nur essentiell",
+    "settings": "Einstellungen",
+    "saveSelection": "Auswahl speichern"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die angeforderte Seite existiert nicht.",
+    "backHome": "Zur Startseite"
+  }
+}

@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────
+   VINKL Design System — Tailwind v4 Theme
+   ───────────────────────────────────────────── */
+
+@theme inline {
+  /* ── Colors: Backgrounds ── */
+  --color-bg-cream: #F5F0EB;
+  --color-bg-warm: #EDE7E0;
+  --color-bg-stone: #D9D2CA;
+  --color-bg-deep: #2C2C2E;
+
+  /* ── Colors: Typography ── */
+  --color-ink-primary: #2C2C2E;
+  --color-ink-secondary: #6B6A6E;
+  --color-ink-tertiary: #9E9C9F;
+  --color-ink-inverse: #F5F0EB;
+
+  /* ── Colors: Accent ── */
+  --color-terracotta: #E8630A;
+  --color-terracotta-dark: #C45208;
+  --color-terracotta-light: #F08B40;
+
+  /* ── Colors: Secondary Accent (use sparingly) ── */
+  --color-steel-blue: #B0C4D4;
+  --color-steel-blue-light: #D0DCE6;
+
+  /* ── Colors: Functional ── */
+  --color-border-default: #D9D2CA;
+  --color-border-strong: #B5AFA8;
+  --color-error: #9B2C2C;
+  --color-success: #2D6A4F;
+
+  /* ── Typography ── */
+  --font-serif: "PP Editorial New", "Georgia", serif;
+  --font-sans: "Inter", "Helvetica Neue", "Arial", sans-serif;
+
+  /* ── Spacing (4px rhythm) ── */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+
+  /* ── Container widths ── */
+  --container-sm: 640px;
+  --container-md: 960px;
+  --container-lg: 1200px;
+  --container-xl: 1440px;
+
+  /* ── Motion ── */
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-moderate: 350ms;
+  --duration-slow: 500ms;
+
+  --ease-out: cubic-bezier(0.25, 0, 0.15, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────────────────────────────────
+   Base styles
+   ───────────────────────────────────────────── */
+
+body {
+  background-color: var(--color-bg-cream);
+  color: var(--color-ink-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─────────────────────────────────────────────
+   Scroll-reveal animation
+   Triggered once via IntersectionObserver.
+   Elements start invisible + shifted, then
+   settle into place. Architectural — no bounce.
+   ───────────────────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children when parent has [data-stagger] */
+.reveal[data-stagger] > .reveal-child {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity var(--duration-moderate) var(--ease-out),
+    transform var(--duration-moderate) var(--ease-out);
+}
+
+.reveal.is-visible[data-stagger] > .reveal-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal.is-visible[data-stagger] > .reveal-child:nth-child(1) { transition-delay: 0ms; }
+.reveal.is-visible[data-stagger] > .reveal-child:nth-child(2) { transition-delay: 80ms; }
+.reveal.is-visible[data-stagger] > .reveal-child:nth-child(3) { transition-delay: 160ms; }
+.reveal.is-visible[data-stagger] > .reveal-child:nth-child(4) { transition-delay: 240ms; }
+.reveal.is-visible[data-stagger] > .reveal-child:nth-child(5) { transition-delay: 320ms; }
+
+/* ─────────────────────────────────────────────
+   Hero entrance — one-time load animation
+   ───────────────────────────────────────────── */
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-animate {
+  animation: hero-fade-up 800ms var(--ease-out) both;
+}
+
+.hero-animate-delay-1 { animation-delay: 100ms; }
+.hero-animate-delay-2 { animation-delay: 280ms; }
+.hero-animate-delay-3 { animation-delay: 500ms; }
+
+/* ─────────────────────────────────────────────
+   Scroll indicator pulse
+   ───────────────────────────────────────────── */
+
+@keyframes scroll-hint {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(4px); }
+}
+
+.scroll-indicator {
+  animation: scroll-hint 2.4s var(--ease-in-out) infinite;
+  animation-delay: 1.2s;
+  opacity: 0;
+}
+
+/* ─────────────────────────────────────────────
+   Image placeholder shimmer
+   ───────────────────────────────────────────── */
+
+.image-placeholder {
+  background: linear-gradient(
+    110deg,
+    var(--color-bg-warm) 30%,
+    var(--color-bg-stone) 50%,
+    var(--color-bg-warm) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─────────────────────────────────────────────
+   Reduced motion — collapse all
+   ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal[data-stagger] > .reveal-child {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,57 @@
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { Reveal } from "@/components/ui/reveal";
+
+/**
+ * Material — teak.
+ *
+ * Inverted section (dark background) with full-width image.
+ * Uses vinkl-regal-1 (800x800) cropped for wood grain detail.
+ */
+export function MaterialSection() {
+  const t = useTranslations("home.material");
+  const tImg = useTranslations("images");
+
+  return (
+    <section className="bg-bg-deep px-5 py-16 text-ink-inverse md:px-10 md:py-24 lg:px-16 lg:py-32">
+      <div className="mx-auto w-full max-w-[1200px]">
+        <Reveal>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-inverse/50">
+            {t("label")}
+          </p>
+        </Reveal>
+
+        <div className="mt-8 grid grid-cols-1 gap-6 md:mt-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <Reveal>
+              <h2 className="font-serif text-[clamp(3rem,7vw,6.5rem)] font-light leading-none tracking-tight">
+                {t("heading")}
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="flex items-end lg:col-span-6 lg:col-start-7">
+            <Reveal>
+              <p className="max-w-md text-base leading-[1.7] text-ink-inverse/70 md:text-lg md:leading-[1.75]">
+                {t("body")}
+              </p>
+            </Reveal>
+          </div>
+        </div>
+
+        {/* Material close-up */}
+        <Reveal>
+          <div className="relative mt-12 aspect-[4/3] overflow-hidden md:mt-16 md:aspect-[16/9]">
+            <Image
+              src="/images/vinkl-regal-1.webp"
+              alt={tImg("material")}
+              fill
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}

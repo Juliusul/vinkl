@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app:*)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)",
+      "Bash(sort:*)",
+      "Bash(powershell -command \":*)",
+      "Bash(ls -la \"/c/Users/ju/Downloads/Vinkl Regal\"*)",
+      "Bash(node -e \":*)",
+      "Bash(node -e \"const pkg = require\\(''C:/Users/ju/Documents/WINKL/package-lock.json''\\); console.log\\(''name:'', pkg.name\\);\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(node -e \"const sharp = require\\(''next/dist/compiled/sharp''\\); [''vinkl-regal-1'',''vinkl-regal-2'',''vinkl-regal-3'',''vinkl-regal-4'',''vinkl-regal-5''].forEach\\(async f => { const m = await sharp\\(''public/images/''+f+''.webp''\\).metadata\\(\\); console.log\\(f, m.width+''x''+m.height\\) }\\)\")",
+      "Bash(node -e \"const sharp = require\\(''sharp''\\); [''vinkl-regal-1'',''vinkl-regal-2'',''vinkl-regal-3'',''vinkl-regal-4'',''vinkl-regal-5''].forEach\\(async f => { const m = await sharp\\(''public/images/''+f+''.webp''\\).metadata\\(\\); console.log\\(f, m.width+''x''+m.height\\) }\\)\")"
+    ]
+  }
+}
