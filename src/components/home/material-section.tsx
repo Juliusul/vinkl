@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -36,6 +37,18 @@ export function MaterialSection() {
           </div>
         </div>
 
+        {/* Material close-up */}
+        <Reveal>
+          <div className="relative mt-12 aspect-[4/3] overflow-hidden md:mt-16 md:aspect-[16/9]">
+            <Image
+              src="/images/vinkl-regal-4.webp"
+              alt="VINKL Teak-Regal — Materialdetail"
+              fill
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
