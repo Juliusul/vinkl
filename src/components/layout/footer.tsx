@@ -22,19 +22,19 @@ export function Footer() {
             <nav className="flex flex-col gap-3" aria-label="Footer">
               <Link
                 href="/objects"
-                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-ink-primary"
+                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-terracotta"
               >
                 {t("objects")}
               </Link>
               <Link
                 href="/journal"
-                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-ink-primary"
+                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-terracotta"
               >
                 {t("journal")}
               </Link>
               <Link
                 href="/about"
-                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-ink-primary"
+                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-terracotta"
               >
                 {t("about")}
               </Link>
@@ -46,19 +46,19 @@ export function Footer() {
             <nav className="flex flex-col gap-3" aria-label="Legal">
               <Link
                 href="/legal/imprint"
-                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-ink-primary"
+                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-terracotta"
               >
                 {tLegal("imprint")}
               </Link>
               <Link
                 href="/legal/privacy"
-                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-ink-primary"
+                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-terracotta"
               >
                 {tLegal("privacy")}
               </Link>
               <Link
                 href="/legal/terms"
-                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-ink-primary"
+                className="text-sm text-ink-secondary transition-colors duration-[--duration-fast] hover:text-terracotta"
               >
                 {tLegal("terms")}
               </Link>

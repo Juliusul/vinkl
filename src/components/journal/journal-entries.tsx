@@ -26,7 +26,7 @@ export function JournalEntries() {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
                 {/* Left column: number + tag */}
                 <div className="md:col-span-3 lg:col-span-2">
-                  <span className="font-serif text-sm text-ink-tertiary">
+                  <span className="font-serif text-sm text-terracotta/60">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span className="ml-4 text-xs font-medium uppercase tracking-[0.12em] text-ink-tertiary">

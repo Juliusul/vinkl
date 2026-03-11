@@ -13,10 +13,10 @@ export function MaterialSection() {
   const tImg = useTranslations("images");
 
   return (
-    <section className="bg-bg-deep px-5 py-16 text-ink-inverse md:px-10 md:py-24 lg:px-16 lg:py-32">
+    <section className="border-t-2 border-terracotta bg-bg-deep px-5 py-16 text-ink-inverse md:px-10 md:py-24 lg:px-16 lg:py-32">
       <div className="mx-auto w-full max-w-[1200px]">
         <Reveal>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-inverse/50">
+          <p className="section-label section-label-inverse text-xs font-medium uppercase tracking-[0.15em] text-ink-inverse/50">
             {t("label")}
           </p>
         </Reveal>

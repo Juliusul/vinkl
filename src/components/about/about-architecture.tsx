@@ -29,7 +29,7 @@ export function AboutArchitecture() {
       {/* Text content */}
       <div className="mx-auto mt-12 w-full max-w-[1200px] px-5 md:mt-16 md:px-10 lg:px-16">
         <Reveal>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
+          <p className="section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
             {t("label")}
           </p>
         </Reveal>

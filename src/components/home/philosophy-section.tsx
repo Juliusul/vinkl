@@ -14,7 +14,7 @@ export function PhilosophySection() {
     <section className="px-5 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
       <div className="mx-auto w-full max-w-[1200px]">
         <Reveal>
-          <p className="reveal-child text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
+          <p className="reveal-child section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
             {t("label")}
           </p>
         </Reveal>

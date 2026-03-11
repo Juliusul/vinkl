@@ -28,7 +28,7 @@ export function Header({ navItems }: HeaderProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="text-xs font-medium uppercase tracking-widest text-ink-secondary transition-colors duration-[--duration-fast] hover:text-ink-primary"
+              className="text-xs font-medium uppercase tracking-widest text-ink-secondary transition-colors duration-[--duration-fast] hover:text-terracotta"
             >
               {item.label}
             </Link>

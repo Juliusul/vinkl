@@ -180,6 +180,32 @@ body {
 }
 
 /* ─────────────────────────────────────────────
+   Section label accent bar
+   Small terracotta line before uppercase labels.
+   Architectural rhythm element.
+   ───────────────────────────────────────────── */
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 2px;
+  background-color: var(--color-terracotta);
+  flex-shrink: 0;
+}
+
+/* Inverted variant for dark backgrounds */
+.section-label-inverse::before {
+  background-color: var(--color-terracotta-light);
+}
+
+/* ─────────────────────────────────────────────
    Reduced motion — collapse all
    ───────────────────────────────────────────── */
 

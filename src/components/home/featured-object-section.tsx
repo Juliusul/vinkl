@@ -33,7 +33,7 @@ export function FeaturedObjectSection() {
         <Reveal stagger>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:items-end md:gap-8">
             <div className="md:col-span-7">
-              <p className="reveal-child text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
+              <p className="reveal-child section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
                 {t("label")}
               </p>
               <h2 className="reveal-child mt-3 font-serif text-3xl font-light tracking-tight md:text-4xl">
@@ -47,7 +47,7 @@ export function FeaturedObjectSection() {
             <div className="md:col-span-5 md:text-right">
               <Link
                 href="/objects/vinkl"
-                className="reveal-child inline-block border border-ink-primary px-8 py-3.5 text-xs font-medium uppercase tracking-widest text-ink-primary transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-ink-primary hover:text-ink-inverse"
+                className="reveal-child inline-block border border-ink-primary px-8 py-3.5 text-xs font-medium uppercase tracking-widest text-ink-primary transition-colors duration-[--duration-fast] ease-[--ease-out] hover:border-terracotta hover:bg-terracotta hover:text-ink-inverse"
               >
                 {t("cta")}
               </Link>

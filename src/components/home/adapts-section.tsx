@@ -34,7 +34,7 @@ export function AdaptsSection() {
           {/* Text — 5 columns */}
           <div className="order-1 flex flex-col justify-center lg:order-2 lg:col-span-5">
             <Reveal stagger>
-              <p className="reveal-child text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
+              <p className="reveal-child section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
                 {t("label")}
               </p>
               <h2 className="reveal-child mt-4 font-serif text-[clamp(1.75rem,3.5vw,3rem)] font-light leading-[1.1] tracking-tight">

@@ -16,7 +16,7 @@ export function AngleSection() {
     <section className="px-5 py-20 md:py-28 lg:py-36">
       <div className="mx-auto w-full max-w-[960px] text-center">
         <Reveal>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
+          <p className="section-label justify-center text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
             {t("label")}
           </p>
         </Reveal>
