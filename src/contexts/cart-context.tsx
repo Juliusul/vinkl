@@ -9,24 +9,71 @@ import {
   useRef,
   type ReactNode,
 } from "react";
-import type { Cart } from "@/types/cart";
+import type { Cart, CartLine } from "@/types/cart";
+import { vinklProduct } from "@/data/products/vinkl";
 
-// ── Cart API calls (client-side) ──
-// We call Shopify directly from the client since the Storefront API
-// is designed for public access with the storefront token.
+// ── Storage ──
 
-const CART_STORAGE_KEY = "vinkl-cart-id";
+const CART_STORAGE_KEY = "vinkl-cart-lines";
 
-async function cartFetch<T>(action: string, payload: Record<string, unknown>): Promise<T> {
-  const res = await fetch("/api/cart", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action, ...payload }),
-  });
-  if (!res.ok) {
-    throw new Error(`Cart API error: ${res.status}`);
+interface StoredLine {
+  lineId: string;
+  variantId: string;
+  quantity: number;
+}
+
+function buildCart(lines: StoredLine[]): Cart {
+  const variant = vinklProduct.variants[0];
+  const pricePerUnit = parseFloat(vinklProduct.price.amount);
+  const currency = vinklProduct.price.currencyCode;
+  const totalQuantity = lines.reduce((sum, l) => sum + l.quantity, 0);
+  const totalAmount = (pricePerUnit * totalQuantity).toFixed(2);
+
+  const cartLines: CartLine[] = lines.map((l) => ({
+    id: l.lineId,
+    quantity: l.quantity,
+    cost: {
+      totalAmount: {
+        amount: (pricePerUnit * l.quantity).toFixed(2),
+        currencyCode: currency,
+      },
+    },
+    merchandise: {
+      id: variant.id,
+      title: variant.title,
+      selectedOptions: variant.selectedOptions,
+      product: {
+        title: vinklProduct.title,
+        slug: vinklProduct.slug,
+        featuredImage: vinklProduct.images[0],
+      },
+    },
+  }));
+
+  return {
+    id: "local",
+    checkoutUrl: "",
+    totalQuantity,
+    cost: {
+      subtotalAmount: { amount: totalAmount, currencyCode: currency },
+      totalAmount: { amount: totalAmount, currencyCode: currency },
+      totalTaxAmount: null,
+    },
+    lines: cartLines,
+  };
+}
+
+function loadLines(): StoredLine[] {
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
   }
-  return res.json();
+}
+
+function saveLines(lines: StoredLine[]) {
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(lines));
 }
 
 // ── Context types ──
@@ -39,6 +86,7 @@ interface CartContextValue {
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
+  clearCart: () => void;
   addItem: (variantId: string, quantity?: number) => Promise<void>;
   updateItem: (lineId: string, quantity: number) => Promise<void>;
   removeItem: (lineId: string) => Promise<void>;
@@ -49,165 +97,70 @@ const CartContext = createContext<CartContextValue | null>(null);
 // ── Provider ──
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<Cart | null>(null);
+  const [lines, setLines] = useState<StoredLine[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAdding, setIsAdding] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const initializedRef = useRef(false);
 
-  // Load existing cart on mount
   useEffect(() => {
     if (initializedRef.current) return;
     initializedRef.current = true;
-
-    async function loadCart() {
-      const cartId = localStorage.getItem(CART_STORAGE_KEY);
-      if (!cartId) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const data = await cartFetch<{ cart: Cart | null }>("get", { cartId });
-        if (data.cart) {
-          setCart(data.cart);
-        } else {
-          // Cart expired
-          localStorage.removeItem(CART_STORAGE_KEY);
-        }
-      } catch {
-        localStorage.removeItem(CART_STORAGE_KEY);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    loadCart();
+    setLines(loadLines());
+    setIsLoading(false);
   }, []);
+
+  // Persist to localStorage on every change (after init)
+  useEffect(() => {
+    if (!initializedRef.current) return;
+    saveLines(lines);
+  }, [lines]);
+
+  const cart = lines.length > 0 ? buildCart(lines) : null;
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
+  const clearCart = useCallback(() => {
+    setLines([]);
+    localStorage.removeItem(CART_STORAGE_KEY);
+  }, []);
 
-  const addItem = useCallback(
-    async (variantId: string, quantity: number = 1) => {
-      setIsAdding(true);
-      try {
-        let currentCartId = cart?.id ?? localStorage.getItem(CART_STORAGE_KEY);
-
-        if (!currentCartId) {
-          // Create new cart and add item
-          const data = await cartFetch<{ cart: Cart }>("create-and-add", {
-            variantId,
-            quantity,
-          });
-          localStorage.setItem(CART_STORAGE_KEY, data.cart.id);
-          setCart(data.cart);
-        } else {
-          // Add to existing cart
-          try {
-            const data = await cartFetch<{ cart: Cart }>("add", {
-              cartId: currentCartId,
-              variantId,
-              quantity,
-            });
-            setCart(data.cart);
-          } catch {
-            // Cart might be expired — create fresh
-            localStorage.removeItem(CART_STORAGE_KEY);
-            const data = await cartFetch<{ cart: Cart }>("create-and-add", {
-              variantId,
-              quantity,
-            });
-            localStorage.setItem(CART_STORAGE_KEY, data.cart.id);
-            setCart(data.cart);
-          }
-        }
-        setIsOpen(true);
-      } finally {
-        setIsAdding(false);
+  const addItem = useCallback(async (variantId: string, quantity: number = 1) => {
+    setLines((prev) => {
+      const existing = prev.find((l) => l.variantId === variantId);
+      if (existing) {
+        return prev.map((l) =>
+          l.variantId === variantId ? { ...l, quantity: l.quantity + quantity } : l
+        );
       }
-    },
-    [cart?.id],
-  );
+      return [
+        ...prev,
+        { lineId: `line-${Date.now()}`, variantId, quantity },
+      ];
+    });
+    setIsOpen(true);
+  }, []);
 
-  const updateItem = useCallback(
-    async (lineId: string, quantity: number) => {
-      if (!cart) return;
-      setIsUpdating(true);
+  const updateItem = useCallback(async (lineId: string, quantity: number) => {
+    setLines((prev) =>
+      prev.map((l) => (l.lineId === lineId ? { ...l, quantity } : l))
+    );
+  }, []);
 
-      // Optimistic update
-      const previousCart = cart;
-      setCart((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          lines: prev.lines.map((line) =>
-            line.id === lineId ? { ...line, quantity } : line,
-          ),
-        };
-      });
-
-      try {
-        const data = await cartFetch<{ cart: Cart }>("update", {
-          cartId: cart.id,
-          lineId,
-          quantity,
-        });
-        setCart(data.cart);
-      } catch {
-        // Revert optimistic update
-        setCart(previousCart);
-      } finally {
-        setIsUpdating(false);
-      }
-    },
-    [cart],
-  );
-
-  const removeItem = useCallback(
-    async (lineId: string) => {
-      if (!cart) return;
-      setIsUpdating(true);
-
-      // Optimistic update
-      const previousCart = cart;
-      setCart((prev) => {
-        if (!prev) return prev;
-        const updatedLines = prev.lines.filter((line) => line.id !== lineId);
-        return {
-          ...prev,
-          lines: updatedLines,
-          totalQuantity: updatedLines.reduce((sum, l) => sum + l.quantity, 0),
-        };
-      });
-
-      try {
-        const data = await cartFetch<{ cart: Cart }>("remove", {
-          cartId: cart.id,
-          lineId,
-        });
-        setCart(data.cart);
-      } catch {
-        // Revert optimistic update
-        setCart(previousCart);
-      } finally {
-        setIsUpdating(false);
-      }
-    },
-    [cart],
-  );
+  const removeItem = useCallback(async (lineId: string) => {
+    setLines((prev) => prev.filter((l) => l.lineId !== lineId));
+  }, []);
 
   return (
     <CartContext.Provider
       value={{
         cart,
         isLoading,
-        isAdding,
-        isUpdating,
+        isAdding: false,
+        isUpdating: false,
         isOpen,
         openCart,
         closeCart,
+        clearCart,
         addItem,
         updateItem,
         removeItem,

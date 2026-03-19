@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { useTranslations } from "next-intl";
-import { getProducts } from "@/lib/shopify";
 import { ObjectGrid } from "@/components/objects/object-grid";
 import { vinklProduct } from "@/data/products/vinkl";
-import type { Locale } from "@/config/i18n";
 import type { Product } from "@/types";
 
 type Props = {
@@ -24,19 +22,7 @@ export default async function ObjectsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  let products: Product[];
-
-  try {
-    products = await getProducts(locale as Locale);
-  } catch {
-    // Shopify not configured — fall back to static flagship products
-    products = [];
-  }
-
-  // Always ensure flagship products are visible, even without Shopify
-  if (!products.some((p) => p.slug === "vinkl")) {
-    products = [vinklProduct, ...products];
-  }
+  const products: Product[] = [vinklProduct];
 
   return <ObjectsContent products={products} />;
 }
