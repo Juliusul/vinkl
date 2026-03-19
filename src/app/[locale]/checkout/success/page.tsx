@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { stripe } from "@/lib/stripe/client";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ClearCartOnSuccess } from "@/components/checkout/clear-cart-on-success";
 import Link from "next/link";
 
@@ -25,6 +26,10 @@ export default async function CheckoutSuccessPage({ params, searchParams }: Prop
       // Session not found — show generic message
     }
   }
+
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isLoggedIn = !!user;
 
   const firstName = customerName?.split(" ")[0] ?? null;
 
@@ -101,6 +106,51 @@ export default async function CheckoutSuccessPage({ params, searchParams }: Prop
           >
             Zurück zur Startseite
           </Link>
+
+          {/* Account CTA */}
+          {!isLoggedIn && customerEmail && (
+            <div
+              style={{
+                marginTop: 40,
+                padding: "24px 28px",
+                backgroundColor: "#fff",
+                border: "1px solid #e0d8d0",
+                textAlign: "left",
+              }}
+            >
+              <p style={{ fontSize: 11, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
+                BESTELLUNGEN VERFOLGEN
+              </p>
+              <p style={{ fontSize: 14, color: "#555", lineHeight: 1.6, margin: "0 0 16px" }}>
+                Erstelle ein Konto, um deine Bestellhistorie einzusehen und Rechnungen jederzeit herunterzuladen.
+              </p>
+              <Link
+                href={`/${locale}/account/register?email=${encodeURIComponent(customerEmail)}`}
+                style={{
+                  display: "inline-block",
+                  backgroundColor: "#f5f0ea",
+                  color: "#1a1a1a",
+                  padding: "10px 20px",
+                  fontSize: 11,
+                  letterSpacing: 1,
+                  textDecoration: "none",
+                  border: "1px solid #c8b89a",
+                }}
+              >
+                KONTO ERSTELLEN
+              </Link>
+            </div>
+          )}
+          {isLoggedIn && (
+            <div style={{ marginTop: 24 }}>
+              <Link
+                href={`/${locale}/account/orders`}
+                style={{ fontSize: 12, color: "#888", textDecoration: "underline" }}
+              >
+                Meine Bestellungen ansehen →
+              </Link>
+            </div>
+          )}
         </div>
       </section>
     </>

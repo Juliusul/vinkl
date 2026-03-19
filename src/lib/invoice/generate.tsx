@@ -1,8 +1,7 @@
 import { renderToBuffer, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import type Stripe from "stripe";
 import { generateInvoiceNumber } from "./number";
-
-const TAX_RATE = parseInt(process.env.SELLER_TAX_RATE ?? "19") / 100;
+import { getTemplateSettings } from "@/lib/supabase/settings";
 
 const styles = StyleSheet.create({
   page: {
@@ -123,6 +122,9 @@ function fmt(amount: number): string {
 export async function generateInvoicePdf(
   session: Stripe.Checkout.Session
 ): Promise<Buffer> {
+  const settings = await getTemplateSettings();
+  const TAX_RATE = parseInt(settings.seller_tax_rate ?? "19") / 100;
+
   const invoiceNumber = generateInvoiceNumber(session.id, session.created);
   const invoiceDate = new Date(session.created * 1000).toLocaleDateString("de-DE", {
     day: "2-digit", month: "2-digit", year: "numeric",
@@ -135,11 +137,11 @@ export async function generateInvoicePdf(
   const customer = session.customer_details;
   const addr = customer?.address;
 
-  const sellerName = process.env.SELLER_NAME ?? "VINKL";
-  const sellerAddress = process.env.SELLER_ADDRESS ?? "";
-  const sellerVatId = process.env.SELLER_VAT_ID ?? "";
-  const sellerIban = process.env.SELLER_IBAN ?? "";
-  const sellerBank = process.env.SELLER_BANK ?? "";
+  const sellerName = settings.seller_name;
+  const sellerAddress = settings.seller_address;
+  const sellerVatId = settings.seller_vat_id;
+  const sellerIban = settings.seller_iban;
+  const sellerBank = settings.seller_bank;
 
   const doc = (
     <Document>

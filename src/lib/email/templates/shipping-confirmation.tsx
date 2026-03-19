@@ -15,9 +15,12 @@ interface Props {
   customerName: string;
   trackingCode: string;
   trackingUrl?: string;
+  shippingDaysDe?: string;
+  shippingDaysIntl?: string;
+  emailFooter?: string;
 }
 
-export function ShippingConfirmationEmail({ customerName, trackingCode, trackingUrl }: Props) {
+export function ShippingConfirmationEmail({ customerName, trackingCode, trackingUrl, shippingDaysDe = "3–5 Werktage", shippingDaysIntl = "5–8 Werktage", emailFooter = "Fragen? Antworte einfach auf diese E-Mail — wir helfen gerne." }: Props) {
   const firstName = customerName.split(" ")[0] ?? customerName;
 
   return (
@@ -62,14 +65,14 @@ export function ShippingConfirmationEmail({ customerName, trackingCode, tracking
           </Section>
 
           <Text style={{ fontSize: 13, color: "#666", lineHeight: 1.6, margin: "0 0 32px" }}>
-            Die Lieferung dauert in der Regel 3–5 Werktage innerhalb Deutschlands.
-            Für Österreich und die Schweiz 5–8 Werktage.
+            Die Lieferung dauert in der Regel {shippingDaysDe} innerhalb Deutschlands.
+            Für Österreich und die Schweiz {shippingDaysIntl}.
           </Text>
 
           <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 24px" }} />
 
           <Text style={{ fontSize: 12, color: "#999", lineHeight: 1.6, margin: 0 }}>
-            Fragen? Antworte einfach auf diese E-Mail — wir helfen gerne.
+            {emailFooter}
           </Text>
         </Container>
       </Body>

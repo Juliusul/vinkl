@@ -16,9 +16,11 @@ import { generateInvoiceNumber } from "@/lib/invoice/number";
 
 interface Props {
   session: Stripe.Checkout.Session;
+  emailGreeting?: string;
+  emailFooter?: string;
 }
 
-export function OrderConfirmationEmail({ session }: Props) {
+export function OrderConfirmationEmail({ session, emailGreeting = "Vielen Dank für deine Bestellung!", emailFooter = "Bei Fragen antworte einfach auf diese E-Mail." }: Props) {
   const invoiceNumber = generateInvoiceNumber(session.id, session.created);
   const customer = session.customer_details;
   const addr = customer?.address;
@@ -42,7 +44,7 @@ export function OrderConfirmationEmail({ session }: Props) {
           <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 32px" }} />
 
           <Text style={{ fontSize: 16, color: "#1a1a1a", margin: "0 0 8px" }}>
-            Vielen Dank für deine Bestellung, {customer?.name?.split(" ")[0] ?? ""}!
+            {emailGreeting.replace("{name}", customer?.name?.split(" ")[0] ?? "")}
           </Text>
           <Text style={{ fontSize: 14, color: "#666", margin: "0 0 32px", lineHeight: 1.6 }}>
             Wir haben deine Bestellung erhalten und bereiten sie für den Versand vor.
@@ -86,7 +88,7 @@ export function OrderConfirmationEmail({ session }: Props) {
           <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 24px" }} />
 
           <Text style={{ fontSize: 12, color: "#999", lineHeight: 1.6, margin: 0 }}>
-            Bei Fragen antworte einfach auf diese E-Mail.<br />
+            {emailFooter}<br />
             Wir melden uns sobald dein Regal unterwegs ist.
           </Text>
         </Container>

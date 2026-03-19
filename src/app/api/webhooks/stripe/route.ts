@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe/client";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { generateInvoicePdf } from "@/lib/invoice/generate";
 import { resend } from "@/lib/email/resend";
 import { OrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
 import { OrderNotificationEmail } from "@/lib/email/templates/order-notification";
 import { generateInvoiceNumber } from "@/lib/invoice/number";
+import { getTemplateSettings } from "@/lib/supabase/settings";
 import { render as renderEmail } from "@react-email/components";
 import React from "react";
 
@@ -31,37 +33,84 @@ export async function POST(req: NextRequest) {
       expand: ["line_items"],
     });
 
-    const customerEmail = session.customer_details?.email;
-    const customerName = session.customer_details?.name ?? "Kunde";
+    const customerEmail = session.customer_details?.email ?? "";
+    const customerName = session.customer_details?.name ?? null;
     const invoiceNumber = generateInvoiceNumber(session.id, session.created);
     const ownerEmail = process.env.OWNER_EMAIL!;
     const accountingEmail = process.env.ACCOUNTING_EMAIL ?? ownerEmail;
+    const addr = session.customer_details?.address ?? null;
 
+    // ── 1. Save order to Supabase ──
     try {
-      // Generate PDF invoice
+      const { data: orderData } = await supabaseAdmin
+        .from("orders")
+        .upsert({
+          stripe_session_id: session.id,
+          invoice_number: invoiceNumber,
+          customer_email: customerEmail,
+          customer_name: customerName,
+          shipping_address: addr
+            ? {
+                line1: addr.line1,
+                line2: addr.line2,
+                city: addr.city,
+                postal_code: addr.postal_code,
+                country: addr.country,
+              }
+            : null,
+          amount_total: session.amount_total ?? 0,
+          currency: session.currency ?? "eur",
+          status: "paid",
+          updated_at: new Date().toISOString(),
+        }, { onConflict: "stripe_session_id" })
+        .select("id")
+        .single();
+
+      if (orderData?.id) {
+        // Link order to customer account if email matches an existing user
+        const { data: userData } = await supabaseAdmin.auth.admin.listUsers();
+        const matchingUser = userData?.users?.find(u => u.email === customerEmail);
+        if (matchingUser) {
+          await supabaseAdmin
+            .from("orders")
+            .update({ customer_id: matchingUser.id })
+            .eq("id", orderData.id);
+        }
+
+        await supabaseAdmin.from("order_events").insert({
+          order_id: orderData.id,
+          event_type: "confirmed",
+          data: { invoice_number: invoiceNumber },
+          created_by: "system",
+        });
+      }
+    } catch (err) {
+      console.error("Supabase save error:", err);
+    }
+
+    // ── 2. Generate PDF + send emails ──
+    try {
+      const settings = await getTemplateSettings();
       const pdfBuffer = await generateInvoicePdf(session);
       const pdfBase64 = pdfBuffer.toString("base64");
 
-      // Email to customer (with invoice PDF)
       if (customerEmail) {
         const html = await renderEmail(
-          React.createElement(OrderConfirmationEmail, { session })
+          React.createElement(OrderConfirmationEmail, {
+            session,
+            emailGreeting: settings.email_greeting,
+            emailFooter: settings.email_footer,
+          })
         );
         await resend.emails.send({
           from: `VINKL <bestellungen@${getEmailDomain()}>`,
           to: customerEmail,
           subject: `Deine VINKL Bestellung ${invoiceNumber}`,
           html,
-          attachments: [
-            {
-              filename: `Rechnung-${invoiceNumber}.pdf`,
-              content: pdfBase64,
-            },
-          ],
+          attachments: [{ filename: `Rechnung-${invoiceNumber}.pdf`, content: pdfBase64 }],
         });
       }
 
-      // Notification to owner + accounting (with invoice PDF)
       const notifHtml = await renderEmail(
         React.createElement(OrderNotificationEmail, { session })
       );
@@ -69,18 +118,12 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: `VINKL Shop <bestellungen@${getEmailDomain()}>`,
         to: recipients,
-        subject: `Neue Bestellung ${invoiceNumber} — ${customerName}`,
+        subject: `Neue Bestellung ${invoiceNumber} — ${customerName ?? customerEmail}`,
         html: notifHtml,
-        attachments: [
-          {
-            filename: `Rechnung-${invoiceNumber}.pdf`,
-            content: pdfBase64,
-          },
-        ],
+        attachments: [{ filename: `Rechnung-${invoiceNumber}.pdf`, content: pdfBase64 }],
       });
     } catch (err) {
       console.error("Email/PDF error:", err);
-      // Don't return 500 — Stripe would retry. Log and continue.
     }
   }
 
