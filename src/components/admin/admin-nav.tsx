@@ -6,7 +6,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 interface Props {
   locale: string;
-  active: "orders" | "customers" | "templates";
+  active: "orders" | "customers" | "templates" | "previews";
   userEmail: string;
 }
 
@@ -24,6 +24,7 @@ export function AdminNav({ locale, active, userEmail }: Props) {
     { key: "orders", label: "Bestellungen", href: `/${locale}/admin` },
     { key: "customers", label: "Kunden", href: `/${locale}/admin/customers` },
     { key: "templates", label: "Templates", href: `/${locale}/admin/templates` },
+    { key: "previews", label: "Vorschau", href: `/${locale}/admin/previews` },
   ];
 
   return (
