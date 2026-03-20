@@ -30,9 +30,17 @@ export function AccountLoginForm({ locale }: { locale: string }) {
         <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>E-MAIL</label>
         <input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" style={inputStyle} />
       </div>
-      <div style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: 8 }}>
         <label style={{ fontSize: 11, color: "#888", display: "block", marginBottom: 4 }}>PASSWORT</label>
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="current-password" style={inputStyle} />
+      </div>
+      <div style={{ marginBottom: 24, textAlign: "right" }}>
+        <a
+          href={`/${locale}/account/forgot-password`}
+          style={{ fontSize: 11, color: "#888", textDecoration: "underline", cursor: "pointer" }}
+        >
+          Passwort vergessen?
+        </a>
       </div>
       {error && <div style={{ fontSize: 12, color: "#c00", marginBottom: 16 }}>{error}</div>}
       <button type="submit" disabled={loading} style={{ width: "100%", backgroundColor: "#1a1a1a", color: "#fff", border: "none", padding: "14px", fontSize: 11, letterSpacing: 2, cursor: loading ? "not-allowed" : "pointer", fontFamily: "monospace", opacity: loading ? 0.7 : 1 }}>
