@@ -14,10 +14,10 @@ export const mockSession: Stripe.Checkout.Session = {
   status: "complete",
   mode: "payment",
   customer_details: {
-    name: "Julius Wagner",
-    email: "julius@example.de",
+    name: "Max Mustermann",
+    email: "max@mustermann.de",
     address: {
-      line1: "Kastanienallee 42",
+      line1: "Musterstraße 1",
       line2: null,
       city: "Berlin",
       postal_code: "10435",
@@ -97,8 +97,8 @@ export const mockTracking = {
 
 /** Musterdaten für Rückgabe/Umtausch/Erstattung */
 export const mockRefund = {
-  customerName: "Julius Wagner",
-  customerEmail: "julius@example.de",
+  customerName: "Max Mustermann",
+  customerEmail: "max@mustermann.de",
   invoiceNumber: "VINKL-2026-0001",
   amount: 299,
   currency: "EUR",

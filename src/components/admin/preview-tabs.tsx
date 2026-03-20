@@ -105,8 +105,9 @@ export function PreviewTabs({ tabs }: Props) {
           backgroundColor: "#f5f5f5",
           padding: 16,
         }}>
-          <iframe
-            src={current.pdfUrl}
+          <object
+            data={current.pdfUrl}
+            type="application/pdf"
             style={{
               width: "100%",
               height: 840,
@@ -114,21 +115,44 @@ export function PreviewTabs({ tabs }: Props) {
               borderRadius: 2,
               display: "block",
             }}
-            title="Rechnungs-Vorschau PDF"
-          />
-          <div style={{ marginTop: 12, textAlign: "center" }}>
+          >
+            {/* Fallback wenn Browser kein PDF-Plugin hat */}
+            <div style={{ padding: 32, textAlign: "center", color: "#888" }}>
+              <p style={{ marginBottom: 12, fontSize: 13 }}>PDF kann nicht direkt angezeigt werden.</p>
+              <a
+                href={current.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-block",
+                  backgroundColor: "#1a1a1a",
+                  color: "#fff",
+                  padding: "10px 20px",
+                  fontSize: 11,
+                  letterSpacing: 1,
+                  textDecoration: "none",
+                  fontFamily: "monospace",
+                }}
+              >
+                PDF IN NEUEM TAB ÖFFNEN ↗
+              </a>
+            </div>
+          </object>
+          <div style={{ marginTop: 12, textAlign: "center", display: "flex", gap: 24, justifyContent: "center" }}>
             <a
               href={current.pdfUrl}
               download="Rechnung-Vorschau.pdf"
-              style={{
-                fontSize: 11,
-                color: "#888",
-                textDecoration: "underline",
-                fontFamily: "monospace",
-                letterSpacing: 1,
-              }}
+              style={{ fontSize: 11, color: "#888", textDecoration: "underline", fontFamily: "monospace", letterSpacing: 1 }}
             >
               PDF herunterladen
+            </a>
+            <a
+              href={current.pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: 11, color: "#888", textDecoration: "underline", fontFamily: "monospace", letterSpacing: 1 }}
+            >
+              In neuem Tab öffnen ↗
             </a>
           </div>
         </div>
