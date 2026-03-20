@@ -1,36 +1,23 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/contexts/cart-context";
 
 export function CartSummary() {
   const t = useTranslations("cart");
   const locale = useLocale();
-  const { cart } = useCart();
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { cart, closeCart } = useCart();
 
   if (!cart || cart.lines.length === 0) return null;
 
   const subtotal = `${parseFloat(cart.cost.subtotalAmount.amount).toFixed(2)} ${cart.cost.subtotalAmount.currencyCode === "EUR" ? "\u20AC" : cart.cost.subtotalAmount.currencyCode}`;
   const totalQty = cart.lines.reduce((sum, l) => sum + l.quantity, 0);
 
-  async function handleCheckout() {
-    setIsLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: totalQty, locale }),
-      });
-
-      if (!res.ok) throw new Error("Checkout failed");
-
-      const { url } = await res.json();
-      window.location.href = url;
-    } catch {
-      setIsLoading(false);
-    }
+  function handleCheckout() {
+    closeCart();
+    router.push(`/${locale}/checkout?quantity=${totalQty}`);
   }
 
   return (
@@ -49,10 +36,9 @@ export function CartSummary() {
       {/* Checkout button */}
       <button
         onClick={handleCheckout}
-        disabled={isLoading}
-        className="mt-4 w-full bg-ink-primary px-6 py-3.5 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta active:scale-[0.98] disabled:opacity-60"
+        className="mt-4 w-full bg-ink-primary px-6 py-3.5 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta active:scale-[0.98]"
       >
-        {isLoading ? "..." : t("checkout")}
+        {t("checkout")}
       </button>
     </div>
   );

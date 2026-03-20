@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
     const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded",
       mode: "payment",
       line_items: [
         {
@@ -16,8 +17,7 @@ export async function POST(req: NextRequest) {
           quantity: qty,
         },
       ],
-      success_url: `${baseUrl}/${locale}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/${locale}`,
+      return_url: `${baseUrl}/${locale}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       shipping_address_collection: {
         allowed_countries: ["DE", "AT", "CH", "LU", "BE", "NL"],
       },
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       metadata: { quantity: String(qty), locale: locale ?? "de" },
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ clientSecret: session.client_secret });
   } catch (err) {
     console.error("Checkout error:", err);
     return NextResponse.json({ error: "Checkout failed" }, { status: 500 });

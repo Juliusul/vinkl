@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./locale-switcher";
 import { CartButton } from "./cart-button";
+import { AccountButton } from "./account-button";
 
 interface NavItem {
   href: string;
@@ -36,9 +37,10 @@ export function Header({ navItems }: HeaderProps) {
           ))}
         </nav>
 
-        {/* Right side: locale switcher + cart */}
+        {/* Right side: locale switcher + account + cart */}
         <div className="flex items-center gap-6">
           <LocaleSwitcher />
+          <AccountButton />
           <CartButton />
         </div>
       </div>
