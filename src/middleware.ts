@@ -14,12 +14,21 @@ export async function middleware(request: NextRequest) {
 
   if (adminMatch && !isAdminLogin) {
     const locale = adminMatch[1];
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    // If Supabase is not configured, redirect to login
+    if (!supabaseUrl || !supabaseKey) {
+      const loginUrl = new URL(`/${locale}/admin/login`, request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
     let response = NextResponse.next({ request });
 
     // Create Supabase client with cookie handling
     const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+      supabaseUrl,
+      supabaseKey,
       {
         cookies: {
           getAll() {
