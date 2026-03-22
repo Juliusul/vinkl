@@ -10,6 +10,8 @@ export function AccountButton() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
+
     const supabase = createSupabaseBrowserClient();
     supabase.auth.getUser().then(({ data }) => {
       setIsLoggedIn(!!data.user);
