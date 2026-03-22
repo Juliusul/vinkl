@@ -20,17 +20,23 @@ export function AdminLoginForm({ locale }: Props) {
     setLoading(true);
     setError("");
 
-    const supabase = createSupabaseBrowserClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      setError("E-Mail oder Passwort falsch.");
+      if (error) {
+        setError("E-Mail oder Passwort falsch.");
+        return;
+      }
+
+      router.push(`/${locale}/admin`);
+      router.refresh();
+    } catch (err) {
+      console.error("Admin login error:", err);
+      setError("Anmeldung fehlgeschlagen. Bitte versuche es erneut.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    router.push(`/${locale}/admin`);
-    router.refresh();
   }
 
   const inputStyle: React.CSSProperties = {

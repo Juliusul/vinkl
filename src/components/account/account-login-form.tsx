@@ -15,11 +15,21 @@ export function AccountLoginForm({ locale }: { locale: string }) {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const supabase = createSupabaseBrowserClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) { setError("E-Mail oder Passwort falsch."); setLoading(false); return; }
-    router.push(`/${locale}/account/orders`);
-    router.refresh();
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError("E-Mail oder Passwort falsch.");
+        return;
+      }
+      router.push(`/${locale}/account/orders`);
+      router.refresh();
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Anmeldung fehlgeschlagen. Bitte versuche es erneut.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const inputStyle: React.CSSProperties = { border: "1px solid #ccc", padding: "10px 12px", fontSize: 14, width: "100%", boxSizing: "border-box", fontFamily: "Georgia, serif", backgroundColor: "#fff" };

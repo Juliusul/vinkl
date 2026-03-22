@@ -24,38 +24,41 @@ export function AccountRegisterForm({ locale, prefillEmail }: Props) {
     setLoading(true);
     setError("");
 
-    const supabase = createSupabaseBrowserClient();
-    const siteUrl = window.location.origin;
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const siteUrl = window.location.origin;
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name },
-        emailRedirectTo: `${siteUrl}/auth/confirm?next=/${locale}/account/orders`,
-      },
-    });
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name },
+          emailRedirectTo: `${siteUrl}/auth/confirm?next=/${locale}/account/orders`,
+        },
+      });
 
-    if (signUpError) { setError(signUpError.message); setLoading(false); return; }
+      if (signUpError) { setError(signUpError.message); return; }
 
-    // Link existing orders to this account via API
-    await fetch("/api/account/link-orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+      // Link existing orders to this account via API
+      await fetch("/api/account/link-orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    // If Supabase returned a session directly (email confirmation disabled),
-    // we're already logged in — show success either way.
-    const needsConfirmation = !data.session;
-    if (!needsConfirmation) {
-      // Already confirmed / auto-confirmed → go to orders
-      window.location.href = `/${locale}/account/orders`;
-      return;
+      const needsConfirmation = !data.session;
+      if (!needsConfirmation) {
+        window.location.href = `/${locale}/account/orders`;
+        return;
+      }
+
+      setDone(true);
+    } catch (err) {
+      console.error("Register error:", err);
+      setError("Registrierung fehlgeschlagen. Bitte versuche es erneut.");
+    } finally {
+      setLoading(false);
     }
-
-    setDone(true);
-    setLoading(false);
   }
 
   const inputStyle: React.CSSProperties = { border: "1px solid #ccc", padding: "10px 12px", fontSize: 14, width: "100%", boxSizing: "border-box", fontFamily: "Georgia, serif", backgroundColor: "#fff" };
