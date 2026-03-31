@@ -27,7 +27,7 @@ export function EmbeddedCheckoutForm({ quantity, locale }: Props) {
       });
       const data = await res.json();
       if (!res.ok || !data.clientSecret) {
-        setError("Checkout konnte nicht gestartet werden. Bitte versuche es erneut.");
+        setError(`Checkout-Fehler: ${data.detail ?? data.error ?? "Unbekannter Fehler"}`);
         return "";
       }
       return data.clientSecret as string;
