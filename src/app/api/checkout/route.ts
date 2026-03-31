@@ -3,30 +3,46 @@ import { stripe } from "@/lib/stripe/client";
 
 export async function POST(req: NextRequest) {
   try {
-    const { quantity, locale } = await req.json();
+    const { quantity, locale, name, email, address } = await req.json();
     const qty = Math.max(1, parseInt(quantity) || 1);
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    // Preis: 299 EUR pro Stück
+    const unitAmount = 29900;
+    const amount = unitAmount * qty;
 
-    const session = await stripe.checkout.sessions.create({
-      ui_mode: "embedded",
-      mode: "payment",
-      line_items: [
-        {
-          price: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID!,
-          quantity: qty,
-        },
-      ],
-      return_url: `${baseUrl}/${locale}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      shipping_address_collection: {
-        allowed_countries: ["DE", "AT", "CH", "LU", "BE", "NL"],
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "eur",
+      automatic_payment_methods: { enabled: true },
+      metadata: {
+        quantity: String(qty),
+        locale: locale ?? "de",
+        customer_name: name ?? "",
+        customer_email: email ?? "",
+        shipping_line1: address?.line1 ?? "",
+        shipping_line2: address?.line2 ?? "",
+        shipping_city: address?.city ?? "",
+        shipping_postal_code: address?.postal_code ?? "",
+        shipping_country: address?.country ?? "DE",
       },
-      phone_number_collection: { enabled: false },
-      locale: locale === "de" ? "de" : "auto",
-      metadata: { quantity: String(qty), locale: locale ?? "de" },
+      ...(email && {
+        receipt_email: email,
+      }),
+      ...(name && address && {
+        shipping: {
+          name,
+          address: {
+            line1: address.line1 ?? "",
+            line2: address.line2 ?? "",
+            city: address.city ?? "",
+            postal_code: address.postal_code ?? "",
+            country: address.country ?? "DE",
+          },
+        },
+      }),
     });
 
-    return NextResponse.json({ clientSecret: session.client_secret });
+    return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("Checkout error:", message);

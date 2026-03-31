@@ -11,7 +11,7 @@ import { ShippingConfirmationEmail } from "@/lib/email/templates/shipping-confir
 import { ReturnNotificationEmail } from "@/lib/email/templates/return-notification";
 import { ExchangeNotificationEmail } from "@/lib/email/templates/exchange-notification";
 import { RefundNotificationEmail } from "@/lib/email/templates/refund-notification";
-import { mockSession, mockTracking, mockRefund } from "@/lib/preview/mock-data";
+import { mockPaymentIntent, mockTracking, mockRefund } from "@/lib/preview/mock-data";
 import { generateInvoiceNumber } from "@/lib/invoice/number";
 
 export default async function PreviewsPage({
@@ -27,7 +27,7 @@ export default async function PreviewsPage({
   if (!user) redirect(`/${locale}/admin/login`);
 
   const settings = await getTemplateSettings();
-  const invoiceNumber = generateInvoiceNumber(mockSession.id, mockSession.created);
+  const invoiceNumber = generateInvoiceNumber(mockPaymentIntent.id, mockPaymentIntent.created);
 
   // Render all email templates to HTML strings server-side
   const [
@@ -38,7 +38,8 @@ export default async function PreviewsPage({
     refundNotificationHtml,
   ] = await Promise.all([
     renderEmail(React.createElement(OrderConfirmationEmail, {
-      session: mockSession,
+      paymentIntent: mockPaymentIntent,
+      invoiceNumber,
       emailGreeting: settings.email_greeting,
       emailFooter: settings.email_footer,
     })),

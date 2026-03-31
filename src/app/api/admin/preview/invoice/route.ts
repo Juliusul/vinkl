@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { generateInvoicePdf } from "@/lib/invoice/generate";
-import { mockSession } from "@/lib/preview/mock-data";
+import { generateInvoicePdfFromPaymentIntent } from "@/lib/invoice/generate";
+import { generateInvoiceNumber } from "@/lib/invoice/number";
+import { mockPaymentIntent } from "@/lib/preview/mock-data";
 
 export const runtime = "nodejs";
 
@@ -10,7 +11,8 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const pdfBuffer = await generateInvoicePdf(mockSession);
+  const invoiceNumber = generateInvoiceNumber(mockPaymentIntent.id, mockPaymentIntent.created);
+  const pdfBuffer = await generateInvoicePdfFromPaymentIntent(mockPaymentIntent, invoiceNumber);
 
   return new NextResponse(new Uint8Array(pdfBuffer), {
     headers: {

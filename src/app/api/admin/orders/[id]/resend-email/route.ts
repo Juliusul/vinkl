@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { stripe } from "@/lib/stripe/client";
-import { generateInvoicePdf } from "@/lib/invoice/generate";
+import { generateInvoicePdfFromPaymentIntent } from "@/lib/invoice/generate";
 import { generateInvoiceNumber } from "@/lib/invoice/number";
 import { getTemplateSettings } from "@/lib/supabase/settings";
 import { resend } from "@/lib/email/resend";
@@ -21,16 +21,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { data: order } = await supabaseAdmin.from("orders").select("*").eq("id", id).single();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
-  const session = await stripe.checkout.sessions.retrieve(order.stripe_session_id, {
-    expand: ["line_items"],
-  });
-
-  const invoiceNumber = generateInvoiceNumber(session.id, session.created);
+  // stripe_session_id now stores the payment_intent id
+  const pi = await stripe.paymentIntents.retrieve(order.stripe_session_id);
+  const invoiceNumber = order.invoice_number ?? generateInvoiceNumber(pi.id, pi.created);
   const settings = await getTemplateSettings();
-  const pdfBuffer = await generateInvoicePdf(session);
+  const pdfBuffer = await generateInvoicePdfFromPaymentIntent(pi, invoiceNumber);
   const pdfBase64 = pdfBuffer.toString("base64");
+
   const html = await renderEmail(React.createElement(OrderConfirmationEmail, {
-    session,
+    paymentIntent: pi,
+    invoiceNumber,
     emailGreeting: settings.email_greeting,
     emailFooter: settings.email_footer,
   }));

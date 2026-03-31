@@ -1,32 +1,27 @@
 import {
-  Body,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Preview,
-  Row,
-  Column,
-  Section,
-  Text,
+  Body, Container, Head, Heading, Hr, Html, Preview,
+  Row, Column, Section, Text,
 } from "@react-email/components";
 import type Stripe from "stripe";
-import { generateInvoiceNumber } from "@/lib/invoice/number";
 
 interface Props {
-  session: Stripe.Checkout.Session;
+  paymentIntent: Stripe.PaymentIntent;
+  invoiceNumber: string;
   emailGreeting?: string;
   emailFooter?: string;
 }
 
-export function OrderConfirmationEmail({ session, emailGreeting = "Vielen Dank für deine Bestellung!", emailFooter = "Bei Fragen antworte einfach auf diese E-Mail." }: Props) {
-  const invoiceNumber = generateInvoiceNumber(session.id, session.created);
-  const customer = session.customer_details;
-  const addr = customer?.address;
-  const gross = ((session.amount_total ?? 0) / 100).toLocaleString("de-DE", {
-    minimumFractionDigits: 2,
-  });
+export function OrderConfirmationEmail({
+  paymentIntent: pi,
+  invoiceNumber,
+  emailGreeting = "Vielen Dank für deine Bestellung!",
+  emailFooter = "Bei Fragen antworte einfach auf diese E-Mail.",
+}: Props) {
+  const meta = pi.metadata ?? {};
+  const customerName = pi.shipping?.name ?? meta.customer_name ?? "";
+  const firstName = customerName.split(" ")[0] ?? "";
+  const addr = pi.shipping?.address;
+  const gross = ((pi.amount ?? 0) / 100).toLocaleString("de-DE", { minimumFractionDigits: 2 });
 
   return (
     <Html lang="de">
@@ -44,14 +39,13 @@ export function OrderConfirmationEmail({ session, emailGreeting = "Vielen Dank f
           <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 32px" }} />
 
           <Text style={{ fontSize: 16, color: "#1a1a1a", margin: "0 0 8px" }}>
-            {emailGreeting.replace("{name}", customer?.name?.split(" ")[0] ?? "")}
+            {emailGreeting.replace("{name}", firstName)}
           </Text>
           <Text style={{ fontSize: 14, color: "#666", margin: "0 0 32px", lineHeight: 1.6 }}>
             Wir haben deine Bestellung erhalten und bereiten sie für den Versand vor.
             Die Rechnung findest du im Anhang dieser E-Mail.
           </Text>
 
-          {/* Order details */}
           <Section style={{ backgroundColor: "#f9f7f4", padding: "20px 24px", marginBottom: 32 }}>
             <Text style={{ fontSize: 9, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 16px" }}>
               BESTELLDETAILS
@@ -62,7 +56,7 @@ export function OrderConfirmationEmail({ session, emailGreeting = "Vielen Dank f
             </Row>
             <Row style={{ marginBottom: 8 }}>
               <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Produkt</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0 }}>VINKL Teak Wandregal</Text></Column>
+              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0 }}>VINKL Teak Wandregal × {meta.quantity ?? "1"}</Text></Column>
             </Row>
             <Row>
               <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Gesamt</Text></Column>
@@ -70,14 +64,13 @@ export function OrderConfirmationEmail({ session, emailGreeting = "Vielen Dank f
             </Row>
           </Section>
 
-          {/* Shipping address */}
           {addr && (
             <Section style={{ marginBottom: 32 }}>
               <Text style={{ fontSize: 9, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
                 LIEFERADRESSE
               </Text>
               <Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0, lineHeight: 1.7 }}>
-                {customer?.name}<br />
+                {customerName}<br />
                 {addr.line1}{addr.line2 ? `, ${addr.line2}` : ""}<br />
                 {addr.postal_code} {addr.city}<br />
                 {addr.country}
