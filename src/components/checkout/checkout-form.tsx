@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const stripePromise = typeof window !== "undefined" && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -12,8 +13,8 @@ const PRICE = 299;
 const PRODUCT_NAME = "VINKL Teak Wandregal";
 const PRODUCT_DESC = "80 × 25 × 30 cm · Teakholz massiv · stufenlos verstellbar";
 
-// ─── Inner form (has access to Stripe hooks) ──────────────────────────────────
-function PaymentForm({ locale, returnUrl }: { locale: string; returnUrl: string }) {
+// ─── Stripe payment step ──────────────────────────────────────────────────────
+function PaymentForm({ locale, returnUrl, total }: { locale: string; returnUrl: string; total: number }) {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<string | null>(null);
@@ -24,72 +25,154 @@ function PaymentForm({ locale, returnUrl }: { locale: string; returnUrl: string 
     if (!stripe || !elements) return;
     setLoading(true);
     setError(null);
-
     const { error: confirmError } = await stripe.confirmPayment({
       elements,
       confirmParams: { return_url: returnUrl },
     });
-
     if (confirmError) {
       setError(confirmError.message ?? "Zahlung fehlgeschlagen.");
       setLoading(false);
     }
-    // On success Stripe redirects — no need to setLoading(false)
   }
 
   return (
     <form onSubmit={handleSubmit}>
+      <p className="co-section-label">ZAHLUNGSMETHODE</p>
       <div style={{ marginBottom: 24 }}>
-        <p style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 12px", fontFamily: "monospace" }}>
-          ZAHLUNGSMETHODE
-        </p>
-        <PaymentElement
-          options={{
-            layout: "tabs",
-            fields: { billingDetails: { name: "auto", email: "auto", address: "auto" } },
-          }}
-        />
+        <PaymentElement options={{ layout: "tabs", fields: { billingDetails: { name: "auto", email: "auto", address: "auto" } } }} />
       </div>
-
-      {error && (
-        <div style={{ backgroundColor: "#fff0f0", border: "1px solid #ffcccc", padding: "12px 16px", marginBottom: 20, fontSize: 13, color: "#c00", fontFamily: "monospace" }}>
-          {error}
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={loading || !stripe}
-        style={{
-          width: "100%",
-          backgroundColor: loading ? "#888" : "#1a1a1a",
-          color: "#fff",
-          border: "none",
-          padding: "16px",
-          fontSize: 11,
-          letterSpacing: 3,
-          cursor: loading ? "not-allowed" : "pointer",
-          fontFamily: "monospace",
-          textTransform: "uppercase",
-          transition: "background-color 0.2s",
-        }}
-      >
-        {loading ? "WIRD VERARBEITET …" : `JETZT KAUFEN — ${PRICE} €`}
+      {error && <div className="co-error">{error}</div>}
+      <button type="submit" disabled={loading || !stripe} className="co-btn-primary">
+        {loading ? "WIRD VERARBEITET …" : `JETZT KAUFEN — ${total} €`}
       </button>
-
-      <p style={{ fontSize: 11, color: "#aaa", textAlign: "center", margin: "12px 0 0", fontFamily: "monospace" }}>
+      <p style={{ fontSize: 11, color: "#bbb", textAlign: "center", margin: "10px 0 0", fontFamily: "monospace" }}>
         🔒 SSL-verschlüsselt · Powered by Stripe
       </p>
     </form>
   );
 }
 
-// ─── Outer form (collects customer data, then creates PaymentIntent) ──────────
-interface Props {
-  quantity: number;
-  locale: string;
-  siteUrl: string;
+// ─── Mini login widget ────────────────────────────────────────────────────────
+function LoginWidget({ onLoggedIn }: { onLoggedIn: (name: string, email: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { data, error: err } = await supabase.auth.signInWithPassword({ email, password });
+      if (err || !data.user) { setError("E-Mail oder Passwort falsch."); return; }
+      const name = data.user.user_metadata?.name ?? "";
+      onLoggedIn(name, data.user.email ?? email);
+    } catch {
+      setError("Anmeldung fehlgeschlagen.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (!open) {
+    return (
+      <p style={{ fontSize: 12, color: "#888", margin: "0 0 28px", fontFamily: "monospace" }}>
+        Bereits Kunde?{" "}
+        <button onClick={() => setOpen(true)} style={{ background: "none", border: "none", color: "#1a1a1a", fontSize: 12, cursor: "pointer", textDecoration: "underline", padding: 0, fontFamily: "monospace" }}>
+          Anmelden
+        </button>
+        {" "}um Daten vorauszufüllen.
+      </p>
+    );
+  }
+
+  return (
+    <div style={{ border: "1px solid #e0d8d0", padding: "20px", marginBottom: 28, backgroundColor: "#fff" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <p style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: 0, fontFamily: "monospace" }}>KONTO ANMELDEN</p>
+        <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", fontSize: 18, color: "#aaa", cursor: "pointer", lineHeight: 1 }}>×</button>
+      </div>
+      <form onSubmit={handleLogin}>
+        <div style={{ marginBottom: 12 }}>
+          <input
+            type="email" value={email} onChange={e => setEmail(e.target.value)} required
+            placeholder="E-Mail" autoComplete="email"
+            style={{ width: "100%", border: "1px solid #ddd", padding: "10px 12px", fontSize: 14, fontFamily: "Georgia, serif", boxSizing: "border-box", backgroundColor: "#fafafa" }}
+          />
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <input
+            type="password" value={password} onChange={e => setPassword(e.target.value)} required
+            placeholder="Passwort" autoComplete="current-password"
+            style={{ width: "100%", border: "1px solid #ddd", padding: "10px 12px", fontSize: 14, fontFamily: "Georgia, serif", boxSizing: "border-box", backgroundColor: "#fafafa" }}
+          />
+        </div>
+        {error && <p style={{ fontSize: 12, color: "#c00", margin: "0 0 10px", fontFamily: "monospace" }}>{error}</p>}
+        <button type="submit" disabled={loading} style={{ width: "100%", backgroundColor: "#1a1a1a", color: "#fff", border: "none", padding: "11px", fontSize: 10, letterSpacing: 2, cursor: loading ? "not-allowed" : "pointer", fontFamily: "monospace", textTransform: "uppercase" }}>
+          {loading ? "…" : "ANMELDEN"}
+        </button>
+      </form>
+    </div>
+  );
 }
+
+// ─── Order summary ────────────────────────────────────────────────────────────
+function OrderSummary({ quantity, total, collapsible }: { quantity: number; total: number; collapsible?: boolean }) {
+  const [open, setOpen] = useState(!collapsible);
+
+  return (
+    <div className="co-summary-box">
+      {collapsible && (
+        <button className="co-summary-toggle" onClick={() => setOpen(o => !o)}>
+          <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "#888" }}>
+            BESTELLÜBERSICHT
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontFamily: "monospace", fontSize: 13, color: "#1a1a1a", fontWeight: 600 }}>{total},00 €</span>
+            <span style={{ fontSize: 10, color: "#aaa" }}>{open ? "▲" : "▼"}</span>
+          </span>
+        </button>
+      )}
+      {!collapsible && (
+        <p style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 20px", fontFamily: "monospace" }}>
+          BESTELLÜBERSICHT
+        </p>
+      )}
+      {open && (
+        <>
+          <div style={{ display: "flex", gap: 14, marginBottom: 20 }}>
+            <div style={{ width: 56, height: 56, backgroundColor: "#e8e0d8", flexShrink: 0 }} />
+            <div>
+              <p style={{ fontSize: 13, color: "#1a1a1a", margin: "0 0 3px", fontWeight: 500 }}>{PRODUCT_NAME}</p>
+              <p style={{ fontSize: 11, color: "#888", margin: "0 0 3px", lineHeight: 1.5 }}>{PRODUCT_DESC}</p>
+              <p style={{ fontSize: 11, color: "#888", margin: 0, fontFamily: "monospace" }}>Menge: {quantity}</p>
+            </div>
+          </div>
+          <div style={{ borderTop: "1px solid #e0d8d0", paddingTop: 14 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#888", marginBottom: 6, fontFamily: "monospace" }}>
+              <span>Zwischensumme</span><span>{total},00 €</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#888", marginBottom: 12, fontFamily: "monospace" }}>
+              <span>Versand</span><span>Kostenlos</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#1a1a1a", fontWeight: 600, fontFamily: "monospace" }}>
+              <span>GESAMT</span><span>{total},00 €</span>
+            </div>
+            <p style={{ fontSize: 10, color: "#aaa", margin: "6px 0 0", fontFamily: "monospace" }}>
+              Inkl. 19% MwSt. · Rechnung per E-Mail
+            </p>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ─── Main checkout form ───────────────────────────────────────────────────────
+interface Props { quantity: number; locale: string; siteUrl: string; }
 
 export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
   const [step, setStep] = useState<"info" | "payment">("info");
@@ -103,8 +186,16 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
   const [city, setCity] = useState("");
   const [postal, setPostal] = useState("");
   const [country, setCountry] = useState("DE");
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const total = PRICE * quantity;
+  const returnUrl = `${siteUrl}/${locale}/checkout/success`;
+
+  const handleLoggedIn = (n: string, e: string) => {
+    if (n) setName(n);
+    if (e) setEmail(e);
+    setLoggedIn(true);
+  };
 
   const handleInfoSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,187 +205,204 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          quantity,
-          locale,
-          name,
-          email,
-          address: { line1, city, postal_code: postal, country },
-        }),
+        body: JSON.stringify({ quantity, locale, name, email, address: { line1, city, postal_code: postal, country } }),
       });
       const data = await res.json();
-      if (!res.ok || !data.clientSecret) {
-        setIntentError(data.detail ?? "Fehler beim Starten des Checkouts.");
-        return;
-      }
+      if (!res.ok || !data.clientSecret) { setIntentError(data.detail ?? "Fehler beim Starten des Checkouts."); return; }
       setClientSecret(data.clientSecret);
       setStep("payment");
-    } catch {
-      setIntentError("Netzwerkfehler. Bitte versuche es erneut.");
-    } finally {
-      setLoadingIntent(false);
-    }
+    } catch { setIntentError("Netzwerkfehler. Bitte versuche es erneut."); }
+    finally { setLoadingIntent(false); }
   }, [quantity, locale, name, email, line1, city, postal, country]);
 
-  const input: React.CSSProperties = {
-    width: "100%", border: "1px solid #ddd", padding: "11px 14px",
-    fontSize: 14, fontFamily: "Georgia, serif", boxSizing: "border-box",
-    backgroundColor: "#fff", outline: "none", color: "#1a1a1a",
-  };
-  const label: React.CSSProperties = {
-    fontSize: 10, letterSpacing: 2, color: "#888", display: "block",
-    marginBottom: 5, fontFamily: "monospace", textTransform: "uppercase",
-  };
-  const field: React.CSSProperties = { marginBottom: 16 };
-
-  const returnUrl = `${siteUrl}/${locale}/checkout/success`;
-
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 48, maxWidth: 900, margin: "0 auto", padding: "40px 24px", fontFamily: "Georgia, serif" }}>
+    <>
+      {/* ── Responsive styles ── */}
+      <style>{`
+        .co-wrap {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 0;
+          max-width: 860px;
+          margin: 0 auto;
+          padding: 0;
+          font-family: Georgia, serif;
+        }
+        .co-summary-mobile { display: block; }
+        .co-summary-desktop { display: none; }
+        .co-form-col { padding: 28px 20px 40px; }
+        .co-summary-box { background: #f9f7f4; padding: 20px; }
+        .co-summary-toggle {
+          display: flex; justify-content: space-between; align-items: center;
+          width: 100%; background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 16px;
+        }
+        .co-section-label {
+          font-size: 10px; letter-spacing: 2px; color: #888;
+          text-transform: uppercase; margin: 0 0 14px; font-family: monospace;
+        }
+        .co-input {
+          width: 100%; border: 1px solid #ddd; padding: 12px 14px;
+          font-size: 15px; font-family: Georgia, serif; box-sizing: border-box;
+          background: #fff; outline: none; color: #1a1a1a;
+          -webkit-appearance: none; border-radius: 0;
+        }
+        .co-input:focus { border-color: #1a1a1a; }
+        .co-label {
+          font-size: 10px; letter-spacing: 2px; color: #888; display: block;
+          margin-bottom: 6px; font-family: monospace; text-transform: uppercase;
+        }
+        .co-field { margin-bottom: 16px; }
+        .co-row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; margin-bottom: 16px; }
+        .co-btn-primary {
+          width: 100%; background: #1a1a1a; color: #fff; border: none;
+          padding: 16px; font-size: 11px; letter-spacing: 3px;
+          cursor: pointer; font-family: monospace; text-transform: uppercase;
+          margin-top: 4px;
+        }
+        .co-btn-primary:disabled { background: #888; cursor: not-allowed; }
+        .co-error {
+          background: #fff0f0; border: 1px solid #ffcccc;
+          padding: 12px 14px; margin-bottom: 16px;
+          font-size: 12px; color: #c00; font-family: monospace;
+        }
+        .co-info-bar {
+          background: #f9f7f4; padding: 14px 16px; margin-bottom: 28px;
+          font-size: 13px; color: #555; line-height: 1.6;
+          display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+        }
+        .co-divider { border: none; border-top: 1px solid #e0d8d0; margin: 28px 0; }
 
-      {/* ── Left: form ─────────────────────────────── */}
-      <div>
-        {step === "info" ? (
-          <form onSubmit={handleInfoSubmit}>
-            <p style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 16px", fontFamily: "monospace" }}>
-              KONTAKT
-            </p>
-            <div style={field}>
-              <label style={label}>Name</label>
-              <input style={input} type="text" value={name} onChange={e => setName(e.target.value)} required autoComplete="name" placeholder="Max Mustermann" />
-            </div>
-            <div style={{ ...field, marginBottom: 32 }}>
-              <label style={label}>E-Mail</label>
-              <input style={input} type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" placeholder="max@mustermann.de" />
-            </div>
+        @media (min-width: 680px) {
+          .co-form-col { padding: 36px 32px 48px; }
+          .co-summary-box { padding: 24px; }
+          .co-input { font-size: 14px; }
+        }
 
-            <p style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 16px", fontFamily: "monospace" }}>
-              LIEFERADRESSE
-            </p>
-            <div style={field}>
-              <label style={label}>Straße &amp; Hausnummer</label>
-              <input style={input} type="text" value={line1} onChange={e => setLine1(e.target.value)} required autoComplete="street-address" placeholder="Musterstraße 1" />
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: 12, marginBottom: 16 }}>
-              <div>
-                <label style={label}>PLZ</label>
-                <input style={input} type="text" value={postal} onChange={e => setPostal(e.target.value)} required autoComplete="postal-code" placeholder="10115" maxLength={10} />
+        @media (min-width: 900px) {
+          .co-wrap {
+            grid-template-columns: 1fr 340px;
+            gap: 0;
+            padding: 0;
+          }
+          .co-summary-mobile { display: none; }
+          .co-summary-desktop { display: block; }
+          .co-form-col { padding: 48px 40px 48px; border-right: 1px solid #e0d8d0; }
+          .co-summary-box {
+            position: sticky; top: 0;
+            height: 100vh; overflow-y: auto;
+            padding: 48px 28px;
+            background: #f9f7f4;
+          }
+          .co-summary-toggle { display: none; }
+        }
+      `}</style>
+
+      <div className="co-wrap">
+        {/* ── Mobile order summary (collapsible) ── */}
+        <div className="co-summary-mobile">
+          <OrderSummary quantity={quantity} total={total} collapsible />
+        </div>
+
+        {/* ── Form column ── */}
+        <div className="co-form-col">
+          {step === "info" ? (
+            <form onSubmit={handleInfoSubmit}>
+              {/* Login widget */}
+              {!loggedIn && <LoginWidget onLoggedIn={handleLoggedIn} />}
+              {loggedIn && (
+                <p style={{ fontSize: 12, color: "#2d7a2d", marginBottom: 20, fontFamily: "monospace" }}>
+                  ✓ Angemeldet · Daten wurden vorausgefüllt
+                </p>
+              )}
+
+              <p className="co-section-label">KONTAKT</p>
+              <div className="co-field">
+                <label className="co-label">Name</label>
+                <input className="co-input" type="text" value={name} onChange={e => setName(e.target.value)} required autoComplete="name" placeholder="Max Mustermann" />
               </div>
-              <div>
-                <label style={label}>Stadt</label>
-                <input style={input} type="text" value={city} onChange={e => setCity(e.target.value)} required autoComplete="address-level2" placeholder="Berlin" />
+              <div className="co-field" style={{ marginBottom: 28 }}>
+                <label className="co-label">E-Mail</label>
+                <input className="co-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" placeholder="max@mustermann.de" />
               </div>
-            </div>
-            <div style={{ ...field, marginBottom: 32 }}>
-              <label style={label}>Land</label>
-              <select style={{ ...input, cursor: "pointer" }} value={country} onChange={e => setCountry(e.target.value)}>
-                <option value="DE">Deutschland</option>
-                <option value="AT">Österreich</option>
-                <option value="CH">Schweiz</option>
-                <option value="LU">Luxemburg</option>
-                <option value="BE">Belgien</option>
-                <option value="NL">Niederlande</option>
-              </select>
-            </div>
 
-            {intentError && (
-              <div style={{ backgroundColor: "#fff0f0", border: "1px solid #ffcccc", padding: "12px 16px", marginBottom: 16, fontSize: 13, color: "#c00", fontFamily: "monospace" }}>
-                {intentError}
+              <hr className="co-divider" style={{ margin: "0 0 28px" }} />
+
+              <p className="co-section-label">LIEFERADRESSE</p>
+              <div className="co-field">
+                <label className="co-label">Straße &amp; Hausnummer</label>
+                <input className="co-input" type="text" value={line1} onChange={e => setLine1(e.target.value)} required autoComplete="street-address" placeholder="Musterstraße 1" />
               </div>
-            )}
+              <div className="co-row">
+                <div>
+                  <label className="co-label">PLZ</label>
+                  <input className="co-input" type="text" value={postal} onChange={e => setPostal(e.target.value)} required autoComplete="postal-code" placeholder="10115" maxLength={10} inputMode="numeric" />
+                </div>
+                <div>
+                  <label className="co-label">Stadt</label>
+                  <input className="co-input" type="text" value={city} onChange={e => setCity(e.target.value)} required autoComplete="address-level2" placeholder="Berlin" />
+                </div>
+              </div>
+              <div className="co-field" style={{ marginBottom: 28 }}>
+                <label className="co-label">Land</label>
+                <select className="co-input" style={{ cursor: "pointer" }} value={country} onChange={e => setCountry(e.target.value)}>
+                  <option value="DE">Deutschland</option>
+                  <option value="AT">Österreich</option>
+                  <option value="CH">Schweiz</option>
+                  <option value="LU">Luxemburg</option>
+                  <option value="BE">Belgien</option>
+                  <option value="NL">Niederlande</option>
+                </select>
+              </div>
 
-            <button
-              type="submit"
-              disabled={loadingIntent}
-              style={{ width: "100%", backgroundColor: loadingIntent ? "#888" : "#1a1a1a", color: "#fff", border: "none", padding: "16px", fontSize: 11, letterSpacing: 3, cursor: loadingIntent ? "not-allowed" : "pointer", fontFamily: "monospace", textTransform: "uppercase" }}
-            >
-              {loadingIntent ? "…" : "WEITER ZUR ZAHLUNG"}
-            </button>
-          </form>
-        ) : (
-          <div>
-            {/* Summary of entered info */}
-            <div style={{ backgroundColor: "#f9f7f4", padding: "16px 20px", marginBottom: 32, fontSize: 13, color: "#555", lineHeight: 1.7 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              {intentError && <div className="co-error">{intentError}</div>}
+              <button type="submit" disabled={loadingIntent} className="co-btn-primary">
+                {loadingIntent ? "…" : "WEITER ZUR ZAHLUNG"}
+              </button>
+            </form>
+          ) : (
+            <div>
+              {/* Summary bar of entered info */}
+              <div className="co-info-bar">
                 <div>
                   <strong style={{ color: "#1a1a1a" }}>{name}</strong> · {email}<br />
                   {line1}, {postal} {city}, {country}
                 </div>
-                <button
-                  onClick={() => setStep("info")}
-                  style={{ background: "none", border: "none", fontSize: 11, color: "#888", cursor: "pointer", textDecoration: "underline", fontFamily: "monospace", padding: 0, whiteSpace: "nowrap" }}
-                >
+                <button onClick={() => setStep("info")} style={{ background: "none", border: "none", fontSize: 11, color: "#888", cursor: "pointer", textDecoration: "underline", fontFamily: "monospace", padding: 0, flexShrink: 0 }}>
                   Ändern
                 </button>
               </div>
-            </div>
 
-            {clientSecret && stripePromise && (
-              <Elements
-                stripe={stripePromise}
-                options={{
+              {clientSecret && stripePromise && (
+                <Elements stripe={stripePromise} options={{
                   clientSecret,
                   appearance: {
                     theme: "stripe",
                     variables: {
-                      colorPrimary: "#1a1a1a",
-                      colorBackground: "#ffffff",
-                      colorText: "#1a1a1a",
-                      colorDanger: "#c00",
-                      fontFamily: "Georgia, serif",
-                      borderRadius: "0px",
-                      fontSizeBase: "14px",
+                      colorPrimary: "#1a1a1a", colorBackground: "#ffffff",
+                      colorText: "#1a1a1a", colorDanger: "#c00",
+                      fontFamily: "Georgia, serif", borderRadius: "0px", fontSizeBase: "15px",
                     },
                     rules: {
-                      ".Input": { border: "1px solid #ddd", boxShadow: "none", padding: "11px 14px" },
+                      ".Input": { border: "1px solid #ddd", boxShadow: "none", padding: "12px 14px" },
                       ".Input:focus": { border: "1px solid #1a1a1a", boxShadow: "none" },
-                      ".Label": { fontFamily: "monospace", fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#888" },
-                      ".Tab": { border: "1px solid #ddd", boxShadow: "none" },
+                      ".Label": { fontFamily: "monospace", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#888" },
+                      ".Tab": { border: "1px solid #ddd", boxShadow: "none", borderRadius: "0" },
                       ".Tab--selected": { border: "1px solid #1a1a1a", boxShadow: "none" },
                     },
                   },
-                }}
-              >
-                <PaymentForm locale={locale} returnUrl={returnUrl} />
-              </Elements>
-            )}
-          </div>
-        )}
-      </div>
+                }}>
+                  <PaymentForm locale={locale} returnUrl={returnUrl} total={total} />
+                </Elements>
+              )}
+            </div>
+          )}
+        </div>
 
-      {/* ── Right: order summary ────────────────────── */}
-      <div>
-        <div style={{ position: "sticky", top: 32, backgroundColor: "#f9f7f4", padding: "28px 24px" }}>
-          <p style={{ fontSize: 10, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 20px", fontFamily: "monospace" }}>
-            BESTELLÜBERSICHT
-          </p>
-          <div style={{ display: "flex", gap: 16, marginBottom: 20 }}>
-            <div style={{ width: 64, height: 64, backgroundColor: "#e8e0d8", flexShrink: 0 }} />
-            <div>
-              <p style={{ fontSize: 13, color: "#1a1a1a", margin: "0 0 4px", fontWeight: 500 }}>{PRODUCT_NAME}</p>
-              <p style={{ fontSize: 11, color: "#888", margin: "0 0 4px", lineHeight: 1.5 }}>{PRODUCT_DESC}</p>
-              <p style={{ fontSize: 11, color: "#888", margin: 0, fontFamily: "monospace" }}>Menge: {quantity}</p>
-            </div>
-          </div>
-          <div style={{ borderTop: "1px solid #e0d8d0", paddingTop: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#888", marginBottom: 8, fontFamily: "monospace" }}>
-              <span>Zwischensumme</span>
-              <span>{total},00 €</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#888", marginBottom: 16, fontFamily: "monospace" }}>
-              <span>Versand</span>
-              <span>Kostenlos</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 15, color: "#1a1a1a", fontWeight: 500, fontFamily: "monospace" }}>
-              <span>GESAMT</span>
-              <span>{total},00 €</span>
-            </div>
-            <p style={{ fontSize: 10, color: "#aaa", margin: "8px 0 0", fontFamily: "monospace" }}>
-              Inkl. 19% MwSt. · Rechnung per E-Mail
-            </p>
-          </div>
+        {/* ── Desktop order summary sidebar ── */}
+        <div className="co-summary-desktop">
+          <OrderSummary quantity={quantity} total={total} />
         </div>
       </div>
-    </div>
+    </>
   );
 }
