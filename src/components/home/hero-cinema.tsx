@@ -16,21 +16,24 @@ import { Link } from "@/i18n/navigation";
  *   0.35–0.60  headline recedes as the camera pushes in
  *   0.70–0.92  closing line + CTA settle over the close-up
  *
- * Two picture pipelines behind one scroll core:
- * - ≥1024px  "video": the 4K film, fully buffered via Blob URL,
- *   currentTime lerped toward the scroll target. (Blob because a
- *   scrub must be fully buffered anyway, and Chrome's progressive
- *   media path chokes on the AV1 4K master.)
- * - <1024px  "frames": 90 pre-extracted WebP frames drawn to a
- *   cover-fit canvas. Phones cannot scrub video reliably — sparse
- *   keyframes make every seek decode-from-keyframe (visible jank),
- *   and iOS adds its own paused-video painting quirks. Images have
- *   none of those failure modes, and they load progressively.
+ * The film is a pre-extracted WebP frame sequence drawn to a
+ * cover-fit canvas — deliberately NOT a scrubbed <video>. Scrubbing
+ * video means a decoder seek per animation frame; with the sparse
+ * keyframes of AI-generated footage every seek re-decodes from the
+ * last keyframe, which stutters on desktop (4K AV1) and simply
+ * freezes on phones (plus iOS paused-video painting quirks).
+ * drawImage of decoded stills has no decoder in the loop and cannot
+ * jank. Two sets, chosen once per visit by viewport:
+ *   ≥1024px  hero-frames-hd  1920×1080 (from the 4K master), ~5 MB
+ *   <1024px  hero-frames     1280×720, ~2.7 MB
+ * Frames load progressively — the nearest loaded frame is drawn, so
+ * the stage paints immediately and sharpens as the rest arrive.
  *
  * Implementation notes:
- * - Zero dependencies. One rAF loop that polls scroll progress
- *   (scroll events are unreliable in some embedded renderers) and
- *   sleeps whenever the hero is off-screen and settled.
+ * - Zero dependencies. One always-on rAF loop that polls scroll
+ *   progress (scroll events are unreliable in some renderers; one
+ *   rect read per frame is nothing). Hidden tabs pause rAF, which
+ *   is exactly the right behavior for free.
  * - All per-frame style writes are imperative (refs), never React
  *   re-renders.
  * - prefers-reduced-motion collapses the runway to one static
@@ -39,8 +42,8 @@ import { Link } from "@/i18n/navigation";
 
 const FRAME_COUNT = 90;
 
-const frameSrc = (i: number) =>
-  `/hero-frames/frame-${String(i).padStart(3, "0")}.webp`;
+const frameSrc = (set: "hd" | "sd", i: number) =>
+  `/${set === "hd" ? "hero-frames-hd" : "hero-frames"}/frame-${String(i).padStart(3, "0")}.webp`;
 
 /** Smoothstep between two progress edges. */
 function ramp(p: number, from: number, to: number): number {
@@ -53,7 +56,6 @@ export function HeroCinema() {
   const tImg = useTranslations("images");
 
   const wrapperRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const closingRef = useRef<HTMLDivElement>(null);
@@ -64,9 +66,6 @@ export function HeroCinema() {
   const lastDrawnRef = useRef(-1);
 
   const [reducedMotion, setReducedMotion] = useState(false);
-  // null until mount; SSR renders both (empty) picture layers so
-  // hydration is always clean.
-  const [mode, setMode] = useState<"video" | "frames" | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -76,46 +75,11 @@ export function HeroCinema() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
+  // ── Frame preload — one set per visit, progressive ──
   useEffect(() => {
-    setMode(window.innerWidth >= 1024 ? "video" : "frames");
-  }, []);
+    if (reducedMotion || framesRef.current.length) return;
 
-  // ── Picture pipeline: video (desktop) ──
-  useEffect(() => {
-    if (mode !== "video") return;
-    const video = videoRef.current;
-    if (!video || video.src) return;
-
-    let objectUrl: string | null = null;
-    let cancelled = false;
-
-    fetch("/videos/hero-wide-4k.mp4")
-      .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(String(r.status)))))
-      .then((blob) => {
-        if (cancelled) return;
-        objectUrl = URL.createObjectURL(blob);
-        video.src = objectUrl;
-        video.load();
-      })
-      .catch(() => {
-        // Progressive fallback — 720p H.264 streams reliably everywhere.
-        if (!cancelled) {
-          video.src = "/videos/hero-wide-720.mp4";
-          video.load();
-        }
-      });
-
-    return () => {
-      cancelled = true;
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
-    };
-  }, [mode]);
-
-  // ── Picture pipeline: frames (mobile / tablet) ──
-  useEffect(() => {
-    if (mode !== "frames" || reducedMotion) return;
-    if (framesRef.current.length) return;
-
+    const set: "hd" | "sd" = window.innerWidth >= 1024 ? "hd" : "sd";
     const imgs: HTMLImageElement[] = [];
     const loaded: boolean[] = new Array(FRAME_COUNT).fill(false);
 
@@ -124,38 +88,30 @@ export function HeroCinema() {
       img.decoding = "async";
       img.onload = () => {
         loaded[i] = true;
-        // Force a repaint pass so early frames appear as they arrive.
-        if (lastDrawnRef.current === -1 || i === lastDrawnRef.current) {
-          lastDrawnRef.current = -2;
-        }
+        // Repaint as soon as a better frame for the current position
+        // exists (first paint included).
+        lastDrawnRef.current = -2;
       };
-      img.src = frameSrc(i);
+      img.src = frameSrc(set, i);
       imgs.push(img);
     }
 
     framesRef.current = imgs;
     frameLoadedRef.current = loaded;
-  }, [mode, reducedMotion]);
+  }, [reducedMotion]);
 
   // ── Scroll core ──
   useEffect(() => {
-    if (reducedMotion || mode === null) return;
+    if (reducedMotion) return;
 
     const wrapper = wrapperRef.current;
-    const video = videoRef.current;
     const canvas = canvasRef.current;
-    if (!wrapper) return;
-
-    // We drive the clock — the element never plays itself.
-    video?.pause();
-
     const ctx = canvas?.getContext("2d") ?? null;
+    if (!wrapper || !canvas || !ctx) return;
 
     let progress = 0; // scroll target 0..1
     let shown = -1; // lerped playhead 0..1
     let rafId = 0;
-    let active = false; // rAF loop runs only while the hero is on screen
-    let inView = true;
 
     const readProgress = () => {
       const rect = wrapper.getBoundingClientRect();
@@ -164,13 +120,12 @@ export function HeroCinema() {
     };
 
     const drawFrame = () => {
-      if (!canvas || !ctx) return;
-
       // Keep the bitmap matched to the element (URL-bar collapse
       // resizes the stage on phones).
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const cw = Math.round(canvas.clientWidth * dpr);
       const ch = Math.round(canvas.clientHeight * dpr);
+      if (!cw || !ch) return;
       if (canvas.width !== cw || canvas.height !== ch) {
         canvas.width = cw;
         canvas.height = ch;
@@ -205,16 +160,7 @@ export function HeroCinema() {
     };
 
     const apply = () => {
-      if (mode === "video" && video) {
-        if (video.readyState >= 2 && video.duration) {
-          const target = shown * (video.duration - 0.05);
-          if (Math.abs(video.currentTime - target) > 0.01) {
-            video.currentTime = target;
-          }
-        }
-      } else {
-        drawFrame();
-      }
+      drawFrame();
 
       // Copy choreography — piecewise, all transform/opacity.
       const headlineOut = ramp(shown, 0.35, 0.6);
@@ -241,43 +187,18 @@ export function HeroCinema() {
     };
 
     const frame = () => {
-      // Poll progress each frame — scroll events are unreliable in
-      // some embedded renderers, and one rect read per frame is cheap.
+      // Poll progress every frame — no scroll listeners, no wake/sleep
+      // machinery to go wrong. Hidden tabs pause rAF automatically.
       readProgress();
       shown = shown < 0 ? progress : shown + (progress - shown) * 0.14;
       apply();
-
-      // Sleep only when the hero has left the viewport AND the
-      // playhead has settled; the observer wakes us on re-entry.
-      if (!inView && Math.abs(progress - shown) < 0.0006) {
-        shown = progress;
-        active = false;
-        return;
-      }
       rafId = requestAnimationFrame(frame);
     };
 
-    const wake = () => {
-      if (!active) {
-        active = true;
-        rafId = requestAnimationFrame(frame);
-      }
-    };
+    rafId = requestAnimationFrame(frame);
 
-    const observer = new IntersectionObserver(([entry]) => {
-      inView = entry.isIntersecting;
-      if (inView) wake();
-    });
-    observer.observe(wrapper);
-    wake();
-
-    return () => {
-      active = false;
-      inView = false;
-      cancelAnimationFrame(rafId);
-      observer.disconnect();
-    };
-  }, [reducedMotion, mode]);
+    return () => cancelAnimationFrame(rafId);
+  }, [reducedMotion]);
 
   return (
     <section
@@ -290,27 +211,12 @@ export function HeroCinema() {
           reducedMotion ? "relative min-h-[92vh]" : "sticky top-0 h-svh"
         }`}
       >
-        {/* Film layer — video on desktop glass */}
-        {!reducedMotion && (
-          <video
-            ref={videoRef}
-            muted
-            playsInline
-            preload="auto"
-            disablePictureInPicture
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
-
-        {/* Film layer — frame flipbook on phones and tablets */}
+        {/* Film layer — frame flipbook on a cover-fit canvas */}
         {!reducedMotion && (
           <canvas
             ref={canvasRef}
             aria-hidden="true"
-            className={`absolute inset-0 h-full w-full ${
-              mode === "frames" ? "" : "hidden"
-            }`}
+            className="absolute inset-0 h-full w-full"
           />
         )}
 
@@ -318,7 +224,7 @@ export function HeroCinema() {
         {reducedMotion && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={frameSrc(0)}
+            src={frameSrc("sd", 0)}
             alt=""
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover"
