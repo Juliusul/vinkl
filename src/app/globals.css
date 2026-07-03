@@ -32,9 +32,12 @@
   --color-error: #9B2C2C;
   --color-success: #2D6A4F;
 
-  /* ── Typography ── */
-  --font-serif: "PP Editorial New", "Georgia", serif;
-  --font-sans: "Inter", "Helvetica Neue", "Arial", sans-serif;
+  /* ── Typography ──
+     Actual loaded faces via next/font (see src/app/fonts.ts).
+     PP Editorial New stays first in the serif stack so a licensed,
+     self-hosted file drops in with zero code change. ── */
+  --font-serif: "PP Editorial New", var(--font-spectral), "Georgia", serif;
+  --font-sans: var(--font-inter), "Helvetica Neue", "Arial", sans-serif;
 
   /* ── Spacing (4px rhythm) ── */
   --spacing-1: 4px;
@@ -63,14 +66,27 @@
   --duration-moderate: 350ms;
   --duration-slow: 500ms;
 
-  --ease-out: cubic-bezier(0.25, 0, 0.15, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);   /* ease-out-expo — premium settle, no bounce */
   --ease-in: cubic-bezier(0.5, 0, 0.75, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ── Z-index scale (semantic, not magic numbers) ── */
+  --z-header: 50;
+  --z-cart-backdrop: 60;
+  --z-cart: 70;
+  --z-cookie: 80;
 }
 
 /* ─────────────────────────────────────────────
    Base styles
    ───────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+  /* keep the scrollbar gutter reserved so opening the cart (which
+     locks body scroll) doesn't shift the whole layout horizontally */
+  scrollbar-gutter: stable;
+}
 
 body {
   background-color: var(--color-bg-cream);
@@ -78,6 +94,38 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "calt";
+}
+
+/* Display serif: enable proper kerning + discretionary ligatures off */
+.font-serif {
+  font-feature-settings: "kern", "liga";
+}
+
+/* ─────────────────────────────────────────────
+   Selection — terracotta wash, ink text
+   ───────────────────────────────────────────── */
+
+::selection {
+  background-color: color-mix(in oklab, var(--color-terracotta) 22%, transparent);
+  color: var(--color-ink-primary);
+}
+
+/* ─────────────────────────────────────────────
+   Focus — visible, branded, keyboard-only.
+   Replaces the removed/default outline everywhere.
+   ───────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* On the dark section, the terracotta-light reads better */
+.bg-bg-deep :focus-visible {
+  outline-color: var(--color-terracotta-light);
 }
 
 /* ─────────────────────────────────────────────

@@ -92,10 +92,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
-                className={`h-1.5 rounded-full transition-all duration-200 ${
+                className={`h-1 transition-all duration-[--duration-moderate] ease-[--ease-out] ${
                   i === activeIndex
-                    ? "w-6 bg-ink-primary"
-                    : "w-1.5 bg-ink-primary/30"
+                    ? "w-6 bg-terracotta"
+                    : "w-3 bg-ink-primary/25"
                 }`}
                 aria-label={`Image ${i + 1}`}
               />
@@ -111,10 +111,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             <button
               key={image.url}
               onClick={() => setActiveIndex(index)}
-              className={`relative aspect-square overflow-hidden transition-opacity duration-200 ${
+              className={`relative aspect-square overflow-hidden transition-all duration-[--duration-normal] ease-[--ease-out] ${
                 index === activeIndex
-                  ? "opacity-100 ring-1 ring-ink-primary"
-                  : "opacity-60 hover:opacity-90"
+                  ? "opacity-100 ring-2 ring-terracotta ring-offset-2 ring-offset-bg-cream"
+                  : "opacity-55 hover:opacity-90"
               }`}
               aria-label={`${productName} — ${index + 1}`}
             >

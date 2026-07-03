@@ -61,7 +61,7 @@ export function AddToCartBar() {
         <button
           onClick={handleClick}
           disabled={isAdding}
-          className="bg-ink-primary px-6 py-3 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta active:scale-[0.98] disabled:opacity-60"
+          className="bg-ink-primary px-6 py-3 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-[background-color,transform] duration-[--duration-normal] ease-[--ease-out] hover:bg-terracotta active:translate-y-px active:scale-[0.99] disabled:opacity-60"
         >
           {isAdding ? tCart("adding") : t("addToCart")}
         </button>

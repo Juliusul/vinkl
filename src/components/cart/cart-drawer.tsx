@@ -45,7 +45,7 @@ export function CartDrawer() {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-50 bg-ink-primary/40 transition-opacity duration-[--duration-moderate] ease-[--ease-out] ${
+        className={`fixed inset-0 z-[var(--z-cart-backdrop)] bg-ink-primary/40 transition-opacity duration-[--duration-moderate] ease-[--ease-out] ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={closeCart}
@@ -57,7 +57,7 @@ export function CartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-label={t("title")}
-        className={`fixed bottom-0 right-0 top-0 z-50 flex w-full max-w-[420px] flex-col bg-bg-cream shadow-2xl transition-transform duration-[--duration-moderate] ease-[--ease-out] ${
+        className={`fixed bottom-0 right-0 top-0 z-[var(--z-cart)] flex w-full max-w-[420px] flex-col bg-bg-cream shadow-2xl transition-transform duration-[--duration-moderate] ease-[--ease-out] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

@@ -32,6 +32,12 @@
     },
     "meta": {
       "language": "Language"
+    },
+    "menu": {
+      "open": "Menu",
+      "close": "Close",
+      "title": "Menu",
+      "account": "Account"
     }
   },
   "home": {
@@ -95,7 +101,15 @@
       "tagline": "The shelf that adapts to your walls.",
       "price": "€299",
       "addToCart": "Add to cart",
-      "shipping": "Free shipping in DE · 30-day returns"
+      "shipping": "Free shipping in DE · 30-day returns",
+      "trust": {
+        "adjustableValue": "Stepless",
+        "adjustableLabel": "Any angle",
+        "materialValue": "Teak",
+        "materialLabel": "Solid",
+        "loadValue": "15 kg",
+        "loadLabel": "Load capacity"
+      }
     },
     "story": {
       "label": "Why this shelf",

@@ -68,7 +68,7 @@ export function ProductHero({ product }: ProductHeroProps) {
             <AddToCartButton
               variantId={product.variants[0]?.id ?? ""}
               available={product.available}
-              className="mt-6 w-full bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink-primary"
+              className="mt-6 w-full bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-[background-color,transform] duration-[--duration-normal] ease-[--ease-out] hover:bg-terracotta active:translate-y-px active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink-primary"
             >
               {t("addToCart")}
             </AddToCartButton>
@@ -78,35 +78,26 @@ export function ProductHero({ product }: ProductHeroProps) {
               {t("shipping")}
             </p>
 
-            {/* Trust signals */}
-            <div className="mt-8 flex items-center gap-6 border-t border-border-default pt-6 lg:mt-10 lg:pt-8">
-              <div className="flex flex-col">
-                <span className="text-xs font-medium uppercase tracking-widest text-ink-tertiary">
-                  Stufenlos
-                </span>
-                <span className="mt-0.5 text-[11px] text-ink-tertiary">
-                  Jeder Winkel
-                </span>
-              </div>
-              <div className="h-6 w-px bg-border-default" />
-              <div className="flex flex-col">
-                <span className="text-xs font-medium uppercase tracking-widest text-ink-tertiary">
-                  Teak
-                </span>
-                <span className="mt-0.5 text-[11px] text-ink-tertiary">
-                  Massiv
-                </span>
-              </div>
-              <div className="h-6 w-px bg-border-default" />
-              <div className="flex flex-col">
-                <span className="text-xs font-medium uppercase tracking-widest text-ink-tertiary">
-                  15 kg
-                </span>
-                <span className="mt-0.5 text-[11px] text-ink-tertiary">
-                  Tragkraft
-                </span>
-              </div>
-            </div>
+            {/* Trust signals — value reads first, caption underneath */}
+            <dl className="mt-8 flex items-stretch gap-6 border-t border-border-default pt-6 lg:mt-10 lg:pt-8">
+              {[
+                { value: t("trust.adjustableValue"), label: t("trust.adjustableLabel") },
+                { value: t("trust.materialValue"), label: t("trust.materialLabel") },
+                { value: t("trust.loadValue"), label: t("trust.loadLabel") },
+              ].map((signal, i) => (
+                <div key={signal.label} className="flex items-stretch gap-6">
+                  {i > 0 && <div className="w-px self-stretch bg-border-default" aria-hidden="true" />}
+                  <div className="flex flex-col">
+                    <dt className="order-2 mt-1 text-[11px] uppercase tracking-[0.12em] text-ink-tertiary">
+                      {signal.label}
+                    </dt>
+                    <dd className="order-1 text-sm font-medium tracking-tight text-ink-primary">
+                      {signal.value}
+                    </dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </div>

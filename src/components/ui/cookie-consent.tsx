@@ -87,7 +87,7 @@ export function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 p-4 md:p-6">
+    <div className="fixed inset-x-0 bottom-0 z-[var(--z-cookie)] p-4 md:p-6">
       <div className="mx-auto max-w-[640px] border border-border-default bg-bg-cream shadow-lg">
         <div className="p-5 md:p-6">
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">

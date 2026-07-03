@@ -60,7 +60,7 @@ export function HeroSection() {
           </p>
           <Link
             href="/objects/vinkl"
-            className="hero-animate hero-animate-delay-3 mt-8 inline-block bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-colors duration-[--duration-fast] ease-[--ease-out] hover:bg-terracotta md:mt-10"
+            className="hero-animate hero-animate-delay-3 mt-8 inline-block bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-[background-color,transform] duration-[--duration-normal] ease-[--ease-out] hover:bg-terracotta active:translate-y-px md:mt-10"
           >
             {t("cta")}
           </Link>

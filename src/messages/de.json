@@ -32,6 +32,12 @@
     },
     "meta": {
       "language": "Sprache"
+    },
+    "menu": {
+      "open": "Menü",
+      "close": "Schliessen",
+      "title": "Menü",
+      "account": "Konto"
     }
   },
   "home": {
@@ -95,7 +101,15 @@
       "tagline": "Das Regal, das sich deinen Wänden anpasst.",
       "price": "299 €",
       "addToCart": "In den Warenkorb",
-      "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe"
+      "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe",
+      "trust": {
+        "adjustableValue": "Stufenlos",
+        "adjustableLabel": "Jeder Winkel",
+        "materialValue": "Teak",
+        "materialLabel": "Massiv",
+        "loadValue": "15 kg",
+        "loadLabel": "Tragkraft"
+      }
     },
     "story": {
       "label": "Warum dieses Regal",

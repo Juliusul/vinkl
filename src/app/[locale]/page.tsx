@@ -1,5 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
-import { HeroSection } from "@/components/home/hero-section";
+import { HeroCinema } from "@/components/home/hero-cinema";
 import { PhilosophySection } from "@/components/home/philosophy-section";
 import { FeaturedObjectSection } from "@/components/home/featured-object-section";
 import { AdaptsSection } from "@/components/home/adapts-section";
@@ -16,8 +16,8 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <>
-      {/* 1. The declaration */}
-      <HeroSection />
+      {/* 1. The declaration — scroll-driven product film */}
+      <HeroCinema />
 
       {/* 2. The why */}
       <PhilosophySection />

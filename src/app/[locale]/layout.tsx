@@ -11,6 +11,7 @@ import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { sans, serif } from "../fonts";
 import "../globals.css";
 
 // ── Static params for all locales ──
@@ -75,7 +76,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   ];
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${sans.variable} ${serif.variable}`}>
       <body className="flex min-h-screen flex-col bg-bg-cream text-ink-primary font-sans antialiased">
         <NextIntlClientProvider>
           <CartProvider>
