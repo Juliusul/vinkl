@@ -7,24 +7,40 @@ import { Link } from "@/i18n/navigation";
 /**
  * Hero Cinema — scroll-driven opening statement.
  *
- * A 300vh scroll runway pins a full-bleed product film. Scroll
- * position scrubs the camera: a slow dolly from the wide room
- * into the crooked corner where the shelf lives.
+ * A scroll runway (250vh mobile / 300vh desktop) pins a full-bleed
+ * product film. Scroll position scrubs the camera: a slow dolly from
+ * the wide room into the crooked corner where the shelf lives.
  *
  * Narrative mapped to scroll progress:
  *   0.00–0.35  headline over the wide scene ("Deine Wände…")
  *   0.35–0.60  headline recedes as the camera pushes in
  *   0.70–0.92  closing line + CTA settle over the close-up
  *
+ * Two picture pipelines behind one scroll core:
+ * - ≥1024px  "video": the 4K film, fully buffered via Blob URL,
+ *   currentTime lerped toward the scroll target. (Blob because a
+ *   scrub must be fully buffered anyway, and Chrome's progressive
+ *   media path chokes on the AV1 4K master.)
+ * - <1024px  "frames": 90 pre-extracted WebP frames drawn to a
+ *   cover-fit canvas. Phones cannot scrub video reliably — sparse
+ *   keyframes make every seek decode-from-keyframe (visible jank),
+ *   and iOS adds its own paused-video painting quirks. Images have
+ *   none of those failure modes, and they load progressively.
+ *
  * Implementation notes:
- * - Zero dependencies. One passive scroll listener + one rAF loop.
- * - currentTime is lerped toward the scroll target, so seeks glide
- *   instead of stepping (and cheap GPUs never see raw jumps).
+ * - Zero dependencies. One rAF loop that polls scroll progress
+ *   (scroll events are unreliable in some embedded renderers) and
+ *   sleeps whenever the hero is off-screen and settled.
  * - All per-frame style writes are imperative (refs), never React
  *   re-renders.
  * - prefers-reduced-motion collapses the runway to one static
  *   viewport: poster frame, full copy, zero scrubbing.
  */
+
+const FRAME_COUNT = 90;
+
+const frameSrc = (i: number) =>
+  `/hero-frames/frame-${String(i).padStart(3, "0")}.webp`;
 
 /** Smoothstep between two progress edges. */
 function ramp(p: number, from: number, to: number): number {
@@ -38,11 +54,19 @@ export function HeroCinema() {
 
   const wrapperRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const closingRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
 
+  const framesRef = useRef<HTMLImageElement[]>([]);
+  const frameLoadedRef = useRef<boolean[]>([]);
+  const lastDrawnRef = useRef(-1);
+
   const [reducedMotion, setReducedMotion] = useState(false);
+  // null until mount; SSR renders both (empty) picture layers so
+  // hydration is always clean.
+  const [mode, setMode] = useState<"video" | "frames" | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -52,24 +76,20 @@ export function HeroCinema() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // Pick the film once per visit: 4K for desktop glass, 720p below.
-  // The file is fetched fully and fed in as a Blob URL — a scrubbed
-  // video must be completely buffered anyway (a mid-dolly network
-  // stall would freeze the scroll), and Chrome's progressive media
-  // path chokes on the AV1 4K master while a Blob plays it fine.
   useEffect(() => {
+    setMode(window.innerWidth >= 1024 ? "video" : "frames");
+  }, []);
+
+  // ── Picture pipeline: video (desktop) ──
+  useEffect(() => {
+    if (mode !== "video") return;
     const video = videoRef.current;
     if (!video || video.src) return;
-
-    const file =
-      window.innerWidth >= 1024
-        ? "/videos/hero-wide-4k.mp4"
-        : "/videos/hero-wide-720.mp4";
 
     let objectUrl: string | null = null;
     let cancelled = false;
 
-    fetch(file)
+    fetch("/videos/hero-wide-4k.mp4")
       .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(String(r.status)))))
       .then((blob) => {
         if (cancelled) return;
@@ -89,17 +109,47 @@ export function HeroCinema() {
       cancelled = true;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, []);
+  }, [mode]);
 
+  // ── Picture pipeline: frames (mobile / tablet) ──
   useEffect(() => {
-    if (reducedMotion) return;
+    if (mode !== "frames" || reducedMotion) return;
+    if (framesRef.current.length) return;
+
+    const imgs: HTMLImageElement[] = [];
+    const loaded: boolean[] = new Array(FRAME_COUNT).fill(false);
+
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      const img = new Image();
+      img.decoding = "async";
+      img.onload = () => {
+        loaded[i] = true;
+        // Force a repaint pass so early frames appear as they arrive.
+        if (lastDrawnRef.current === -1 || i === lastDrawnRef.current) {
+          lastDrawnRef.current = -2;
+        }
+      };
+      img.src = frameSrc(i);
+      imgs.push(img);
+    }
+
+    framesRef.current = imgs;
+    frameLoadedRef.current = loaded;
+  }, [mode, reducedMotion]);
+
+  // ── Scroll core ──
+  useEffect(() => {
+    if (reducedMotion || mode === null) return;
 
     const wrapper = wrapperRef.current;
     const video = videoRef.current;
-    if (!wrapper || !video) return;
+    const canvas = canvasRef.current;
+    if (!wrapper) return;
 
     // We drive the clock — the element never plays itself.
-    video.pause();
+    video?.pause();
+
+    const ctx = canvas?.getContext("2d") ?? null;
 
     let progress = 0; // scroll target 0..1
     let shown = -1; // lerped playhead 0..1
@@ -113,12 +163,57 @@ export function HeroCinema() {
       progress = runway > 0 ? Math.min(1, Math.max(0, -rect.top / runway)) : 0;
     };
 
-    const apply = () => {
-      if (video.readyState >= 2 && video.duration) {
-        const target = shown * (video.duration - 0.05);
-        if (Math.abs(video.currentTime - target) > 0.01) {
-          video.currentTime = target;
+    const drawFrame = () => {
+      if (!canvas || !ctx) return;
+
+      // Keep the bitmap matched to the element (URL-bar collapse
+      // resizes the stage on phones).
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cw = Math.round(canvas.clientWidth * dpr);
+      const ch = Math.round(canvas.clientHeight * dpr);
+      if (canvas.width !== cw || canvas.height !== ch) {
+        canvas.width = cw;
+        canvas.height = ch;
+        lastDrawnRef.current = -2; // force redraw at the new size
+      }
+
+      const want = Math.round(shown * (FRAME_COUNT - 1));
+      const loaded = frameLoadedRef.current;
+
+      // Nearest loaded frame at or below the target, else first loaded.
+      let idx = -1;
+      for (let i = want; i >= 0; i--) {
+        if (loaded[i]) {
+          idx = i;
+          break;
         }
+      }
+      if (idx === -1) idx = loaded.findIndex(Boolean);
+      if (idx === -1 || idx === lastDrawnRef.current) return;
+
+      const img = framesRef.current[idx];
+      const iw = img.naturalWidth;
+      const ih = img.naturalHeight;
+      if (!iw || !ih) return;
+
+      // object-fit: cover
+      const scale = Math.max(cw / iw, ch / ih);
+      const dw = iw * scale;
+      const dh = ih * scale;
+      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      lastDrawnRef.current = idx;
+    };
+
+    const apply = () => {
+      if (mode === "video" && video) {
+        if (video.readyState >= 2 && video.duration) {
+          const target = shown * (video.duration - 0.05);
+          if (Math.abs(video.currentTime - target) > 0.01) {
+            video.currentTime = target;
+          }
+        }
+      } else {
+        drawFrame();
       }
 
       // Copy choreography — piecewise, all transform/opacity.
@@ -182,29 +277,53 @@ export function HeroCinema() {
       cancelAnimationFrame(rafId);
       observer.disconnect();
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, mode]);
 
   return (
     <section
       ref={wrapperRef}
-      className={reducedMotion ? "relative" : "relative h-[300vh]"}
+      className={reducedMotion ? "relative" : "relative h-[250vh] lg:h-[300vh]"}
       aria-label={tImg("hero")}
     >
       <div
         className={`overflow-hidden ${
-          reducedMotion ? "relative min-h-[92vh]" : "sticky top-0 h-screen"
+          reducedMotion ? "relative min-h-[92vh]" : "sticky top-0 h-svh"
         }`}
       >
-        {/* Film layer */}
-        <video
-          ref={videoRef}
-          muted
-          playsInline
-          preload="auto"
-          disablePictureInPicture
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        {/* Film layer — video on desktop glass */}
+        {!reducedMotion && (
+          <video
+            ref={videoRef}
+            muted
+            playsInline
+            preload="auto"
+            disablePictureInPicture
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+
+        {/* Film layer — frame flipbook on phones and tablets */}
+        {!reducedMotion && (
+          <canvas
+            ref={canvasRef}
+            aria-hidden="true"
+            className={`absolute inset-0 h-full w-full ${
+              mode === "frames" ? "" : "hidden"
+            }`}
+          />
+        )}
+
+        {/* Reduced motion: one honest still */}
+        {reducedMotion && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={frameSrc(0)}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
 
         {/* Legibility scrim — follows the headline out */}
         <div
