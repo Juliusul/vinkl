@@ -183,7 +183,12 @@ export function HeroCinema() {
         hintRef.current.style.animation = hintOut > 0.01 ? "none" : "";
         hintRef.current.style.opacity = String(1 - hintOut);
       }
-      wrapper.style.setProperty("--scrim", String(1 - headlineOut));
+      // Scrim tracks whichever copy block is on stage: full under the
+      // headline, a brief clean-film dip mid-dolly, back for the close.
+      wrapper.style.setProperty(
+        "--scrim",
+        String(Math.max(1 - headlineOut, closingIn)),
+      );
     };
 
     const frame = () => {
@@ -231,9 +236,17 @@ export function HeroCinema() {
           />
         )}
 
-        {/* Legibility scrim — follows the headline out */}
+        {/* Legibility scrims — present whenever copy is on stage,
+            dipped in the pure-film middle. Bottom-anchored (the copy
+            lives in the lower third everywhere) + a left wash on
+            desktop where the copy is left-aligned. */}
         <div
-          className="absolute inset-0 bg-gradient-to-r from-bg-cream/60 via-bg-cream/20 to-transparent"
+          className="hero-scrim absolute inset-0"
+          style={{ opacity: "var(--scrim, 1)" }}
+          aria-hidden="true"
+        />
+        <div
+          className="hero-scrim-side absolute inset-0 hidden lg:block"
           style={{ opacity: "var(--scrim, 1)" }}
           aria-hidden="true"
         />

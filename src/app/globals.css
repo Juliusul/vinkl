@@ -254,6 +254,38 @@ body {
 }
 
 /* ─────────────────────────────────────────────
+   Hero scrim — text protection over the film.
+   Bottom-anchored (the copy lives in the lower
+   third on every breakpoint), brand cream instead
+   of generic black, eased stops instead of a
+   linear fade so no scrim edge is ever visible.
+   ───────────────────────────────────────────── */
+
+.hero-scrim {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-bg-cream) 94%, transparent) 0%,
+    color-mix(in srgb, var(--color-bg-cream) 88%, transparent) 14%,
+    color-mix(in srgb, var(--color-bg-cream) 72%, transparent) 26%,
+    color-mix(in srgb, var(--color-bg-cream) 50%, transparent) 38%,
+    color-mix(in srgb, var(--color-bg-cream) 28%, transparent) 48%,
+    color-mix(in srgb, var(--color-bg-cream) 12%, transparent) 57%,
+    transparent 66%
+  );
+}
+
+/* Desktop assist: the copy is left-aligned, so a soft
+   left wash rides on top of the bottom scrim. */
+.hero-scrim-side {
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-bg-cream) 55%, transparent) 0%,
+    color-mix(in srgb, var(--color-bg-cream) 25%, transparent) 32%,
+    transparent 60%
+  );
+}
+
+/* ─────────────────────────────────────────────
    Cart drawer body scroll lock
    ───────────────────────────────────────────── */
 
