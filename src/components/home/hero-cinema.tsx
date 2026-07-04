@@ -1,49 +1,42 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 /**
- * Hero Cinema — scroll-driven opening statement.
+ * Hero Cinema — the opening statement, split by device class.
  *
- * A scroll runway (250vh mobile / 300vh desktop) pins a full-bleed
- * product film. Scroll position scrubs the camera: a slow dolly from
- * the wide room into the crooked corner where the shelf lives.
+ * DESKTOP (≥1024px): a 300vh scroll runway pins a full-bleed product
+ * film. Scroll scrubs the camera — a slow dolly from the wide room
+ * into the crooked corner where the shelf lives.
  *
- * Narrative mapped to scroll progress:
  *   0.00–0.35  headline over the wide scene ("Deine Wände…")
  *   0.35–0.60  headline recedes as the camera pushes in
  *   0.70–0.92  closing line + CTA settle over the close-up
  *
- * The film is a pre-extracted WebP frame sequence drawn to a
- * cover-fit canvas — deliberately NOT a scrubbed <video>. Scrubbing
- * video means a decoder seek per animation frame; with the sparse
- * keyframes of AI-generated footage every seek re-decodes from the
- * last keyframe, which stutters on desktop (4K AV1) and simply
- * freezes on phones (plus iOS paused-video painting quirks).
- * drawImage of decoded stills has no decoder in the loop and cannot
- * jank. Two sets, chosen once per visit by viewport:
- *   ≥1024px  hero-frames-hd  1920×1080 (from the 4K master), ~5 MB
- *   <1024px  hero-frames     1280×720, ~2.7 MB
- * Frames load progressively — the nearest loaded frame is drawn, so
- * the stage paints immediately and sharpens as the rest arrive.
+ * The film is 90 WebP frames (2560×1440, cut from the 4K master)
+ * drawn to a cover-fit canvas — deliberately NOT a scrubbed <video>:
+ * decoder seeks stutter on desktop (4K AV1) and freeze on phones.
+ * drawImage of decoded stills cannot jank.
  *
- * Implementation notes:
- * - Zero dependencies. One always-on rAF loop that polls scroll
- *   progress (scroll events are unreliable in some renderers; one
- *   rect read per frame is nothing). Hidden tabs pause rAF, which
- *   is exactly the right behavior for free.
- * - All per-frame style writes are imperative (refs), never React
- *   re-renders.
- * - prefers-reduced-motion collapses the runway to one static
- *   viewport: poster frame, full copy, zero scrubbing.
+ * MOBILE / TABLET (<1024px): one sharp portrait still (1080×1920,
+ * cut and cropped from the 4K master) with the full copy — no scrub.
+ * Deliberate decision, not a fallback: phones scrub unreliably, a
+ * 250vh runway is heavy thumb-work, a native-resolution still beats
+ * an upscaled 16:9 frame on quality, and a single priority image
+ * makes the LCP dramatically faster for 90% of traffic.
+ *
+ * The split is CSS-first (lg:hidden / hidden lg:block) so SSR markup
+ * is stable — no mode flash, no hydration mismatch. Frame preloading
+ * is width-guarded so phones never download the desktop film.
  */
 
 const FRAME_COUNT = 90;
 
-const frameSrc = (set: "hd" | "sd", i: number) =>
-  `/${set === "hd" ? "hero-frames-hd" : "hero-frames"}/frame-${String(i).padStart(3, "0")}.webp`;
+const frameSrc = (i: number) =>
+  `/hero-frames-hd/frame-${String(i).padStart(3, "0")}.webp`;
 
 /** Smoothstep between two progress edges. */
 function ramp(p: number, from: number, to: number): number {
@@ -75,16 +68,16 @@ export function HeroCinema() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // ── Frame preload — one set per visit, progressive ──
+  // ── Desktop film preload — progressive, never on phones ──
   useEffect(() => {
     if (reducedMotion || framesRef.current.length) return;
+    if (window.innerWidth < 1024) return;
 
-    const set: "hd" | "sd" = window.innerWidth >= 1024 ? "hd" : "sd";
     const imgs: HTMLImageElement[] = [];
     const loaded: boolean[] = new Array(FRAME_COUNT).fill(false);
 
     for (let i = 0; i < FRAME_COUNT; i++) {
-      const img = new Image();
+      const img = new window.Image();
       img.decoding = "async";
       img.onload = () => {
         loaded[i] = true;
@@ -92,7 +85,7 @@ export function HeroCinema() {
         // exists (first paint included).
         lastDrawnRef.current = -2;
       };
-      img.src = frameSrc(set, i);
+      img.src = frameSrc(i);
       imgs.push(img);
     }
 
@@ -100,14 +93,17 @@ export function HeroCinema() {
     frameLoadedRef.current = loaded;
   }, [reducedMotion]);
 
-  // ── Scroll core ──
+  // ── Desktop scroll core ──
   useEffect(() => {
     if (reducedMotion) return;
+    if (window.innerWidth < 1024) return;
 
     const wrapper = wrapperRef.current;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d") ?? null;
     if (!wrapper || !canvas || !ctx) return;
+
+    ctx.imageSmoothingQuality = "high";
 
     let progress = 0; // scroll target 0..1
     let shown = -1; // lerped playhead 0..1
@@ -120,8 +116,6 @@ export function HeroCinema() {
     };
 
     const drawFrame = () => {
-      // Keep the bitmap matched to the element (URL-bar collapse
-      // resizes the stage on phones).
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const cw = Math.round(canvas.clientWidth * dpr);
       const ch = Math.round(canvas.clientHeight * dpr);
@@ -129,7 +123,8 @@ export function HeroCinema() {
       if (canvas.width !== cw || canvas.height !== ch) {
         canvas.width = cw;
         canvas.height = ch;
-        lastDrawnRef.current = -2; // force redraw at the new size
+        ctx.imageSmoothingQuality = "high"; // reset by bitmap resize
+        lastDrawnRef.current = -2;
       }
 
       const want = Math.round(shown * (FRAME_COUNT - 1));
@@ -205,115 +200,156 @@ export function HeroCinema() {
     return () => cancelAnimationFrame(rafId);
   }, [reducedMotion]);
 
-  return (
-    <section
-      ref={wrapperRef}
-      className={reducedMotion ? "relative" : "relative h-[250vh] lg:h-[300vh]"}
-      aria-label={tImg("hero")}
+  const cta = (
+    <Link
+      href="/objects/vinkl"
+      className="mt-8 inline-block bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-[background-color,transform] duration-[--duration-normal] ease-[--ease-out] hover:bg-terracotta active:translate-y-px"
     >
-      <div
-        className={`overflow-hidden ${
-          reducedMotion ? "relative min-h-[92vh]" : "sticky top-0 h-svh"
-        }`}
+      {t("cta")}
+    </Link>
+  );
+
+  const hint = (
+    <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-ink-secondary">
+      {t("scroll")}
+    </span>
+  );
+
+  return (
+    <>
+      {/* ── Mobile / tablet: sharp portrait still, full statement ── */}
+      <section
+        className="relative h-svh overflow-hidden lg:hidden"
+        aria-label={tImg("hero")}
       >
-        {/* Film layer — frame flipbook on a cover-fit canvas */}
-        {!reducedMotion && (
-          <canvas
-            ref={canvasRef}
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full"
-          />
-        )}
-
-        {/* Reduced motion: one honest still */}
-        {reducedMotion && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={frameSrc("sd", 0)}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
-
-        {/* Legibility scrims — present whenever copy is on stage,
-            dipped in the pure-film middle. Bottom-anchored (the copy
-            lives in the lower third everywhere) + a left wash on
-            desktop where the copy is left-aligned. */}
-        <div
-          className="hero-scrim absolute inset-0"
-          style={{ opacity: "var(--scrim, 1)" }}
+        <Image
+          src="/images/hero-still-mobile.webp"
+          alt=""
           aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
-        <div
-          className="hero-scrim-side absolute inset-0 hidden lg:block"
-          style={{ opacity: "var(--scrim, 1)" }}
-          aria-hidden="true"
-        />
+        <div className="hero-scrim absolute inset-0" aria-hidden="true" />
 
-        {/* Headline — the wide-scene statement */}
-        <div
-          ref={headlineRef}
-          className="absolute inset-x-0 bottom-[18vh] px-5 md:px-10 lg:bottom-[22vh] lg:px-16 will-change-transform"
-        >
-          <div className="mx-auto w-full max-w-[1440px]">
-            <h1 className="font-serif font-light tracking-tight text-ink-primary">
-              <span className="hero-animate block text-[clamp(2.25rem,5.5vw,4.5rem)] leading-[1.08]">
-                {t("line1")}
-              </span>
-              <span className="hero-animate hero-animate-delay-1 block text-[clamp(2.25rem,5.5vw,4.5rem)] leading-[1.08]">
-                {t("line2")}
-              </span>
-            </h1>
-            {reducedMotion && (
-              <>
-                <p className="mt-6 font-serif text-[clamp(1.25rem,2.5vw,2rem)] font-light leading-snug text-ink-secondary">
-                  {t("line3")}
-                </p>
-                <Link
-                  href="/objects/vinkl"
-                  className="mt-8 inline-block bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-[background-color,transform] duration-[--duration-normal] ease-[--ease-out] hover:bg-terracotta"
-                >
-                  {t("cta")}
-                </Link>
-              </>
-            )}
-          </div>
+        <div className="absolute inset-x-0 bottom-[14vh] px-5 md:px-10">
+          <h1 className="font-serif font-light tracking-tight text-ink-primary">
+            <span className="hero-animate block text-[clamp(2.25rem,8vw,3.5rem)] leading-[1.08]">
+              {t("line1")}
+            </span>
+            <span className="hero-animate hero-animate-delay-1 block text-[clamp(2.25rem,8vw,3.5rem)] leading-[1.08]">
+              {t("line2")}
+            </span>
+          </h1>
+          <p className="hero-animate hero-animate-delay-2 mt-4 font-serif text-[clamp(1.125rem,4.5vw,1.5rem)] font-light leading-snug text-ink-secondary">
+            {t("line3")}
+          </p>
+          <div className="hero-animate hero-animate-delay-3">{cta}</div>
         </div>
 
-        {/* Closing line + CTA — settles over the close-up */}
-        {!reducedMotion && (
+        <div className="scroll-indicator absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
+          {hint}
+          <div className="h-6 w-px bg-ink-secondary" />
+        </div>
+      </section>
+
+      {/* ── Desktop: scroll-scrubbed cinema ── */}
+      <section
+        ref={wrapperRef}
+        className={`relative hidden lg:block ${reducedMotion ? "" : "h-[300vh]"}`}
+        aria-label={tImg("hero")}
+      >
+        <div
+          className={`overflow-hidden ${
+            reducedMotion ? "relative min-h-[92vh]" : "sticky top-0 h-svh"
+          }`}
+        >
+          {/* Film layer — frame flipbook on a cover-fit canvas */}
+          {!reducedMotion && (
+            <canvas
+              ref={canvasRef}
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full"
+            />
+          )}
+
+          {/* Reduced motion: one honest still from the film */}
+          {reducedMotion && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={frameSrc(0)}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
+
+          {/* Legibility scrims — present whenever copy is on stage,
+              dipped in the pure-film middle. */}
           <div
-            ref={closingRef}
-            className="pointer-events-none absolute inset-x-0 bottom-[14vh] px-5 opacity-0 md:px-10 lg:px-16 will-change-transform"
+            className="hero-scrim absolute inset-0"
+            style={{ opacity: "var(--scrim, 1)" }}
+            aria-hidden="true"
+          />
+          <div
+            className="hero-scrim-side absolute inset-0"
+            style={{ opacity: "var(--scrim, 1)" }}
+            aria-hidden="true"
+          />
+
+          {/* Headline — the wide-scene statement */}
+          <div
+            ref={headlineRef}
+            className="absolute inset-x-0 bottom-[22vh] px-16 will-change-transform"
           >
             <div className="mx-auto w-full max-w-[1440px]">
-              <p className="max-w-[16ch] font-serif text-[clamp(1.75rem,4vw,3.25rem)] font-light leading-[1.15] tracking-tight text-ink-primary [text-wrap:balance]">
-                {t("line3")}
-              </p>
-              <Link
-                href="/objects/vinkl"
-                className="mt-8 inline-block bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-[background-color,transform] duration-[--duration-normal] ease-[--ease-out] hover:bg-terracotta active:translate-y-px"
-              >
-                {t("cta")}
-              </Link>
+              <h1 className="font-serif font-light tracking-tight text-ink-primary">
+                <span className="hero-animate block text-[clamp(2.25rem,5.5vw,4.5rem)] leading-[1.08]">
+                  {t("line1")}
+                </span>
+                <span className="hero-animate hero-animate-delay-1 block text-[clamp(2.25rem,5.5vw,4.5rem)] leading-[1.08]">
+                  {t("line2")}
+                </span>
+              </h1>
+              {reducedMotion && (
+                <>
+                  <p className="mt-6 font-serif text-[clamp(1.25rem,2.5vw,2rem)] font-light leading-snug text-ink-secondary">
+                    {t("line3")}
+                  </p>
+                  {cta}
+                </>
+              )}
             </div>
           </div>
-        )}
 
-        {/* Scroll hint */}
-        {!reducedMotion && (
-          <div
-            ref={hintRef}
-            className="scroll-indicator absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3"
-          >
-            <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-ink-secondary">
-              {t("scroll")}
-            </span>
-            <div className="h-8 w-px bg-ink-secondary" />
-          </div>
-        )}
-      </div>
-    </section>
+          {/* Closing line + CTA — settles over the close-up */}
+          {!reducedMotion && (
+            <div
+              ref={closingRef}
+              className="pointer-events-none absolute inset-x-0 bottom-[14vh] px-16 opacity-0 will-change-transform"
+            >
+              <div className="mx-auto w-full max-w-[1440px]">
+                <p className="max-w-[16ch] font-serif text-[clamp(1.75rem,4vw,3.25rem)] font-light leading-[1.15] tracking-tight text-ink-primary [text-wrap:balance]">
+                  {t("line3")}
+                </p>
+                {cta}
+              </div>
+            </div>
+          )}
+
+          {/* Scroll hint */}
+          {!reducedMotion && (
+            <div
+              ref={hintRef}
+              className="scroll-indicator absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3"
+            >
+              {hint}
+              <div className="h-8 w-px bg-ink-secondary" />
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
 }
