@@ -15,12 +15,12 @@ export function FeaturedObjectSection() {
 
   return (
     <section className="py-16 md:py-20 lg:py-24">
-      {/* Full-bleed image area — art-directed: the square crop suits
-          the tall mobile frame; wider viewports get a natively wide
-          master cut to the container's exact 2:1, so the shelf is
-          never clipped. */}
+      {/* Full-bleed image area — art-directed: the square render suits
+          the tall mobile frame; wider viewports show the wide master
+          render at its NATIVE aspect ratio — original pixels, no
+          upscale, no crop, shelf never clipped. */}
       <Reveal>
-        <div className="relative mx-5 aspect-[4/3] overflow-hidden md:mx-10 md:aspect-[16/9] lg:mx-0 lg:aspect-[2/1]">
+        <div className="relative mx-5 aspect-[4/3] overflow-hidden md:mx-10 md:aspect-[16/9] lg:mx-0 lg:aspect-[2752/1536]">
           <Image
             src="/images/vinkl-regal-3.webp"
             alt={tImg("featured")}

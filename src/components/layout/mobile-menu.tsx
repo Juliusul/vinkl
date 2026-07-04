@@ -38,6 +38,13 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
   const [mounted, setMounted] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // Focus is only moved for keyboard users. iOS Safari paints the
+  // :focus-visible ring on programmatically focused buttons, so an
+  // unconditional focus() here put a permanent terracotta ring on
+  // the burger for every touch visitor (worst on initial page load,
+  // where the old effect focused the trigger before any interaction).
+  const keyboardRef = useRef(false);
+  const hasOpenedRef = useRef(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -51,15 +58,23 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
     };
   }, [open]);
 
-  // Escape to close + focus management
+  // Escape to close + keyboard-only focus management
   useEffect(() => {
     if (!open) {
-      triggerRef.current?.focus();
+      // Return focus only after a real keyboard-driven open/close —
+      // never on mount, never for touch or mouse.
+      if (hasOpenedRef.current && keyboardRef.current) {
+        triggerRef.current?.focus();
+      }
       return;
     }
-    closeRef.current?.focus();
+    hasOpenedRef.current = true;
+    if (keyboardRef.current) closeRef.current?.focus();
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        keyboardRef.current = true;
+        setOpen(false);
+      }
     }
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -71,7 +86,11 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={(e) => {
+          // detail === 0 → activated via keyboard (Enter/Space)
+          keyboardRef.current = e.detail === 0;
+          setOpen(true);
+        }}
         aria-label={t("open")}
         aria-expanded={open}
         aria-controls="mobile-menu"
@@ -104,7 +123,10 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
           <button
             ref={closeRef}
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={(e) => {
+              keyboardRef.current = e.detail === 0;
+              setOpen(false);
+            }}
             aria-label={t("close")}
             className="-mr-1 flex h-9 w-9 items-center justify-center text-ink-primary transition-[color,transform] duration-[--duration-fast] ease-[--ease-out] hover:text-terracotta active:scale-[0.94]"
           >
