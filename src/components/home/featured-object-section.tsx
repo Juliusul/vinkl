@@ -15,7 +15,10 @@ export function FeaturedObjectSection() {
 
   return (
     <section className="py-16 md:py-20 lg:py-24">
-      {/* Full-bleed image area */}
+      {/* Full-bleed image area — art-directed: the square crop suits
+          the tall mobile frame; wider viewports get a natively wide
+          master cut to the container's exact 2:1, so the shelf is
+          never clipped. */}
       <Reveal>
         <div className="relative mx-5 aspect-[4/3] overflow-hidden md:mx-10 md:aspect-[16/9] lg:mx-0 lg:aspect-[2/1]">
           <Image
@@ -23,7 +26,14 @@ export function FeaturedObjectSection() {
             alt={tImg("featured")}
             fill
             sizes="100vw"
-            className="object-cover object-center"
+            className="object-cover object-center md:hidden"
+          />
+          <Image
+            src="/images/vinkl-regal-featured.webp"
+            alt={tImg("featured")}
+            fill
+            sizes="100vw"
+            className="hidden object-cover object-center md:block"
           />
         </div>
       </Reveal>
