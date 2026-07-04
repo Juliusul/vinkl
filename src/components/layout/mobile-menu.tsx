@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -25,12 +26,20 @@ interface MobileMenuProps {
  *   trigger on close (keyboard users never get stranded).
  * - Entrance choreography is pure CSS transition; the global
  *   reduced-motion rule collapses it to an instant swap.
+ * - The overlay is PORTALED to <body>: the sticky header uses
+ *   backdrop-filter, which makes it the containing block for fixed
+ *   descendants — rendered inline, `fixed inset-0` would span only
+ *   the header bar and the menu would float transparent over the
+ *   page (the original readability bug).
  */
 export function MobileMenu({ navItems }: MobileMenuProps) {
   const t = useTranslations("common.menu");
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => setMounted(true), []);
 
   // Body scroll lock
   useEffect(() => {
@@ -66,21 +75,25 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
         aria-label={t("open")}
         aria-expanded={open}
         aria-controls="mobile-menu"
-        className="-mr-1 flex h-9 w-9 items-center justify-center text-ink-primary transition-colors duration-[--duration-fast] hover:text-terracotta"
+        className="-mr-1 flex h-9 w-9 items-center justify-center text-ink-primary transition-[color,transform] duration-[--duration-fast] ease-[--ease-out] hover:text-terracotta active:scale-[0.94]"
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M2 5.5h16M2 14.5h16" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
         </svg>
       </button>
 
-      {/* Overlay */}
-      <div
-        id="mobile-menu"
+      {/* Overlay — portaled past the backdrop-filtered header */}
+      {mounted &&
+        createPortal(
+          <div
+            id="mobile-menu"
         role="dialog"
         aria-modal="true"
         aria-label={t("title")}
-        className={`fixed inset-0 z-[var(--z-cart)] flex flex-col bg-bg-cream transition-opacity duration-[--duration-moderate] ease-[--ease-out] ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
+        className={`fixed inset-0 z-[var(--z-cart)] flex flex-col bg-bg-cream transition-opacity ease-[--ease-out] lg:hidden ${
+          open
+            ? "opacity-100 duration-[250ms]"
+            : "pointer-events-none opacity-0 duration-[180ms]"
         }`}
       >
         {/* Top bar — mirrors the header so the close sits where the burger was */}
@@ -93,7 +106,7 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
             type="button"
             onClick={() => setOpen(false)}
             aria-label={t("close")}
-            className="-mr-1 flex h-9 w-9 items-center justify-center text-ink-primary transition-colors duration-[--duration-fast] hover:text-terracotta"
+            className="-mr-1 flex h-9 w-9 items-center justify-center text-ink-primary transition-[color,transform] duration-[--duration-fast] ease-[--ease-out] hover:text-terracotta active:scale-[0.94]"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
@@ -101,21 +114,28 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
           </button>
         </div>
 
-        {/* Nav links — large, editorial, staggered in */}
-        <nav className="flex flex-1 flex-col justify-center gap-2 px-5 md:px-10" aria-label="Main">
-          {navItems.map((item, i) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              style={{ transitionDelay: open ? `${80 + i * 55}ms` : "0ms" }}
-              className={`font-serif text-[clamp(2.25rem,9vw,3.25rem)] font-light leading-[1.1] tracking-tight text-ink-primary transition-[color,transform] duration-[--duration-moderate] ease-[--ease-out] hover:text-terracotta ${
-                open ? "translate-y-0" : "translate-y-3"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+        {/* Nav — editorial list: calm serif rows on hairline rules.
+            Rhythm comes from the row structure, not from type size. */}
+        <nav
+          className="flex flex-1 flex-col justify-center px-5 md:px-10"
+          aria-label="Main"
+        >
+          <ul className="w-full max-w-xl border-t border-border-default">
+            {navItems.map((item, i) => (
+              <li key={item.href} className="border-b border-border-default">
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  style={{ transitionDelay: open ? `${40 + i * 45}ms` : "0ms" }}
+                  className={`block py-5 font-serif text-[1.75rem] font-normal leading-none tracking-[-0.01em] text-ink-primary transition-[color,transform] duration-[250ms] ease-[--ease-out] hover:text-terracotta active:text-terracotta ${
+                    open ? "translate-x-0" : "translate-x-3"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
 
         {/* Footer row — account + language */}
@@ -129,7 +149,9 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
           </Link>
           <LocaleSwitcher />
         </div>
-      </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
