@@ -9,6 +9,7 @@ import type { Locale } from "@/config/i18n";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/ui/cookie-consent";
+import { Analytics } from "@vercel/analytics/react";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { sans, serif } from "../fonts";
@@ -39,13 +40,34 @@ export async function generateMetadata({
     },
     description: meta.description,
     metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl.vercel.app",
     ),
     alternates: {
       languages: {
         de: "/de",
         en: "/en",
       },
+    },
+    openGraph: {
+      type: "website",
+      siteName: "VINKL",
+      title: meta.title,
+      description: meta.description,
+      locale: locale === "de" ? "de_DE" : "en_US",
+      images: [
+        {
+          url: "/og.jpg",
+          width: 1200,
+          height: 630,
+          alt: "VINKL — Teak corner shelf",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.description,
+      images: ["/og.jpg"],
     },
   };
 }
@@ -87,6 +109,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           </CartProvider>
           <CookieConsent />
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );

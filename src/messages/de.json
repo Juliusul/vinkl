@@ -67,8 +67,8 @@
     },
     "angle": {
       "label": "Präzision",
-      "range": "Stufenlos.",
-      "body": "Kein fester Winkel. Kein Limit. Das Regal passt sich an — an jede Ecke, die dein Zuhause hat."
+      "range": "85°–95°",
+      "body": "Stufenlos einstellbar. Jede echte Ecke liegt dazwischen — Altbau, Neubau, Dachgeschoss."
     },
     "material": {
       "label": "Material",
@@ -100,11 +100,14 @@
       "name": "VINKL",
       "tagline": "Das Regal, das sich deinen Wänden anpasst.",
       "price": "299 €",
+      "priceNote": "Massives Teak, kein Furnier. Gebaut, um zu bleiben.",
+      "availability": "Erste Auflage — Lieferung ab Anfang August",
       "addToCart": "In den Warenkorb",
       "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe",
+      "mounting": "Verdeckte Montage · Dübel inklusive · ohne Werkzeug nachstellbar",
       "trust": {
-        "adjustableValue": "Stufenlos",
-        "adjustableLabel": "Jeder Winkel",
+        "adjustableValue": "85°–95°",
+        "adjustableLabel": "Stufenlos",
         "materialValue": "Teak",
         "materialLabel": "Massiv",
         "loadValue": "15 kg",
@@ -126,7 +129,7 @@
       "materialLabel": "Material",
       "materialValue": "Massives Teakholz, geölt",
       "rangeLabel": "Verstellung",
-      "rangeValue": "Stufenlos, jeder Winkel",
+      "rangeValue": "Stufenlos, 85°–95°",
       "mountingLabel": "Montage",
       "mountingValue": "Verdeckte Wandmontage · Dübel inklusive",
       "loadLabel": "Tragkraft",
@@ -135,7 +138,7 @@
     "use": {
       "label": "Anwendung",
       "heading": "Ein Regal. Jeder Winkel.",
-      "body": "Der integrierte Mechanismus gleicht jeden Wandwinkel aus — unsichtbar, ohne Werkzeug nachstellbar. Ob Altbau-Charme oder Neubau-Präzision: VINKL sitzt.",
+      "body": "Der integrierte Mechanismus gleicht Wandwinkel von 85 bis 95 Grad aus — unsichtbar, ohne Werkzeug nachstellbar. Ob Altbau-Charme oder Neubau-Präzision: VINKL sitzt.",
       "altbauLabel": "Altbau",
       "altbauAngle": "87°",
       "altbauDesc": "Schiefe Wände, voller Charakter.",
@@ -183,7 +186,27 @@
         "abstract": "Ein kurzer Leitfaden zum Ausmessen deiner Wände. Kein Verkaufstext. Kein Upselling. Nur ein Geodreieck und die Wahrheit."
       }
     },
-    "closing": "Neue Einträge erscheinen, wenn wir etwas zu sagen haben. Nicht nach Redaktionsplan."
+    "closing": "Neue Einträge erscheinen, wenn wir etwas zu sagen haben. Nicht nach Redaktionsplan.",
+    "readEntry": "Lesen",
+    "backToJournal": "Zurück zum Journal",
+    "measure": {
+      "meta": {
+        "title": "Winkel messen, Winkel verstehen — VINKL Journal",
+        "description": "Ein kurzer Leitfaden zum Ausmessen deiner Wandecken. Kein Verkaufstext. Nur ein Geodreieck, ein Zollstock und die Wahrheit."
+      },
+      "tag": "Anleitung",
+      "title": "Winkel messen, Winkel verstehen",
+      "intro": "Möbel werden für 90 Grad gebaut. Deine Ecke hat vermutlich keine. Bevor du das nächste Regal, die nächste Arbeitsplatte oder den nächsten Schrank an eine Ecke stellst, lohnt sich eine Frage: Wie schief ist sie wirklich? Hier sind drei Methoden — von grob bis präzise. Du brauchst nichts, was du nicht schon zu Hause hast.",
+      "s1heading": "Methode 1: Das gefaltete Papier",
+      "s1body": "Jedes Blatt Papier hat perfekte 90-Grad-Ecken — das ist Industriestandard und zuverlässiger als jedes Auge. Halte eine Papierecke in deine Wandecke, auf Augenhöhe. Klafft oben oder unten ein Spalt zwischen Papier und Wand, weicht der Winkel ab: Spalt zur Raumseite bedeutet mehr als 90 Grad, Spalt zur Ecke hin weniger. Das dauert zehn Sekunden und beantwortet die wichtigste Frage: Ist meine Ecke überhaupt gerade?",
+      "s2heading": "Methode 2: Die Diagonale",
+      "s2body": "Für eine echte Zahl brauchst du nur einen Zollstock und einen Bleistift. Miss von der Ecke aus an beiden Wänden exakt 50 Zentimeter ab und markiere die Punkte. Dann miss die direkte Verbindung zwischen den beiden Markierungen — die Diagonale. Bei exakt 90 Grad beträgt sie 70,7 Zentimeter. Misst du weniger, ist deine Ecke spitzer; misst du mehr, ist sie weiter geöffnet. Als Anhaltspunkte: 67,6 cm entsprechen etwa 85 Grad, 70,7 cm sind 90 Grad, 73,7 cm etwa 95 Grad. Auf den Millimeter genau musst du nicht arbeiten — die Tendenz reicht.",
+      "s3heading": "Methode 3: Das Telefon",
+      "s3body": "Die Wasserwaagen-App auf deinem Smartphone misst Neigungen erstaunlich gut — Winkel zwischen zwei Wänden misst sie allerdings nur über Umwege. Halte das Telefon flach an die eine Wand, notiere den Wert, dann an die andere. Die Differenz zur Theorie verrät dir die Abweichung. Es bleibt eine Schätzung: Wände sind selten eben, und ein Messwert an einer Stelle gilt nicht automatisch für die ganze Ecke. Für den ersten Eindruck reicht es.",
+      "s4heading": "Was ist normal?",
+      "s4body": "Mehr, als du denkst. Auch im Neubau erlauben die Bautoleranzen sichtbare Abweichungen — und im Altbau, wo sich ein Haus über Jahrzehnte gesetzt hat, sind einige Grad Abweichung eher Regel als Ausnahme. Eine Ecke mit 87 oder 93 Grad ist kein Baumangel und kein Grund zur Sorge. Sie ist der Normalfall, über den niemand spricht — weil die Möbelindustrie so tut, als gäbe es ihn nicht.",
+      "closing": "Deine Wand ist nicht das Problem. Miss sie einmal, kenn ihre Zahl, und kauf danach — was auch immer du kaufst."
+    }
   },
   "about": {
     "meta": {
@@ -219,6 +242,29 @@
     "manifesto": {
       "line1": "Nicht für den Showroom.",
       "line2": "Für die schiefe Wand im dritten Stock."
+    }
+  },
+  "waitlist": {
+    "label": "Erste Auflage",
+    "heading": "Lieferbar ab Anfang August.",
+    "body": "Die erste Auflage ist klein. Trag dich ein — wir schreiben dir genau zweimal: wenn das Regal verfügbar ist, und falls sich der Termin verschiebt.",
+    "placeholder": "E-Mail-Adresse",
+    "cta": "Auf die Liste",
+    "sending": "Wird eingetragen…",
+    "success": "Fast geschafft. Wir haben dir einen Bestätigungslink geschickt — ein Klick, und du stehst auf der Liste.",
+    "confirmed": "Du stehst auf der Liste. Wir melden uns, sobald es losgeht.",
+    "errorInvalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
+    "errorGeneric": "Das hat nicht geklappt. Versuch es später noch einmal.",
+    "privacyPrefix": "Mit dem Eintrag akzeptierst du unsere",
+    "privacyLink": "Datenschutzerklärung",
+    "privacySuffix": ". Austragen jederzeit mit einem Klick.",
+    "email": {
+      "subject": "Ein Klick fehlt noch — VINKL Warteliste",
+      "preview": "Bestätige deine E-Mail-Adresse für die VINKL Warteliste.",
+      "greeting": "Fast geschafft.",
+      "body": "Du hast dich für die VINKL Warteliste eingetragen. Bestätige kurz deine E-Mail-Adresse — dann melden wir uns, sobald die erste Auflage verfügbar ist.",
+      "button": "E-Mail bestätigen",
+      "ignore": "Falls du dich nicht eingetragen hast, ignoriere diese E-Mail einfach."
     }
   },
   "cookies": {

@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ProductGallery } from "./product-gallery";
 import { AddToCartButton } from "./add-to-cart-button";
+import { WaitlistForm } from "@/components/waitlist/waitlist-form";
 import type { Product } from "@/types";
 
 interface ProductHeroProps {
@@ -17,6 +18,7 @@ interface ProductHeroProps {
 export function ProductHero({ product }: ProductHeroProps) {
   const t = useTranslations("vinkl.hero");
   const tProduct = useTranslations("product");
+  const tWaitlist = useTranslations("waitlist");
 
   return (
     <section className="px-5 pb-16 pt-6 md:px-10 md:pb-20 md:pt-8 lg:px-16 lg:pb-24 lg:pt-10">
@@ -59,9 +61,16 @@ export function ProductHero({ product }: ProductHeroProps) {
             {/* Divider */}
             <div className="my-6 h-px bg-border-default lg:my-8" />
 
-            {/* Price */}
+            {/* Price + why it costs what it costs */}
             <p className="font-serif text-2xl font-light tracking-tight text-ink-primary md:text-3xl">
               {t("price")}
+            </p>
+            <p className="mt-1.5 text-sm text-ink-secondary">{t("priceNote")}</p>
+
+            {/* Availability — first edition, pre-launch */}
+            <p className="mt-4 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.12em] text-terracotta">
+              <span className="h-1.5 w-1.5 bg-terracotta" aria-hidden="true" />
+              {t("availability")}
             </p>
 
             {/* Add to cart */}
@@ -73,9 +82,12 @@ export function ProductHero({ product }: ProductHeroProps) {
               {t("addToCart")}
             </AddToCartButton>
 
-            {/* Shipping note */}
+            {/* Shipping + mounting reassurance */}
             <p className="mt-4 text-center text-xs text-ink-tertiary">
               {t("shipping")}
+            </p>
+            <p className="mt-1.5 text-center text-xs text-ink-tertiary">
+              {t("mounting")}
             </p>
 
             {/* Trust signals — value reads first, caption underneath */}
@@ -98,6 +110,19 @@ export function ProductHero({ product }: ProductHeroProps) {
                 </div>
               ))}
             </dl>
+
+            {/* Pre-launch capture — the email is the sale until August */}
+            <div className="mt-8 border-t border-border-default pt-6 lg:mt-10 lg:pt-8">
+              <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
+                {tWaitlist("label")}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                {tWaitlist("body")}
+              </p>
+              <div className="mt-4">
+                <WaitlistForm />
+              </div>
+            </div>
           </div>
         </div>
       </div>

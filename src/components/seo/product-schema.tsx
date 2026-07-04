@@ -1,5 +1,6 @@
 import type { Product } from "@/types";
 import type { Locale } from "@/config/i18n";
+import { launchConfig } from "@/config/site";
 
 interface ProductSchemaProps {
   product: Product;
@@ -45,9 +46,14 @@ export function ProductSchema({ product, locale }: ProductSchemaProps) {
       url: productUrl,
       priceCurrency: product.price.currencyCode,
       price: product.price.amount,
-      availability: product.available
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
+      availability: launchConfig.preOrder
+        ? "https://schema.org/PreOrder"
+        : product.available
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      ...(launchConfig.preOrder && {
+        availabilityStarts: launchConfig.availabilityStarts,
+      }),
       seller: {
         "@type": "Organization",
         name: "VINKL",
@@ -101,7 +107,7 @@ export function ProductSchema({ product, locale }: ProductSchemaProps) {
       {
         "@type": "PropertyValue",
         name: "Adjustment",
-        value: "Stepless, any angle",
+        value: "Stepless, 85°–95°",
       },
       {
         "@type": "PropertyValue",

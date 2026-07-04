@@ -67,8 +67,8 @@
     },
     "angle": {
       "label": "Precision",
-      "range": "Stepless.",
-      "body": "No fixed angle. No limit. The shelf adapts — to every corner your home has."
+      "range": "85°–95°",
+      "body": "Steplessly adjustable. Every real corner falls in between — old building, new build, attic."
     },
     "material": {
       "label": "Material",
@@ -100,11 +100,14 @@
       "name": "VINKL",
       "tagline": "The shelf that adapts to your walls.",
       "price": "€299",
+      "priceNote": "Solid teak, no veneer. Built to stay.",
+      "availability": "First edition — ships early August",
       "addToCart": "Add to cart",
       "shipping": "Free shipping in DE · 30-day returns",
+      "mounting": "Concealed mount · Anchors included · Readjusts without tools",
       "trust": {
-        "adjustableValue": "Stepless",
-        "adjustableLabel": "Any angle",
+        "adjustableValue": "85°–95°",
+        "adjustableLabel": "Stepless",
         "materialValue": "Teak",
         "materialLabel": "Solid",
         "loadValue": "15 kg",
@@ -126,7 +129,7 @@
       "materialLabel": "Material",
       "materialValue": "Solid teak, oiled",
       "rangeLabel": "Adjustment",
-      "rangeValue": "Stepless, any angle",
+      "rangeValue": "Stepless, 85°–95°",
       "mountingLabel": "Mounting",
       "mountingValue": "Concealed wall mount · Anchors included",
       "loadLabel": "Load Capacity",
@@ -135,7 +138,7 @@
     "use": {
       "label": "Application",
       "heading": "One shelf. Every angle.",
-      "body": "The integrated mechanism compensates for any wall angle — invisibly, adjustable without tools. Whether old-building charm or new-build precision: VINKL fits.",
+      "body": "The integrated mechanism compensates for wall angles from 85 to 95 degrees — invisibly, adjustable without tools. Whether old-building charm or new-build precision: VINKL fits.",
       "altbauLabel": "Old building",
       "altbauAngle": "87°",
       "altbauDesc": "Crooked walls, full of character.",
@@ -183,7 +186,27 @@
         "abstract": "A short guide to measuring your walls. No sales copy. No upselling. Just a protractor and the truth."
       }
     },
-    "closing": "New entries appear when we have something to say. Not on a content schedule."
+    "closing": "New entries appear when we have something to say. Not on a content schedule.",
+    "readEntry": "Read",
+    "backToJournal": "Back to Journal",
+    "measure": {
+      "meta": {
+        "title": "Measuring Angles, Understanding Angles — VINKL Journal",
+        "description": "A short guide to measuring your wall corners. No sales pitch. Just a set square, a folding rule, and the truth."
+      },
+      "tag": "Guide",
+      "title": "Measuring angles, understanding angles",
+      "intro": "Furniture is built for 90 degrees. Your corner probably doesn't have them. Before you put the next shelf, countertop, or cabinet against a corner, one question is worth asking: how crooked is it, really? Here are three methods — from rough to precise. You won't need anything you don't already own.",
+      "s1heading": "Method 1: The folded sheet of paper",
+      "s1body": "Every sheet of paper has perfect 90-degree corners — that's an industrial standard, and more reliable than any eye. Hold a paper corner into your wall corner at eye level. If a gap opens between paper and wall at the top or bottom, the angle deviates: a gap toward the room means more than 90 degrees, a gap toward the corner means less. It takes ten seconds and answers the most important question: is my corner even straight?",
+      "s2heading": "Method 2: The diagonal",
+      "s2body": "For a real number, all you need is a folding rule and a pencil. From the corner, measure exactly 50 centimetres along each wall and mark both points. Then measure the straight line between the two marks — the diagonal. At exactly 90 degrees it is 70.7 centimetres. Less means your corner is tighter; more means it opens wider. As reference points: 67.6 cm is roughly 85 degrees, 70.7 cm is 90, 73.7 cm is about 95. You don't need millimetre precision — the tendency is enough.",
+      "s3heading": "Method 3: The phone",
+      "s3body": "The spirit-level app on your smartphone measures inclines surprisingly well — angles between two walls, however, only indirectly. Hold the phone flat against one wall, note the value, then against the other. The difference from theory tells you the deviation. It remains an estimate: walls are rarely flat, and one reading in one spot doesn't speak for the whole corner. For a first impression, it's plenty.",
+      "s4heading": "What's normal?",
+      "s4body": "More than you'd think. Even in new buildings, construction tolerances allow visible deviations — and in old buildings, where a house has settled over decades, a few degrees off is the rule rather than the exception. A corner at 87 or 93 degrees is not a construction defect and no cause for concern. It's the normal case nobody talks about — because the furniture industry pretends it doesn't exist.",
+      "closing": "Your wall is not the problem. Measure it once, know its number, and then buy — whatever it is you're buying."
+    }
   },
   "about": {
     "meta": {
@@ -219,6 +242,29 @@
     "manifesto": {
       "line1": "Not for the showroom.",
       "line2": "For the crooked wall on the third floor."
+    }
+  },
+  "waitlist": {
+    "label": "First Edition",
+    "heading": "Shipping early August.",
+    "body": "The first edition is small. Sign up — we'll write you exactly twice: when the shelf is available, and if the date shifts.",
+    "placeholder": "Email address",
+    "cta": "Join the list",
+    "sending": "Signing up…",
+    "success": "Almost there. We've sent you a confirmation link — one click and you're on the list.",
+    "confirmed": "You're on the list. We'll be in touch as soon as it starts.",
+    "errorInvalid": "Please enter a valid email address.",
+    "errorGeneric": "That didn't work. Please try again later.",
+    "privacyPrefix": "By signing up you accept our",
+    "privacyLink": "privacy policy",
+    "privacySuffix": ". Unsubscribe anytime with one click.",
+    "email": {
+      "subject": "One click to go — VINKL waitlist",
+      "preview": "Confirm your email address for the VINKL waitlist.",
+      "greeting": "Almost there.",
+      "body": "You signed up for the VINKL waitlist. Confirm your email address briefly — we'll get in touch as soon as the first edition is available.",
+      "button": "Confirm email",
+      "ignore": "If you didn't sign up, simply ignore this email."
     }
   },
   "cookies": {

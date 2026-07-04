@@ -6,6 +6,16 @@ export const siteConfig = {
   defaultLocale: "de" as Locale,
 } as const;
 
+/**
+ * Launch state — flips the site from pre-order to in-stock.
+ * Set `preOrder: false` on launch day (early August 2026); the
+ * product schema and availability messaging read from here.
+ */
+export const launchConfig = {
+  preOrder: true,
+  availabilityStarts: "2026-08-01",
+} as const;
+
 export const siteMetadata: Record<Locale, { title: string; description: string }> = {
   de: {
     title: "VINKL — Möbel und Objekte",

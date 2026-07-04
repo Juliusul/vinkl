@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Reveal } from "@/components/ui/reveal";
 
 /**
@@ -7,12 +8,20 @@ import { Reveal } from "@/components/ui/reveal";
  * Numbered entries with tag, title, abstract.
  * Each entry separated by a fine border.
  * Laid out like an editorial index, not a card grid.
+ * Entries with a `href` link to a full article page.
  */
 
-const ENTRY_KEYS = ["entry1", "entry2", "entry3", "entry4", "entry5"] as const;
+const ENTRIES: ReadonlyArray<{ key: string; href?: string }> = [
+  { key: "entry1" },
+  { key: "entry2" },
+  { key: "entry3" },
+  { key: "entry4" },
+  { key: "entry5", href: "/journal/winkel-messen" },
+];
 
 export function JournalEntries() {
   const t = useTranslations("journal.entries");
+  const tJournal = useTranslations("journal");
 
   return (
     <section className="px-5 pb-16 md:px-10 md:pb-20 lg:px-16 lg:pb-24">
@@ -20,7 +29,7 @@ export function JournalEntries() {
         {/* Divider above first entry */}
         <div className="border-t border-border-default" />
 
-        {ENTRY_KEYS.map((key, index) => (
+        {ENTRIES.map(({ key, href }, index) => (
           <Reveal key={key}>
             <article className="border-b border-border-default py-10 md:py-14">
               <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
@@ -37,11 +46,28 @@ export function JournalEntries() {
                 {/* Right column: title + abstract */}
                 <div className="md:col-span-9 lg:col-span-10">
                   <h2 className="font-serif text-xl font-light tracking-tight text-ink-primary md:text-2xl lg:text-[1.75rem]">
-                    {t(`${key}.title`)}
+                    {href ? (
+                      <Link
+                        href={href}
+                        className="transition-colors duration-[--duration-fast] hover:text-terracotta"
+                      >
+                        {t(`${key}.title`)}
+                      </Link>
+                    ) : (
+                      t(`${key}.title`)
+                    )}
                   </h2>
                   <p className="mt-4 max-w-[640px] text-base leading-[1.7] text-ink-secondary">
                     {t(`${key}.abstract`)}
                   </p>
+                  {href && (
+                    <Link
+                      href={href}
+                      className="mt-5 inline-block text-xs font-medium uppercase tracking-widest text-ink-primary underline decoration-terracotta decoration-2 underline-offset-8 transition-colors duration-[--duration-fast] hover:text-terracotta"
+                    >
+                      {tJournal("readEntry")}
+                    </Link>
+                  )}
                 </div>
               </div>
             </article>

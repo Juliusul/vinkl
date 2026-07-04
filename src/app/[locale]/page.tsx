@@ -5,6 +5,7 @@ import { FeaturedObjectSection } from "@/components/home/featured-object-section
 import { AdaptsSection } from "@/components/home/adapts-section";
 import { AngleSection } from "@/components/home/angle-section";
 import { MaterialSection } from "@/components/home/material-section";
+import { WaitlistSection } from "@/components/home/waitlist-section";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -33,6 +34,9 @@ export default async function HomePage({ params }: Props) {
 
       {/* 6. The material */}
       <MaterialSection />
+
+      {/* 7. The pre-launch conversion — first edition waitlist */}
+      <WaitlistSection />
     </>
   );
 }
