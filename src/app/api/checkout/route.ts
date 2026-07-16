@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe/client";
+import { vinklProduct } from "@/data/products/vinkl";
 
 export async function POST(req: NextRequest) {
   try {
     const { quantity, locale, name, email, address } = await req.json();
     const qty = Math.max(1, parseInt(quantity) || 1);
 
-    // Preis: 299 EUR pro Stück
-    const unitAmount = 29900;
+    // Single source of truth: the product data (EUR -> cents)
+    const unitAmount = Math.round(parseFloat(vinklProduct.price.amount) * 100);
     const amount = unitAmount * qty;
 
     const paymentIntent = await stripe.paymentIntents.create({

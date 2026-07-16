@@ -2,7 +2,7 @@ import type Stripe from "stripe";
 
 /**
  * Fiktive Stripe PaymentIntent für Template-Vorschauen.
- * Entspricht einer Bestellung über 299 € (1× VINKL Teak Wandregal).
+ * Entspricht einer Bestellung über 399 € (1× VINKL Teak Wandregal).
  */
 export const mockPaymentIntent: Stripe.PaymentIntent = {
   id: "pi_test_preview_mock_0000001",
@@ -84,7 +84,7 @@ export const mockRefund = {
   customerName: "Max Mustermann",
   customerEmail: "max@mustermann.de",
   invoiceNumber: "VINKL-2026-0001",
-  amount: 299,
+  amount: 399,
   currency: "EUR",
   reason: "Artikel entspricht nicht der Beschreibung",
   date: "15.03.2026",

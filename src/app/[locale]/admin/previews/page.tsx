@@ -135,7 +135,7 @@ export default async function PreviewsPage({
           color: "#8a6a00",
           fontFamily: "monospace",
         }}>
-          Musterdaten: {mockRefund.customerName} · {mockRefund.customerEmail} · Bestellung {invoiceNumber} · 299,00 €
+          Musterdaten: {mockRefund.customerName} · {mockRefund.customerEmail} · Bestellung {invoiceNumber} · 399,00 €
         </div>
 
         <PreviewTabs tabs={tabs} />

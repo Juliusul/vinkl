@@ -4,12 +4,14 @@ import { useState, useCallback } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { vinklProduct } from "@/data/products/vinkl";
 
 const stripePromise = typeof window !== "undefined" && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
   : null;
 
-const PRICE = 299;
+// Single source of truth: the product data
+const PRICE = Math.round(parseFloat(vinklProduct.price.amount));
 const PRODUCT_NAME = "VINKL Teak Wandregal";
 const PRODUCT_DESC = "80 × 25 × 30 cm · Teakholz massiv · stufenlos verstellbar";
 
@@ -189,7 +191,12 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const total = PRICE * quantity;
-  const returnUrl = `${siteUrl}/${locale}/checkout/success`;
+  // Build from the browser's own origin — the env-based siteUrl broke
+  // the post-payment redirect whenever host/port differ (e.g. dev on
+  // 3002 vs NEXT_PUBLIC_SITE_URL=localhost:3000, preview deploys).
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : siteUrl;
+  const returnUrl = `${origin}/${locale}/checkout/success`;
 
   const handleLoggedIn = (n: string, e: string) => {
     if (n) setName(n);

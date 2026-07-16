@@ -4,7 +4,7 @@
 
 ## What it is
 
-VINKL is a European architectural furniture brand (formerly WINKL). The flagship — and currently only — product is an **adjustable teak corner wall shelf** that flexes from 85° to 95° to fit imperfect walls. €299. The site is a single-product editorial storefront: it sells one object the way a gallery presents one piece.
+VINKL is a European architectural furniture brand (formerly WINKL). The flagship — and currently only — product is an **adjustable teak corner wall shelf** that flexes from 85° to 95° to fit imperfect walls. €399. The site is a single-product editorial storefront: it sells one object the way a gallery presents one piece.
 
 ## Who it's for
 

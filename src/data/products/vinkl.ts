@@ -18,7 +18,7 @@ export const vinklProduct: Product = {
   descriptionHtml:
     "<p>Corner wall shelf in solid teak with continuously adjustable angle mechanism. Adapts to any wall angle.</p>",
   price: {
-    amount: "299.00",
+    amount: "399.00",
     currencyCode: "EUR",
   },
   compareAtPrice: null,
@@ -56,7 +56,7 @@ export const vinklProduct: Product = {
       title: "Default",
       available: true,
       price: {
-        amount: "299.00",
+        amount: "399.00",
         currencyCode: "EUR",
       },
       compareAtPrice: null,
