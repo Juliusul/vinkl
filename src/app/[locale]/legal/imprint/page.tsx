@@ -43,7 +43,7 @@ function ImprintDE() {
             Kontakt
           </h2>
           <div className="mt-4">
-            <p>E-Mail: hello@vinkl.com</p>
+            <p>E-Mail: hallo@vinkl-design.de</p>
           </div>
         </section>
 
@@ -182,7 +182,7 @@ function ImprintEN() {
             Contact
           </h2>
           <div className="mt-4">
-            <p>Email: hello@vinkl.com</p>
+            <p>Email: hallo@vinkl-design.de</p>
           </div>
         </section>
 

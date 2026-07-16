@@ -43,9 +43,10 @@ export function verifyWaitlistToken(
 export function emailDomain(): string {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl.vercel.app";
   try {
-    return new URL(siteUrl).hostname;
+    // Sender domains never carry a www — Resend verifies the apex.
+    return new URL(siteUrl).hostname.replace(/^www\./, "");
   } catch {
-    return "vinkl.de";
+    return "vinkl-design.de";
   }
 }
 

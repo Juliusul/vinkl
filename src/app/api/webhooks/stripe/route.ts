@@ -110,6 +110,7 @@ async function handlePaymentIntent(pi: Stripe.PaymentIntent) {
       );
       await resend.emails.send({
         from: `VINKL <bestellungen@${getEmailDomain()}>`,
+        replyTo: "hallo@vinkl-design.de",
         to: customerEmail,
         subject: `Deine VINKL Bestellung ${invoiceNumber}`,
         html,
@@ -137,5 +138,5 @@ async function handlePaymentIntent(pi: Stripe.PaymentIntent) {
 
 function getEmailDomain(): string {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "localhost:3000";
-  try { return new URL(siteUrl).hostname; } catch { return "vinkl.de"; }
+  try { return new URL(siteUrl).hostname.replace(/^www./, ""); } catch { return "vinkl-design.de"; }
 }

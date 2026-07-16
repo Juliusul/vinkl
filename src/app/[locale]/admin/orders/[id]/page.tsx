@@ -1,3 +1,4 @@
+import { isAdminEmail } from "@/lib/admin-auth";
 import { redirect, notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -37,7 +38,7 @@ export default async function AdminOrderDetailPage({ params }: Props) {
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/${locale}/admin/login`);
+  if (!user || !isAdminEmail(user.email)) redirect(`/${locale}/admin/login`);
 
   const { data: order } = await supabaseAdmin.from("orders").select("*").eq("id", id).single();
   if (!order) notFound();

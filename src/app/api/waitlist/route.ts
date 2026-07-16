@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
 
   const { error } = await resend.emails.send({
     from: waitlistSender(),
+    replyTo: "hallo@vinkl-design.de",
     to: email,
     subject: t("subject"),
     react: WaitlistConfirmationEmail({

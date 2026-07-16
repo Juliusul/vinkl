@@ -2,7 +2,7 @@ import type { Locale } from "./i18n";
 
 export const siteConfig = {
   name: "VINKL",
-  url: "https://vinkl.com",
+  url: "https://vinkl-design.de",
   defaultLocale: "de" as Locale,
 } as const;
 

@@ -44,10 +44,10 @@ function PrivacyDE() {
             <p className="mt-2">
               E-Mail:{" "}
               <a
-                href="mailto:hello@vinkl.com"
+                href="mailto:hallo@vinkl-design.de"
                 className="text-ink-primary underline underline-offset-2"
               >
-                hello@vinkl.com
+                hallo@vinkl-design.de
               </a>
             </p>
             <p>
@@ -724,10 +724,10 @@ function PrivacyDE() {
               Zur Ausübung Ihrer Rechte können Sie sich jederzeit an uns wenden
               unter:{" "}
               <a
-                href="mailto:hello@vinkl.com"
+                href="mailto:hallo@vinkl-design.de"
                 className="text-ink-primary underline underline-offset-2"
               >
-                hello@vinkl.com
+                hallo@vinkl-design.de
               </a>
             </p>
           </div>
@@ -821,10 +821,10 @@ function PrivacyEN() {
             <p className="mt-2">
               Email:{" "}
               <a
-                href="mailto:hello@vinkl.com"
+                href="mailto:hallo@vinkl-design.de"
                 className="text-ink-primary underline underline-offset-2"
               >
-                hello@vinkl.com
+                hallo@vinkl-design.de
               </a>
             </p>
             <p>
@@ -1472,10 +1472,10 @@ function PrivacyEN() {
             <p className="mt-4">
               To exercise your rights, you can contact us at any time at:{" "}
               <a
-                href="mailto:hello@vinkl.com"
+                href="mailto:hallo@vinkl-design.de"
                 className="text-ink-primary underline underline-offset-2"
               >
-                hello@vinkl.com
+                hallo@vinkl-design.de
               </a>
             </p>
           </div>

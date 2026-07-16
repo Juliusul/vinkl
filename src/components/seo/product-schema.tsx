@@ -20,7 +20,7 @@ interface ProductSchemaProps {
  * @see https://developers.google.com/search/docs/appearance/structured-data/product
  */
 export function ProductSchema({ product, locale }: ProductSchemaProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl-design.de";
   const productUrl = `${siteUrl}/${locale}/objects/${product.slug}`;
 
   const schema: Record<string, unknown> = {

@@ -44,7 +44,7 @@ function TermsDE() {
               <br />
               Deutschland
               <br />
-              E-Mail: hello@vinkl.com
+              E-Mail: hallo@vinkl-design.de
             </p>
             <p className="mt-2">
               — nachfolgend &bdquo;Verkäuferin&ldquo; — und dem Kunden
@@ -133,7 +133,7 @@ function TermsDE() {
               Haidberg 8<br />
               93491 Stamsried
               <br />
-              E-Mail: hello@vinkl.com
+              E-Mail: hallo@vinkl-design.de
             </p>
             <p className="mt-2">
               mittels einer eindeutigen Erklärung (z.&thinsp;B. ein mit der
@@ -204,7 +204,7 @@ function TermsDE() {
                 Haidberg 8<br />
                 93491 Stamsried
                 <br />
-                E-Mail: hello@vinkl.com
+                E-Mail: hallo@vinkl-design.de
               </p>
               <p className="mt-2">
                 Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*)
@@ -442,7 +442,7 @@ function TermsEN() {
               <br />
               Germany
               <br />
-              Email: hello@vinkl.com
+              Email: hallo@vinkl-design.de
             </p>
             <p className="mt-2">
               — hereinafter referred to as &ldquo;Seller&rdquo; — and the
@@ -534,7 +534,7 @@ function TermsEN() {
               Haidberg 8<br />
               93491 Stamsried
               <br />
-              Email: hello@vinkl.com
+              Email: hallo@vinkl-design.de
             </p>
             <p className="mt-2">
               by means of a clear statement (e.g. a letter sent by post or an
@@ -601,7 +601,7 @@ function TermsEN() {
                 Haidberg 8<br />
                 93491 Stamsried
                 <br />
-                Email: hello@vinkl.com
+                Email: hallo@vinkl-design.de
               </p>
               <p className="mt-2">
                 I/We (*) hereby revoke the contract concluded by me/us (*) for
