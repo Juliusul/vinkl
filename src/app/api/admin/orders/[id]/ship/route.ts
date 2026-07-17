@@ -55,7 +55,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       from: senderAddress("versand"),
       replyTo: REPLY_TO_EMAIL,
       to: order.customer_email,
-      subject: "Dein VINKL Regal ist unterwegs!",
+      subject: "Dein VLip ist unterwegs",
       html,
     });
   } catch (err) {

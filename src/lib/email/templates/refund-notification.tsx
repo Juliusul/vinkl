@@ -1,17 +1,13 @@
 import {
-  Body,
-  Container,
-  Head,
-  Img,
-  Hr,
-  Html,
-  Preview,
-  Row,
-  Column,
-  Section,
-  Text,
-} from "@react-email/components";
-import { LOGO_ASPECT_RATIO, LOGO_URL } from "@/lib/email/domain";
+  DataRow,
+  EHeading,
+  EText,
+  EmailShell,
+  Kicker,
+  Panel,
+} from "./_components";
+
+const SUCCESS = "#2D6A4F"; // --color-success from the site theme
 
 interface Props {
   customerName: string;
@@ -37,65 +33,37 @@ export function RefundNotificationEmail({
   });
 
   return (
-    <Html lang="de">
-      <Head />
-      <Preview>Deine Erstattung über {formattedAmount} € für Bestellung {invoiceNumber}</Preview>
-      <Body style={{ fontFamily: "Georgia, serif", backgroundColor: "#f5f0ea", margin: 0, padding: "32px 0" }}>
-        <Container style={{ maxWidth: 560, margin: "0 auto", backgroundColor: "#fff", padding: "48px 40px" }}>
-          <Text style={{ fontSize: 11, letterSpacing: 3, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
-            WANDREGAL
-          </Text>
-          <Img
-            src={LOGO_URL}
-            alt="VINKL"
-            height={32}
-            width={Math.round(32 * LOGO_ASPECT_RATIO)}
-            style={{ margin: "0 0 32px", display: "block" }}
-          />
+    <EmailShell
+      preview={`Deine Erstattung über ${formattedAmount} € für Bestellung ${invoiceNumber}`}
+      footerNote={emailFooter}
+    >
+      <Kicker>Erstattung</Kicker>
+      <EHeading>Erstattung veranlasst, {firstName}.</EHeading>
+      <EText>
+        Wir haben eine Erstattung für deine Bestellung {invoiceNumber}{" "}
+        veranlasst. Der Betrag wird innerhalb von 5–10 Werktagen auf deinem
+        ursprünglichen Zahlungsmittel gutgeschrieben.
+      </EText>
 
-          <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 32px" }} />
+      <Panel>
+        <DataRow label="Bestellnummer" value={invoiceNumber} />
+        <DataRow label="Erstattungsdatum" value={refundDate} />
+        <DataRow label="Währung" value={currency} />
+        <DataRow
+          label="Erstattungsbetrag"
+          value={
+            <span style={{ fontSize: 16, fontWeight: 500, color: SUCCESS }}>
+              {formattedAmount} €
+            </span>
+          }
+          last
+        />
+      </Panel>
 
-          <Text style={{ fontSize: 16, color: "#1a1a1a", margin: "0 0 8px" }}>
-            Erstattung veranlasst, {firstName}.
-          </Text>
-          <Text style={{ fontSize: 14, color: "#666", margin: "0 0 32px", lineHeight: 1.6 }}>
-            Wir haben eine Erstattung für deine Bestellung {invoiceNumber} veranlasst.
-            Der Betrag wird innerhalb von 5–10 Werktagen auf deinem ursprünglichen Zahlungsmittel gutgeschrieben.
-          </Text>
-
-          <Section style={{ backgroundColor: "#f9f7f4", padding: "20px 24px", marginBottom: 32 }}>
-            <Text style={{ fontSize: 9, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 16px" }}>
-              ERSTATTUNG DETAILS
-            </Text>
-            <Row style={{ marginBottom: 8 }}>
-              <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Bestellnummer</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0 }}>{invoiceNumber}</Text></Column>
-            </Row>
-            <Row style={{ marginBottom: 8 }}>
-              <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Erstattungsdatum</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0 }}>{refundDate}</Text></Column>
-            </Row>
-            <Row style={{ marginBottom: 8 }}>
-              <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Währung</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0 }}>{currency}</Text></Column>
-            </Row>
-            <Row>
-              <Column><Text style={{ fontSize: 14, fontWeight: "bold", color: "#1a1a1a", margin: 0 }}>Erstattungsbetrag</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 14, fontWeight: "bold", color: "#2d7a2d", margin: 0 }}>{formattedAmount} €</Text></Column>
-            </Row>
-          </Section>
-
-          <Text style={{ fontSize: 13, color: "#666", lineHeight: 1.6, margin: "0 0 32px" }}>
-            Bitte beachte, dass je nach Bank oder Zahlungsanbieter die Buchung einige Werktage in Anspruch nehmen kann.
-          </Text>
-
-          <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 24px" }} />
-
-          <Text style={{ fontSize: 12, color: "#999", lineHeight: 1.6, margin: 0 }}>
-            {emailFooter}
-          </Text>
-        </Container>
-      </Body>
-    </Html>
+      <EText style={{ fontSize: 13, margin: 0 }}>
+        Bitte beachte, dass je nach Bank oder Zahlungsanbieter die Buchung
+        einige Werktage in Anspruch nehmen kann.
+      </EText>
+    </EmailShell>
   );
 }

@@ -1,9 +1,14 @@
-import {
-  Body, Container, Head, Hr, Html, Img, Preview,
-  Row, Column, Section, Text,
-} from "@react-email/components";
-import { LOGO_ASPECT_RATIO, LOGO_URL } from "@/lib/email/domain";
 import type Stripe from "stripe";
+import {
+  DataRow,
+  EHeading,
+  EText,
+  EmailShell,
+  Hairline,
+  Kicker,
+  Panel,
+  email,
+} from "./_components";
 
 interface Props {
   paymentIntent: Stripe.PaymentIntent;
@@ -25,72 +30,57 @@ export function OrderConfirmationEmail({
   const gross = ((pi.amount ?? 0) / 100).toLocaleString("de-DE", { minimumFractionDigits: 2 });
 
   return (
-    <Html lang="de">
-      <Head />
-      <Preview>Deine VINKL Bestellung {invoiceNumber} ist eingegangen</Preview>
-      <Body style={{ fontFamily: "Georgia, serif", backgroundColor: "#f5f0ea", margin: 0, padding: "32px 0" }}>
-        <Container style={{ maxWidth: 560, margin: "0 auto", backgroundColor: "#fff", padding: "48px 40px" }}>
-          <Text style={{ fontSize: 11, letterSpacing: 3, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
-            WANDREGAL
-          </Text>
-          <Img
-            src={LOGO_URL}
-            alt="VINKL"
-            height={32}
-            width={Math.round(32 * LOGO_ASPECT_RATIO)}
-            style={{ margin: "0 0 32px", display: "block" }}
-          />
+    <EmailShell
+      preview={`Deine VINKL Bestellung ${invoiceNumber} ist eingegangen`}
+      footerNote="Wir melden uns, sobald dein Regal unterwegs ist."
+    >
+      <Kicker>Bestellbestätigung</Kicker>
+      <EHeading>{emailGreeting.replace("{name}", firstName)}</EHeading>
+      <EText>
+        Wir haben deine Bestellung erhalten und bereiten sie für den Versand
+        vor. Die Rechnung findest du im Anhang dieser E-Mail.
+      </EText>
 
-          <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 32px" }} />
+      <Panel>
+        <DataRow label="Bestellnummer" value={invoiceNumber} />
+        <DataRow
+          label="Produkt"
+          value={`VLip Teak-Wandregal × ${meta.quantity ?? "1"}`}
+        />
+        <DataRow
+          label="Gesamt"
+          value={
+            <span style={{ fontSize: 16, fontWeight: 500 }}>{gross} €</span>
+          }
+          last
+        />
+      </Panel>
 
-          <Text style={{ fontSize: 16, color: "#1a1a1a", margin: "0 0 8px" }}>
-            {emailGreeting.replace("{name}", firstName)}
-          </Text>
-          <Text style={{ fontSize: 14, color: "#666", margin: "0 0 32px", lineHeight: 1.6 }}>
-            Wir haben deine Bestellung erhalten und bereiten sie für den Versand vor.
-            Die Rechnung findest du im Anhang dieser E-Mail.
-          </Text>
-
-          <Section style={{ backgroundColor: "#f9f7f4", padding: "20px 24px", marginBottom: 32 }}>
-            <Text style={{ fontSize: 9, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 16px" }}>
-              BESTELLDETAILS
-            </Text>
-            <Row style={{ marginBottom: 8 }}>
-              <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Bestellnummer</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0 }}>{invoiceNumber}</Text></Column>
-            </Row>
-            <Row style={{ marginBottom: 8 }}>
-              <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Produkt</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0 }}>VINKL Teak Wandregal × {meta.quantity ?? "1"}</Text></Column>
-            </Row>
-            <Row>
-              <Column><Text style={{ fontSize: 13, color: "#888", margin: 0 }}>Gesamt</Text></Column>
-              <Column style={{ textAlign: "right" }}><Text style={{ fontSize: 14, fontWeight: "bold", color: "#1a1a1a", margin: 0 }}>{gross} €</Text></Column>
-            </Row>
-          </Section>
-
-          {addr && (
-            <Section style={{ marginBottom: 32 }}>
-              <Text style={{ fontSize: 9, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
-                LIEFERADRESSE
-              </Text>
-              <Text style={{ fontSize: 13, color: "#1a1a1a", margin: 0, lineHeight: 1.7 }}>
-                {customerName}<br />
-                {addr.line1}{addr.line2 ? `, ${addr.line2}` : ""}<br />
-                {addr.postal_code} {addr.city}<br />
+      {addr && (
+        <>
+          <DataRow
+            label="Lieferadresse"
+            value={
+              <>
+                {customerName}
+                <br />
+                {addr.line1}
+                {addr.line2 ? `, ${addr.line2}` : ""}
+                <br />
+                {addr.postal_code} {addr.city}
+                <br />
                 {addr.country}
-              </Text>
-            </Section>
-          )}
+              </>
+            }
+            last
+          />
+          <Hairline />
+        </>
+      )}
 
-          <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 24px" }} />
-
-          <Text style={{ fontSize: 12, color: "#999", lineHeight: 1.6, margin: 0 }}>
-            {emailFooter}<br />
-            Wir melden uns sobald dein Regal unterwegs ist.
-          </Text>
-        </Container>
-      </Body>
-    </Html>
+      <EText style={{ margin: 0, fontSize: 13, color: email.inkTertiary }}>
+        {emailFooter}
+      </EText>
+    </EmailShell>
   );
 }

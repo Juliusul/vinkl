@@ -1,16 +1,11 @@
+import { Link, Section, Text } from "@react-email/components";
 import {
-  Body,
-  Container,
-  Head,
-  Img,
-  Hr,
-  Html,
-  Link,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components";
-import { LOGO_ASPECT_RATIO, LOGO_URL } from "@/lib/email/domain";
+  EHeading,
+  EText,
+  EmailShell,
+  Kicker,
+  email,
+} from "./_components";
 
 interface Props {
   customerName: string;
@@ -21,66 +16,70 @@ interface Props {
   emailFooter?: string;
 }
 
-export function ShippingConfirmationEmail({ customerName, trackingCode, trackingUrl, shippingDaysDe = "3–5 Werktage", shippingDaysIntl = "5–8 Werktage", emailFooter = "Fragen? Antworte einfach auf diese E-Mail — wir helfen gerne." }: Props) {
+export function ShippingConfirmationEmail({
+  customerName,
+  trackingCode,
+  trackingUrl,
+  shippingDaysDe = "3–5 Werktage",
+  shippingDaysIntl = "5–8 Werktage",
+  emailFooter = "Fragen? Antworte einfach auf diese E-Mail — wir helfen gerne.",
+}: Props) {
   const firstName = customerName.split(" ")[0] ?? customerName;
 
+  const codeStyle = {
+    fontSize: 17,
+    letterSpacing: 1,
+    color: email.inkPrimary,
+    fontFamily: "'SF Mono', Consolas, 'Courier New', monospace",
+    fontWeight: 500,
+  } as const;
+
   return (
-    <Html lang="de">
-      <Head />
-      <Preview>Dein VINKL Regal ist unterwegs 🚚</Preview>
-      <Body style={{ fontFamily: "Georgia, serif", backgroundColor: "#f5f0ea", margin: 0, padding: "32px 0" }}>
-        <Container style={{ maxWidth: 560, margin: "0 auto", backgroundColor: "#fff", padding: "48px 40px" }}>
-          <Text style={{ fontSize: 11, letterSpacing: 3, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
-            WANDREGAL
-          </Text>
-          <Img
-            src={LOGO_URL}
-            alt="VINKL"
-            height={32}
-            width={Math.round(32 * LOGO_ASPECT_RATIO)}
-            style={{ margin: "0 0 32px", display: "block" }}
-          />
+    <EmailShell
+      preview="Dein VLip ist unterwegs"
+      footerNote={emailFooter}
+    >
+      <Kicker>Versandbestätigung</Kicker>
+      <EHeading>Es ist unterwegs, {firstName}.</EHeading>
+      <EText>
+        Dein VLip Teak-Wandregal ist auf dem Weg zu dir. Du kannst deine
+        Sendung mit der folgenden Tracking-Nummer verfolgen.
+      </EText>
 
-          <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 32px" }} />
+      <Section
+        style={{
+          backgroundColor: email.bgWarm,
+          padding: "28px 28px",
+          margin: "28px 0",
+          textAlign: "center" as const,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 10,
+            letterSpacing: 1.8,
+            textTransform: "uppercase" as const,
+            color: email.inkTertiary,
+            margin: "0 0 10px",
+            fontFamily: email.fontBody,
+            fontWeight: 500,
+          }}
+        >
+          Sendungsverfolgung
+        </Text>
+        {trackingUrl ? (
+          <Link href={trackingUrl} style={{ ...codeStyle, textDecoration: "underline" }}>
+            {trackingCode}
+          </Link>
+        ) : (
+          <Text style={{ ...codeStyle, margin: 0 }}>{trackingCode}</Text>
+        )}
+      </Section>
 
-          <Text style={{ fontSize: 16, color: "#1a1a1a", margin: "0 0 8px" }}>
-            Es ist unterwegs, {firstName}!
-          </Text>
-          <Text style={{ fontSize: 14, color: "#666", margin: "0 0 32px", lineHeight: 1.6 }}>
-            Dein VINKL Teak Wandregal ist auf dem Weg zu dir.
-            Du kannst deine Sendung mit der folgenden Tracking-Nummer verfolgen.
-          </Text>
-
-          <Section style={{ backgroundColor: "#f9f7f4", padding: "20px 24px", marginBottom: 32, textAlign: "center" }}>
-            <Text style={{ fontSize: 9, letterSpacing: 2, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
-              SENDUNGSVERFOLGUNG
-            </Text>
-            {trackingUrl ? (
-              <Link
-                href={trackingUrl}
-                style={{ fontSize: 16, color: "#1a1a1a", fontFamily: "monospace", fontWeight: "bold", textDecoration: "underline" }}
-              >
-                {trackingCode}
-              </Link>
-            ) : (
-              <Text style={{ fontSize: 16, color: "#1a1a1a", fontFamily: "monospace", fontWeight: "bold", margin: 0 }}>
-                {trackingCode}
-              </Text>
-            )}
-          </Section>
-
-          <Text style={{ fontSize: 13, color: "#666", lineHeight: 1.6, margin: "0 0 32px" }}>
-            Die Lieferung dauert in der Regel {shippingDaysDe} innerhalb Deutschlands.
-            Für Österreich und die Schweiz {shippingDaysIntl}.
-          </Text>
-
-          <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 24px" }} />
-
-          <Text style={{ fontSize: 12, color: "#999", lineHeight: 1.6, margin: 0 }}>
-            {emailFooter}
-          </Text>
-        </Container>
-      </Body>
-    </Html>
+      <EText style={{ fontSize: 13, margin: 0 }}>
+        Die Lieferung dauert in der Regel {shippingDaysDe} innerhalb
+        Deutschlands, {shippingDaysIntl} nach Österreich und in die Schweiz.
+      </EText>
+    </EmailShell>
   );
 }
