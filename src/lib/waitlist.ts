@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { senderAddress } from "@/lib/email/domain";
 
 /**
  * Waitlist double-opt-in helpers.
@@ -40,28 +41,9 @@ export function verifyWaitlistToken(
   return timingSafeEqual(Buffer.from(token, "utf8"), Buffer.from(expected, "utf8"));
 }
 
-export function emailDomain(): string {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl.vercel.app";
-  try {
-    // Sender domains never carry a www — Resend verifies the apex.
-    return new URL(siteUrl).hostname.replace(/^www\./, "");
-  } catch {
-    return "vinkl-design.de";
-  }
-}
-
-/**
- * Sender address for waitlist mail. Resend only delivers from
- * verified domains — a *.vercel.app host can never be verified, so
- * fall back to Resend's onboarding sender until the real domain is
- * live and verified.
- */
+/** Sender address for waitlist mail — always the verified subdomain. */
 export function waitlistSender(): string {
-  const domain = emailDomain();
-  if (domain.endsWith(".vercel.app") || domain === "localhost") {
-    return "VINKL <onboarding@resend.dev>";
-  }
-  return `VINKL <warteliste@${domain}>`;
+  return senderAddress("warteliste");
 }
 
 export function siteUrl(): string {

@@ -7,6 +7,7 @@ import { generateInvoicePdfFromPaymentIntent } from "@/lib/invoice/generate";
 import { generateInvoiceNumber } from "@/lib/invoice/number";
 import { getTemplateSettings } from "@/lib/supabase/settings";
 import { resend } from "@/lib/email/resend";
+import { REPLY_TO_EMAIL, senderAddress } from "@/lib/email/domain";
 import { OrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
 import { render as renderEmail } from "@react-email/components";
 import React from "react";
@@ -36,9 +37,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     emailFooter: settings.email_footer,
   }));
 
-  const domain = (() => { try { return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "").hostname; } catch { return "vinkl.de"; } })();
   await resend.emails.send({
-    from: `VINKL <bestellungen@${domain}>`,
+    from: senderAddress("bestellungen"),
+    replyTo: REPLY_TO_EMAIL,
     to: order.customer_email,
     subject: `Deine VINKL Bestellung ${invoiceNumber} (erneut gesendet)`,
     html,

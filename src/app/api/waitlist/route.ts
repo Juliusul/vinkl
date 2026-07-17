@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { resend } from "@/lib/email/resend";
+import { REPLY_TO_EMAIL } from "@/lib/email/domain";
 import { WaitlistConfirmationEmail } from "@/lib/email/templates/waitlist-confirmation";
 import {
   isValidEmail,
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
 
   const { error } = await resend.emails.send({
     from: waitlistSender(),
-    replyTo: "hallo@vinkl-design.de",
+    replyTo: REPLY_TO_EMAIL,
     to: email,
     subject: t("subject"),
     react: WaitlistConfirmationEmail({

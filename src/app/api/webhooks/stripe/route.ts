@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe/client";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { generateInvoicePdfFromPaymentIntent } from "@/lib/invoice/generate";
 import { resend } from "@/lib/email/resend";
+import { REPLY_TO_EMAIL, senderAddress } from "@/lib/email/domain";
 import { OrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
 import { OrderNotificationEmail } from "@/lib/email/templates/order-notification";
 import { generateInvoiceNumber } from "@/lib/invoice/number";
@@ -109,8 +110,8 @@ async function handlePaymentIntent(pi: Stripe.PaymentIntent) {
         })
       );
       await resend.emails.send({
-        from: `VINKL <bestellungen@${getEmailDomain()}>`,
-        replyTo: "hallo@vinkl-design.de",
+        from: senderAddress("bestellungen"),
+        replyTo: REPLY_TO_EMAIL,
         to: customerEmail,
         subject: `Deine VINKL Bestellung ${invoiceNumber}`,
         html,
@@ -124,7 +125,7 @@ async function handlePaymentIntent(pi: Stripe.PaymentIntent) {
       );
       const recipients = [...new Set([ownerEmail, accountingEmail].filter(Boolean))];
       await resend.emails.send({
-        from: `VINKL Shop <bestellungen@${getEmailDomain()}>`,
+        from: senderAddress("bestellungen", "VINKL Shop"),
         to: recipients,
         subject: `Neue Bestellung ${invoiceNumber} — ${customerName ?? customerEmail}`,
         html: notifHtml,
@@ -134,9 +135,4 @@ async function handlePaymentIntent(pi: Stripe.PaymentIntent) {
   } catch (err) {
     console.error("Email/PDF error:", err);
   }
-}
-
-function getEmailDomain(): string {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "localhost:3000";
-  try { return new URL(siteUrl).hostname.replace(/^www./, ""); } catch { return "vinkl-design.de"; }
 }

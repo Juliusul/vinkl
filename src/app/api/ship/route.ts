@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe/client";
 import { resend } from "@/lib/email/resend";
+import { REPLY_TO_EMAIL, senderAddress } from "@/lib/email/domain";
 import { ShippingConfirmationEmail } from "@/lib/email/templates/shipping-confirmation";
 import { render as renderEmail } from "@react-email/components";
 import React from "react";
@@ -46,11 +47,9 @@ export async function POST(req: NextRequest) {
     })
   );
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const domain = (() => { try { return new URL(siteUrl).hostname; } catch { return "vinkl.de"; } })();
-
   await resend.emails.send({
-    from: `VINKL <versand@${domain}>`,
+    from: senderAddress("versand"),
+    replyTo: REPLY_TO_EMAIL,
     to: customerEmail,
     subject: "Dein VINKL Regal ist unterwegs!",
     html,

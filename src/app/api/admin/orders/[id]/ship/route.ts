@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { resend } from "@/lib/email/resend";
+import { REPLY_TO_EMAIL, senderAddress } from "@/lib/email/domain";
 import { ShippingConfirmationEmail } from "@/lib/email/templates/shipping-confirmation";
 import { getTemplateSettings } from "@/lib/supabase/settings";
 import { render as renderEmail } from "@react-email/components";
@@ -50,9 +51,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         emailFooter: settings.email_footer,
       })
     );
-    const domain = getDomain();
     await resend.emails.send({
-      from: `VINKL <versand@${domain}>`,
+      from: senderAddress("versand"),
+      replyTo: REPLY_TO_EMAIL,
       to: order.customer_email,
       subject: "Dein VINKL Regal ist unterwegs!",
       html,
@@ -62,8 +63,4 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
 
   return NextResponse.json({ success: true });
-}
-
-function getDomain() {
-  try { return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "").hostname; } catch { return "vinkl.de"; }
 }
