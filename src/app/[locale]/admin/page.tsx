@@ -42,16 +42,30 @@ export default async function AdminPage({ params, searchParams }: Props) {
   const pageSize = 20;
   const offset = (pageNum - 1) * pageSize;
 
-  let query = supabaseAdmin
-    .from("orders")
-    .select("*", { count: "exact" })
-    .order("created_at", { ascending: false })
-    .range(offset, offset + pageSize - 1);
+  let orders: Order[] | null = null;
+  let count: number | null = null;
+  let queryError: string | null = null;
 
-  if (status !== "all") query = query.eq("status", status);
-  if (q) query = query.or(`customer_email.ilike.%${q}%,customer_name.ilike.%${q}%,invoice_number.ilike.%${q}%`);
+  try {
+    let query = supabaseAdmin
+      .from("orders")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(offset, offset + pageSize - 1);
 
-  const { data: orders, count } = await query;
+    if (status !== "all") query = query.eq("status", status);
+    if (q) query = query.or(`customer_email.ilike.%${q}%,customer_name.ilike.%${q}%,invoice_number.ilike.%${q}%`);
+
+    const result = await query;
+    orders = result.data;
+    count = result.count;
+    if (result.error) queryError = result.error.message;
+  } catch (err) {
+    // Never crash the page on a data problem — surface it to the
+    // admin instead (e.g. a broken SUPABASE_SERVICE_ROLE_KEY).
+    queryError = err instanceof Error ? err.message : String(err);
+  }
+
   const totalPages = Math.ceil((count ?? 0) / pageSize);
 
   return (
@@ -109,7 +123,15 @@ export default async function AdminPage({ params, searchParams }: Props) {
             <span>DATUM</span><span>KUNDE</span><span>RECHNUNG</span><span>BETRAG</span><span>STATUS</span>
           </div>
 
-          {(!orders || orders.length === 0) && (
+          {queryError && (
+            <div style={{ padding: "16px", backgroundColor: "#fdf3f3", color: "#9B2C2C", fontSize: 12, lineHeight: 1.6 }}>
+              Datenbankfehler: {queryError}
+              <br />
+              Prüfe SUPABASE_SERVICE_ROLE_KEY in den Vercel-Umgebungsvariablen.
+            </div>
+          )}
+
+          {!queryError && (!orders || orders.length === 0) && (
             <div style={{ padding: "32px 16px", color: "#888", fontSize: 13, textAlign: "center" }}>
               Keine Bestellungen gefunden.
             </div>

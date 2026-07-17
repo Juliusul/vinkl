@@ -5,9 +5,12 @@ let _admin: SupabaseClient | null = null;
 
 function getAdmin(): SupabaseClient {
   if (!_admin) {
+    // trim(): a key pasted into an env UI with a trailing newline is an
+    // invalid HTTP header character — fetch then throws on every query
+    // (crashed all authenticated admin pages in production).
     _admin = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co",
-      process.env.SUPABASE_SERVICE_ROLE_KEY ?? "placeholder",
+      (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co").trim(),
+      (process.env.SUPABASE_SERVICE_ROLE_KEY ?? "placeholder").trim(),
       { auth: { autoRefreshToken: false, persistSession: false } }
     );
   }
