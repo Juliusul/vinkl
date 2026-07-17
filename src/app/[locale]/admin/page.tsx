@@ -119,6 +119,10 @@ export default async function AdminPage({ params, searchParams }: Props) {
             <Link
               key={order.id}
               href={`/${locale}/admin/orders/${order.id}`}
+              // Hover via CSS class — event-handler props are illegal in
+              // server components and crash the page at render time as
+              // soon as at least one order row exists.
+              className="hover:bg-[#fafafa]"
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 2fr 1fr 1fr 80px",
@@ -129,8 +133,6 @@ export default async function AdminPage({ params, searchParams }: Props) {
                 alignItems: "center",
                 transition: "background 0.1s",
               }}
-              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#fafafa")}
-              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "")}
             >
               <span style={{ fontSize: 12, color: "#666" }}>
                 {new Date(order.created_at).toLocaleDateString("de-DE")}
