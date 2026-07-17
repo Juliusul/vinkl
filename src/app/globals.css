@@ -17,10 +17,13 @@
   --color-ink-tertiary: #9E9C9F;
   --color-ink-inverse: #F5F0EB;
 
-  /* ── Colors: Accent ── */
-  --color-terracotta: #E8630A;
-  --color-terracotta-dark: #C45208;
-  --color-terracotta-light: #F08B40;
+  /* ── Colors: Accent ──
+     Base = the logo's brand orange (public/logo/vinkl-wordmark.svg).
+     Dark/light derived by preserving the previous set's HSL deltas
+     (saturation/lightness offsets), not by eyeballing. ── */
+  --color-terracotta: #EF7928;
+  --color-terracotta-dark: #E16510;
+  --color-terracotta-light: #EE9E67;
 
   /* ── Colors: Secondary Accent (use sparingly) ── */
   --color-steel-blue: #B0C4D4;

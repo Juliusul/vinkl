@@ -117,9 +117,8 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
       >
         {/* Top bar — mirrors the header so the close sits where the burger was */}
         <div className="flex items-center justify-between border-b border-border-default px-5 py-4 md:px-10">
-          <span className="text-sm font-medium uppercase tracking-[0.2em] text-ink-primary">
-            <span className="text-terracotta">V</span>INKL
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo/vinkl-wordmark.svg" alt="VINKL" className="h-5 w-auto" />
           <button
             ref={closeRef}
             type="button"

@@ -22,8 +22,9 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "18px 32px", borderBottom: "1px solid #e0d8d0", backgroundColor: "#fff",
       }}>
-        <Link href={`/${locale}`} style={{ fontSize: 13, letterSpacing: "0.2em", color: "#1a1a1a", textDecoration: "none", fontWeight: 500, textTransform: "uppercase" }}>
-          <span style={{ color: "#c0856a" }}>V</span>INKL
+        <Link href={`/${locale}`} style={{ display: "flex", textDecoration: "none" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo/vinkl-wordmark.svg" alt="VINKL" style={{ height: 18, width: "auto" }} />
         </Link>
         <span style={{ fontSize: 10, letterSpacing: "0.15em", color: "#aaa", textTransform: "uppercase", fontFamily: "monospace" }}>
           Sichere Zahlung

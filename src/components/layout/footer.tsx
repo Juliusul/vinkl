@@ -12,9 +12,8 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-ink-primary">
-              <span className="text-terracotta">V</span>INKL
-            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo/vinkl-wordmark.svg" alt="VINKL" className="h-5 w-auto" />
           </div>
 
           {/* Navigation */}

@@ -20,9 +20,10 @@ export function Header({ navItems }: HeaderProps) {
         {/* Logo */}
         <Link
           href="/"
-          className="rounded-sm text-sm font-medium uppercase tracking-[0.2em] text-ink-primary transition-opacity duration-[--duration-fast] ease-[--ease-out] hover:opacity-70"
+          className="rounded-sm transition-opacity duration-[--duration-fast] ease-[--ease-out] hover:opacity-70"
         >
-          <span className="text-terracotta">V</span>INKL
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo/vinkl-wordmark.svg" alt="VINKL" className="h-5 w-auto" />
         </Link>
 
         {/* Desktop navigation */}
