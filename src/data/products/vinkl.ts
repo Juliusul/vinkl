@@ -12,7 +12,7 @@ import type { Product } from "@/types";
 export const vinklProduct: Product = {
   id: "gid://shopify/Product/vinkl-shelf-001",
   slug: "vinkl",
-  title: "VINKL",
+  title: "VLip",
   description:
     "Corner wall shelf in solid teak with continuously adjustable angle mechanism. Adapts to any wall angle.",
   descriptionHtml:
@@ -66,7 +66,7 @@ export const vinklProduct: Product = {
   tags: ["shelf", "teak", "corner", "wall-mount", "adjustable"],
   productType: "Corner Wall Shelf",
   seo: {
-    title: "VINKL — Adjustable Teak Corner Shelf",
+    title: "VLip — Adjustable Teak Corner Shelf",
     description:
       "Solid teak corner wall shelf with stepless invisible angle adjustment. Designed for real rooms.",
   },

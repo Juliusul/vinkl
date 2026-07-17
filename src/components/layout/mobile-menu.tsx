@@ -148,7 +148,7 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
                   href={item.href}
                   onClick={() => setOpen(false)}
                   style={{ transitionDelay: open ? `${40 + i * 45}ms` : "0ms" }}
-                  className={`block py-5 font-serif text-[1.75rem] font-normal leading-none tracking-[-0.01em] text-ink-primary transition-[color,transform] duration-[250ms] ease-[--ease-out] hover:text-terracotta active:text-terracotta ${
+                  className={`block py-5 font-heading text-[1.75rem] font-normal leading-none tracking-[-0.01em] text-ink-primary transition-[color,transform] duration-[250ms] ease-[--ease-out] hover:text-terracotta active:text-terracotta ${
                     open ? "translate-x-0" : "translate-x-3"
                   }`}
                 >

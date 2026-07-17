@@ -13,7 +13,7 @@
   },
   "common": {
     "nav": {
-      "objects": "Objekte",
+      "objects": "Regale",
       "journal": "Journal",
       "about": "Über uns",
       "cart": "Warenkorb"
@@ -22,7 +22,7 @@
       "addToCart": "In den Warenkorb",
       "readMore": "Weiterlesen",
       "viewAll": "Alle ansehen",
-      "backToObjects": "Zurück zu Objekte",
+      "backToObjects": "Zurück zu den Regalen",
       "discover": "Entdecken"
     },
     "legal": {
@@ -55,7 +55,7 @@
     },
     "featured": {
       "label": "Erstes Objekt",
-      "name": "Das Teak-Regal",
+      "name": "VLip",
       "description": "Massives Teak. Stufenlos verstellbar. Passt sich jeder Ecke an.",
       "cta": "Objekt ansehen"
     },
@@ -81,8 +81,8 @@
     }
   },
   "objects": {
-    "title": "Objekte",
-    "empty": "Keine Objekte verfügbar.",
+    "title": "Regale",
+    "empty": "Keine Regale verfügbar.",
     "from": "ab"
   },
   "product": {
@@ -92,12 +92,12 @@
     "addToCart": "In den Warenkorb",
     "soldOut": "Ausverkauft",
     "notFound": "Objekt nicht gefunden.",
-    "backToObjects": "Alle Objekte"
+    "backToObjects": "Alle Regale"
   },
   "vinkl": {
     "hero": {
       "type": "Wandregal",
-      "name": "VINKL",
+      "name": "VLip",
       "tagline": "Das Regal, das sich deinen Wänden anpasst.",
       "price": "399 €",
       "priceNote": "Massives Teak, kein Furnier. Gebaut, um zu bleiben.",
