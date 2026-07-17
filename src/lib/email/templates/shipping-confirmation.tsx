@@ -2,7 +2,7 @@ import {
   Body,
   Container,
   Head,
-  Heading,
+  Img,
   Hr,
   Html,
   Link,
@@ -10,6 +10,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { LOGO_ASPECT_RATIO, LOGO_URL } from "@/lib/email/domain";
 
 interface Props {
   customerName: string;
@@ -32,9 +33,13 @@ export function ShippingConfirmationEmail({ customerName, trackingCode, tracking
           <Text style={{ fontSize: 11, letterSpacing: 3, color: "#888", textTransform: "uppercase", margin: "0 0 8px" }}>
             WANDREGAL
           </Text>
-          <Heading style={{ fontSize: 28, fontWeight: 400, margin: "0 0 32px", color: "#1a1a1a" }}>
-            VINKL
-          </Heading>
+          <Img
+            src={LOGO_URL}
+            alt="VINKL"
+            height={32}
+            width={Math.round(32 * LOGO_ASPECT_RATIO)}
+            style={{ margin: "0 0 32px", display: "block" }}
+          />
 
           <Hr style={{ borderColor: "#e0d8d0", margin: "0 0 32px" }} />
 

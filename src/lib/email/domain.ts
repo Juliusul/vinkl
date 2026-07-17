@@ -20,3 +20,14 @@ export const REPLY_TO_EMAIL = "hallo@vinkl-design.de";
 export function senderAddress(localPart: string, displayName = "VINKL"): string {
   return `${displayName} <${localPart}@${MAIL_DOMAIN}>`;
 }
+
+/**
+ * Wordmark image for email headers — email clients can't load web
+ * fonts, so the brand mark must be a raster image at an absolute,
+ * publicly reachable URL (relative paths don't resolve in a mail
+ * client). Native aspect ratio 499×134; templates render it at a
+ * fixed height and scale width to match.
+ */
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl-design.de";
+export const LOGO_URL = `${SITE_URL}/logo/vinkl-wordmark.png`;
+export const LOGO_ASPECT_RATIO = 499 / 134;
