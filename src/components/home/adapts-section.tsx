@@ -37,7 +37,7 @@ export function AdaptsSection() {
               <p className="reveal-child section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
                 {t("label")}
               </p>
-              <h2 className="reveal-child mt-4 font-serif text-[clamp(1.75rem,3.5vw,3rem)] font-light leading-[1.1] tracking-tight">
+              <h2 className="reveal-child mt-4 font-heading text-[clamp(1.75rem,3.5vw,3rem)] font-normal leading-[1.1] tracking-tight">
                 {t("heading")}
                 <br />
                 {t("headingLine2")}

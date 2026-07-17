@@ -46,7 +46,7 @@ export function FeaturedObjectSection() {
               <p className="reveal-child section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
                 {t("label")}
               </p>
-              <h2 className="reveal-child mt-3 font-serif text-3xl font-light tracking-tight md:text-4xl">
+              <h2 className="reveal-child mt-3 font-heading text-3xl font-normal tracking-tight md:text-4xl">
                 {t("name")}
               </h2>
               <p className="reveal-child mt-4 max-w-md text-base leading-relaxed text-ink-secondary">

@@ -21,7 +21,7 @@ export default async function TermsPage({ params }: Props) {
 function TermsDE() {
   return (
     <article className="mx-auto w-full max-w-[760px] px-5 py-16 md:px-10 md:py-24 lg:py-32">
-      <h1 className="font-serif text-3xl font-light tracking-tight md:text-4xl">
+      <h1 className="font-heading text-3xl font-normal tracking-tight md:text-4xl">
         Allgemeine Geschäftsbedingungen
       </h1>
 
@@ -419,7 +419,7 @@ function TermsDE() {
 function TermsEN() {
   return (
     <article className="mx-auto w-full max-w-[760px] px-5 py-16 md:px-10 md:py-24 lg:py-32">
-      <h1 className="font-serif text-3xl font-light tracking-tight md:text-4xl">
+      <h1 className="font-heading text-3xl font-normal tracking-tight md:text-4xl">
         Terms &amp; Conditions
       </h1>
 

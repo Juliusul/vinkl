@@ -12,7 +12,7 @@ import { CookieConsent } from "@/components/ui/cookie-consent";
 import { Analytics } from "@vercel/analytics/react";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
-import { sans, serif } from "../fonts";
+import { heading, sans, serif } from "../fonts";
 import "../globals.css";
 
 // ── Static params for all locales ──
@@ -98,7 +98,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   ];
 
   return (
-    <html lang={locale} className={`${sans.variable} ${serif.variable}`}>
+    <html lang={locale} className={`${sans.variable} ${serif.variable} ${heading.variable}`}>
       <body className="flex min-h-screen flex-col bg-bg-cream text-ink-primary font-sans antialiased">
         <NextIntlClientProvider>
           <CartProvider>

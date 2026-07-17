@@ -45,7 +45,7 @@ export function JournalEntries() {
 
                 {/* Right column: title + abstract */}
                 <div className="md:col-span-9 lg:col-span-10">
-                  <h2 className="font-serif text-xl font-light tracking-tight text-ink-primary md:text-2xl lg:text-[1.75rem]">
+                  <h2 className="font-heading text-xl font-normal tracking-tight text-ink-primary md:text-2xl lg:text-[1.75rem]">
                     {href ? (
                       <Link
                         href={href}

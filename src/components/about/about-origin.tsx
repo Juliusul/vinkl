@@ -24,7 +24,7 @@ export function AboutOrigin() {
           {/* Heading — left */}
           <div className="lg:col-span-5">
             <Reveal>
-              <h2 className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-light leading-[1.15] tracking-tight">
+              <h2 className="font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-normal leading-[1.15] tracking-tight">
                 {t("heading")}
               </h2>
             </Reveal>

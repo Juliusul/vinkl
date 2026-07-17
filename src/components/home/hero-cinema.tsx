@@ -234,7 +234,7 @@ export function HeroCinema() {
         <div className="hero-scrim absolute inset-0" aria-hidden="true" />
 
         <div className="absolute inset-x-0 bottom-[14vh] px-5 md:px-10">
-          <h1 className="font-serif font-light tracking-tight text-ink-primary">
+          <h1 className="font-heading font-normal tracking-tight text-ink-primary">
             <span className="hero-animate block text-[clamp(2.25rem,8vw,3.5rem)] leading-[1.08]">
               {t("line1")}
             </span>
@@ -242,7 +242,7 @@ export function HeroCinema() {
               {t("line2")}
             </span>
           </h1>
-          <p className="hero-animate hero-animate-delay-2 mt-4 font-serif text-[clamp(1.125rem,4.5vw,1.5rem)] font-light leading-snug text-ink-secondary">
+          <p className="hero-animate hero-animate-delay-2 mt-4 font-heading text-[clamp(1.125rem,4.5vw,1.5rem)] font-normal leading-snug text-ink-secondary">
             {t("line3")}
           </p>
           <div className="hero-animate hero-animate-delay-3">{cta}</div>
@@ -304,7 +304,7 @@ export function HeroCinema() {
             className="absolute inset-x-0 bottom-[22vh] px-16 will-change-transform"
           >
             <div className="mx-auto w-full max-w-[1440px]">
-              <h1 className="font-serif font-light tracking-tight text-ink-primary">
+              <h1 className="font-heading font-normal tracking-tight text-ink-primary">
                 <span className="hero-animate block text-[clamp(2.25rem,5.5vw,4.5rem)] leading-[1.08]">
                   {t("line1")}
                 </span>
@@ -314,7 +314,7 @@ export function HeroCinema() {
               </h1>
               {reducedMotion && (
                 <>
-                  <p className="mt-6 font-serif text-[clamp(1.25rem,2.5vw,2rem)] font-light leading-snug text-ink-secondary">
+                  <p className="mt-6 font-heading text-[clamp(1.25rem,2.5vw,2rem)] font-normal leading-snug text-ink-secondary">
                     {t("line3")}
                   </p>
                   {cta}
@@ -330,7 +330,7 @@ export function HeroCinema() {
               className="pointer-events-none absolute inset-x-0 bottom-[14vh] px-16 opacity-0 will-change-transform"
             >
               <div className="mx-auto w-full max-w-[1440px]">
-                <p className="max-w-[16ch] font-serif text-[clamp(1.75rem,4vw,3.25rem)] font-light leading-[1.15] tracking-tight text-ink-primary [text-wrap:balance]">
+                <p className="max-w-[16ch] font-heading text-[clamp(1.75rem,4vw,3.25rem)] font-normal leading-[1.15] tracking-tight text-ink-primary [text-wrap:balance]">
                   {t("line3")}
                 </p>
                 {cta}

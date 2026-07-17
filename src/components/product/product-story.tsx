@@ -22,7 +22,7 @@ export function ProductStory() {
               <p className="reveal-child text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
                 {t("label")}
               </p>
-              <h2 className="reveal-child mt-4 font-serif text-[clamp(1.75rem,3vw,2.5rem)] font-light leading-[1.15] tracking-tight">
+              <h2 className="reveal-child mt-4 font-heading text-[clamp(1.75rem,3vw,2.5rem)] font-normal leading-[1.15] tracking-tight">
                 {t("heading")}
               </h2>
               <p className="reveal-child mt-6 text-base leading-[1.75] text-ink-secondary">

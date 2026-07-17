@@ -20,7 +20,7 @@ export function WaitlistSection() {
               <p className="section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
                 {t("label")}
               </p>
-              <h2 className="mt-4 font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-light leading-[1.15] tracking-tight">
+              <h2 className="mt-4 font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-normal leading-[1.15] tracking-tight">
                 {t("heading")}
               </h2>
             </Reveal>

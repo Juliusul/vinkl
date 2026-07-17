@@ -21,7 +21,7 @@ export default async function ImprintPage({ params }: Props) {
 function ImprintDE() {
   return (
     <article className="mx-auto w-full max-w-[760px] px-5 py-16 md:px-10 md:py-24 lg:py-32">
-      <h1 className="font-serif text-3xl font-light tracking-tight md:text-4xl">
+      <h1 className="font-heading text-3xl font-normal tracking-tight md:text-4xl">
         Impressum
       </h1>
 
@@ -160,7 +160,7 @@ function ImprintDE() {
 function ImprintEN() {
   return (
     <article className="mx-auto w-full max-w-[760px] px-5 py-16 md:px-10 md:py-24 lg:py-32">
-      <h1 className="font-serif text-3xl font-light tracking-tight md:text-4xl">
+      <h1 className="font-heading text-3xl font-normal tracking-tight md:text-4xl">
         Legal Notice
       </h1>
 

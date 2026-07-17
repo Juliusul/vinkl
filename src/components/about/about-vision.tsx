@@ -22,7 +22,7 @@ export function AboutVision() {
         <div className="mt-8 grid grid-cols-1 gap-8 md:mt-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <Reveal>
-              <h2 className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-light leading-[1.15] tracking-tight">
+              <h2 className="font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-normal leading-[1.15] tracking-tight">
                 {t("heading")}
               </h2>
             </Reveal>

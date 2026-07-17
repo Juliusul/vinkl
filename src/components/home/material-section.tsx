@@ -22,7 +22,7 @@ export function MaterialSection() {
         <div className="mt-8 grid grid-cols-1 gap-6 md:mt-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <Reveal>
-              <h2 className="font-serif text-[clamp(3rem,7vw,6.5rem)] font-light leading-none tracking-tight">
+              <h2 className="font-heading text-[clamp(3rem,7vw,6.5rem)] font-normal leading-none tracking-tight">
                 {t("heading")}
               </h2>
             </Reveal>

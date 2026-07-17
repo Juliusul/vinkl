@@ -57,7 +57,7 @@ export function ObjectDetail({ product }: ObjectDetailProps) {
               </p>
             )}
 
-            <h1 className="mt-2 font-serif text-3xl font-light tracking-tight md:text-4xl">
+            <h1 className="mt-2 font-heading text-3xl font-normal tracking-tight md:text-4xl">
               {product.title}
             </h1>
 

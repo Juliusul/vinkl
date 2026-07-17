@@ -33,7 +33,7 @@ function ObjectsContent({ products }: { products: Product[] }) {
   return (
     <section className="px-5 py-16 md:px-10 md:py-20 lg:px-16 lg:py-24">
       <div className="mx-auto w-full max-w-[1200px]">
-        <h1 className="font-serif text-3xl font-light tracking-tight md:text-4xl">
+        <h1 className="font-heading text-3xl font-normal tracking-tight md:text-4xl">
           {t("title")}
         </h1>
 

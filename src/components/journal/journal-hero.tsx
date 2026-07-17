@@ -13,7 +13,7 @@ export function JournalHero() {
   return (
     <section className="px-5 pb-12 pt-24 md:px-10 md:pb-16 md:pt-32 lg:px-16 lg:pt-40">
       <div className="mx-auto w-full max-w-[1200px]">
-        <h1 className="max-w-[900px] font-serif text-[clamp(2.25rem,5vw,4rem)] font-light leading-[1.1] tracking-tight text-ink-primary">
+        <h1 className="max-w-[900px] font-heading text-[clamp(2.25rem,5vw,4rem)] font-normal leading-[1.1] tracking-tight text-ink-primary">
           {t("heading")}
         </h1>
 

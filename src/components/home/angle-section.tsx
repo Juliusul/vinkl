@@ -22,7 +22,7 @@ export function AngleSection() {
         </Reveal>
 
         <Reveal>
-          <p className="mt-6 font-serif text-[clamp(3.5rem,10vw,9rem)] font-light leading-none tracking-tight text-terracotta md:mt-8">
+          <p className="mt-6 font-heading text-[clamp(3.5rem,10vw,9rem)] font-normal leading-none tracking-tight text-terracotta md:mt-8">
             {t("range")}
           </p>
         </Reveal>

@@ -47,7 +47,7 @@ export function ProductUse() {
           <p className="reveal-child text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
             {t("label")}
           </p>
-          <h2 className="reveal-child mt-4 font-serif text-[clamp(1.75rem,3vw,2.5rem)] font-light leading-[1.15] tracking-tight">
+          <h2 className="reveal-child mt-4 font-heading text-[clamp(1.75rem,3vw,2.5rem)] font-normal leading-[1.15] tracking-tight">
             {t("heading")}
           </h2>
           <p className="reveal-child mt-4 max-w-xl text-base leading-[1.75] text-ink-secondary">
@@ -60,7 +60,7 @@ export function ProductUse() {
           {scenarios.map((scenario) => (
             <Reveal key={scenario.label}>
               <div className="flex flex-col bg-bg-cream px-6 py-8 md:px-8 md:py-10">
-                <p className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-light leading-none tracking-tight text-terracotta">
+                <p className="font-heading text-[clamp(2.5rem,5vw,3.5rem)] font-normal leading-none tracking-tight text-terracotta">
                   {scenario.angle}
                 </p>
                 <p className="mt-4 text-xs font-medium uppercase tracking-widest text-ink-primary">

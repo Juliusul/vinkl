@@ -49,7 +49,7 @@ export function ProductHero({ product }: ProductHeroProps) {
             </p>
 
             {/* Product name */}
-            <h1 className="mt-3 font-serif text-[clamp(2.25rem,4vw,3.5rem)] font-light leading-none tracking-tight text-ink-primary">
+            <h1 className="mt-3 font-heading text-[clamp(2.25rem,4vw,3.5rem)] font-normal leading-none tracking-tight text-ink-primary">
               {t("name")}
             </h1>
 

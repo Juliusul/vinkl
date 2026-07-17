@@ -42,7 +42,7 @@ export default async function MeasureAnglesPage({ params }: Props) {
           <p className="section-label text-xs font-medium uppercase tracking-[0.15em] text-ink-tertiary">
             {t("tag")}
           </p>
-          <h1 className="mt-6 font-serif text-[clamp(2rem,4.5vw,3.25rem)] font-light leading-[1.12] tracking-tight text-ink-primary [text-wrap:balance]">
+          <h1 className="mt-6 font-heading text-[clamp(2rem,4.5vw,3.25rem)] font-normal leading-[1.12] tracking-tight text-ink-primary [text-wrap:balance]">
             {t("title")}
           </h1>
           <p className="mt-8 font-serif text-lg font-light leading-[1.65] text-ink-secondary md:text-xl [text-wrap:pretty]">
@@ -55,7 +55,7 @@ export default async function MeasureAnglesPage({ params }: Props) {
           {SECTIONS.map((key) => (
             <Reveal key={key}>
               <section className="border-t border-border-default py-10 md:py-12">
-                <h2 className="font-serif text-xl font-light tracking-tight text-ink-primary md:text-2xl">
+                <h2 className="font-heading text-xl font-normal tracking-tight text-ink-primary md:text-2xl">
                   {t(`${key}heading`)}
                 </h2>
                 <p className="mt-4 text-base leading-[1.75] text-ink-secondary [text-wrap:pretty]">
