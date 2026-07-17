@@ -8,7 +8,7 @@ export const mockPaymentIntent: Stripe.PaymentIntent = {
   id: "pi_test_preview_mock_0000001",
   object: "payment_intent",
   created: Math.floor(new Date("2026-03-15T10:23:00Z").getTime() / 1000),
-  amount: 29900,
+  amount: 39900,
   currency: "eur",
   status: "succeeded",
   metadata: {
@@ -38,7 +38,7 @@ export const mockPaymentIntent: Stripe.PaymentIntent = {
   // Required fields
   amount_capturable: 0,
   amount_details: { tip: {} },
-  amount_received: 29900,
+  amount_received: 39900,
   application: null,
   application_fee_amount: null,
   automatic_payment_methods: null,

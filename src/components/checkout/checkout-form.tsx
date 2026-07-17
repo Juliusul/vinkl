@@ -12,7 +12,7 @@ const stripePromise = typeof window !== "undefined" && process.env.NEXT_PUBLIC_S
 
 // Single source of truth: the product data
 const PRICE = Math.round(parseFloat(vinklProduct.price.amount));
-const PRODUCT_NAME = "VINKL Teak Wandregal";
+const PRODUCT_NAME = "VLip — Teak-Wandregal";
 const PRODUCT_DESC = "80 × 25 × 30 cm · Teakholz massiv · stufenlos verstellbar";
 
 // ─── Stripe payment step ──────────────────────────────────────────────────────
@@ -122,7 +122,7 @@ function LoginWidget({ onLoggedIn }: { onLoggedIn: (name: string, email: string)
 }
 
 // ─── Order summary ────────────────────────────────────────────────────────────
-function OrderSummary({ quantity, total, collapsible }: { quantity: number; total: number; collapsible?: boolean }) {
+function OrderSummary({ quantity, total, collapsible, kleinunternehmer }: { quantity: number; total: number; collapsible?: boolean; kleinunternehmer?: boolean }) {
   const [open, setOpen] = useState(!collapsible);
 
   return (
@@ -164,7 +164,9 @@ function OrderSummary({ quantity, total, collapsible }: { quantity: number; tota
               <span>GESAMT</span><span>{total},00 €</span>
             </div>
             <p style={{ fontSize: 10, color: "#aaa", margin: "6px 0 0", fontFamily: "monospace" }}>
-              Inkl. 19% MwSt. · Rechnung per E-Mail
+              {kleinunternehmer
+                ? "Gemäß § 19 UStG ohne USt-Ausweis · Rechnung per E-Mail"
+                : "Inkl. 19% MwSt. · Rechnung per E-Mail"}
             </p>
           </div>
         </>
@@ -174,9 +176,9 @@ function OrderSummary({ quantity, total, collapsible }: { quantity: number; tota
 }
 
 // ─── Main checkout form ───────────────────────────────────────────────────────
-interface Props { quantity: number; locale: string; siteUrl: string; }
+interface Props { quantity: number; locale: string; siteUrl: string; kleinunternehmer?: boolean; }
 
-export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
+export function CheckoutForm({ quantity, locale, siteUrl, kleinunternehmer }: Props) {
   const [step, setStep] = useState<"info" | "payment">("info");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loadingIntent, setLoadingIntent] = useState(false);
@@ -189,6 +191,13 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
   const [postal, setPostal] = useState("");
   const [country, setCountry] = useState("DE");
   const [loggedIn, setLoggedIn] = useState(false);
+
+  // Optionales Konto direkt im Kaufprozess: Passwort jetzt setzen,
+  // aktiv wird das Konto erst nach E-Mail-Bestätigung (Double-Opt-in).
+  const [createAccount, setCreateAccount] = useState(false);
+  const [accountPw, setAccountPw] = useState("");
+  const [accountPw2, setAccountPw2] = useState("");
+  const [accountCreated, setAccountCreated] = useState(false);
 
   const total = PRICE * quantity;
   // Build from the browser's own origin — the env-based siteUrl broke
@@ -209,6 +218,34 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
     setLoadingIntent(true);
     setIntentError(null);
     try {
+      // Konto zuerst anlegen — schlägt das fehl, bleibt der Käufer auf
+      // diesem Schritt und kann den Haken entfernen oder sich anmelden.
+      if (!loggedIn && createAccount && !accountCreated) {
+        if (accountPw.length < 8) { setIntentError("Das Passwort muss mindestens 8 Zeichen haben."); return; }
+        if (accountPw !== accountPw2) { setIntentError("Die Passwörter stimmen nicht überein."); return; }
+        const supabase = createSupabaseBrowserClient();
+        const origin = window.location.origin;
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password: accountPw,
+          options: {
+            data: { name },
+            emailRedirectTo: `${origin}/auth/confirm?next=/${locale}/account/orders`,
+          },
+        });
+        // Bei aktivierter E-Mail-Bestätigung liefert Supabase für bereits
+        // registrierte Adressen einen User ohne identities (Anti-Enumeration).
+        const alreadyRegistered =
+          signUpError?.message?.toLowerCase().includes("already registered") ||
+          (data?.user && data.user.identities?.length === 0);
+        if (alreadyRegistered) {
+          setIntentError("Für diese E-Mail existiert bereits ein Konto. Melde dich oben an — oder entferne den Haken bei „Konto erstellen“.");
+          return;
+        }
+        if (signUpError) { setIntentError(`Konto konnte nicht angelegt werden: ${signUpError.message}`); return; }
+        setAccountCreated(true);
+      }
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -220,7 +257,7 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
       setStep("payment");
     } catch { setIntentError("Netzwerkfehler. Bitte versuche es erneut."); }
     finally { setLoadingIntent(false); }
-  }, [quantity, locale, name, email, line1, city, postal, country]);
+  }, [quantity, locale, name, email, line1, city, postal, country, loggedIn, createAccount, accountCreated, accountPw, accountPw2]);
 
   return (
     <>
@@ -307,7 +344,7 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
       <div className="co-wrap">
         {/* ── Mobile order summary (collapsible) ── */}
         <div className="co-summary-mobile">
-          <OrderSummary quantity={quantity} total={total} collapsible />
+          <OrderSummary quantity={quantity} total={total} collapsible kleinunternehmer={kleinunternehmer} />
         </div>
 
         {/* ── Form column ── */}
@@ -361,6 +398,43 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
                 </select>
               </div>
 
+              {!loggedIn && (
+                <div style={{ border: "1px solid #e0d8d0", padding: "16px 18px", marginBottom: 28, backgroundColor: "#fff" }}>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={createAccount}
+                      onChange={e => setCreateAccount(e.target.checked)}
+                      disabled={accountCreated}
+                      style={{ marginTop: 3, accentColor: "#1a1a1a" }}
+                    />
+                    <span>
+                      <span style={{ fontSize: 13, color: "#1a1a1a", display: "block", marginBottom: 2 }}>Konto erstellen (optional)</span>
+                      <span style={{ fontSize: 11, color: "#888", lineHeight: 1.5, display: "block" }}>
+                        Bestellungen verfolgen und Rechnungen jederzeit herunterladen. Du bestätigst dein Konto nach dem Kauf per E-Mail.
+                      </span>
+                    </span>
+                  </label>
+                  {createAccount && !accountCreated && (
+                    <div style={{ marginTop: 14 }}>
+                      <div className="co-field">
+                        <label className="co-label">Passwort (min. 8 Zeichen)</label>
+                        <input className="co-input" type="password" value={accountPw} onChange={e => setAccountPw(e.target.value)} required autoComplete="new-password" />
+                      </div>
+                      <div style={{ marginBottom: 0 }} className="co-field">
+                        <label className="co-label">Passwort wiederholen</label>
+                        <input className="co-input" type="password" value={accountPw2} onChange={e => setAccountPw2(e.target.value)} required autoComplete="new-password" />
+                      </div>
+                    </div>
+                  )}
+                  {accountCreated && (
+                    <p style={{ fontSize: 12, color: "#2d7a2d", margin: "10px 0 0", fontFamily: "monospace" }}>
+                      ✓ Konto angelegt — Bestätigungslink kommt per E-Mail.
+                    </p>
+                  )}
+                </div>
+              )}
+
               {intentError && <div className="co-error">{intentError}</div>}
               <button type="submit" disabled={loadingIntent} className="co-btn-primary">
                 {loadingIntent ? "…" : "WEITER ZUR ZAHLUNG"}
@@ -373,6 +447,14 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
                 <div>
                   <strong style={{ color: "#1a1a1a" }}>{name}</strong> · {email}<br />
                   {line1}, {postal} {city}, {country}
+                  {accountCreated && (
+                    <>
+                      <br />
+                      <span style={{ fontSize: 11, color: "#2d7a2d", fontFamily: "monospace" }}>
+                        ✓ Konto angelegt — bitte nach dem Kauf per E-Mail bestätigen
+                      </span>
+                    </>
+                  )}
                 </div>
                 <button onClick={() => setStep("info")} style={{ background: "none", border: "none", fontSize: 11, color: "#888", cursor: "pointer", textDecoration: "underline", fontFamily: "monospace", padding: 0, flexShrink: 0 }}>
                   Ändern
@@ -407,7 +489,7 @@ export function CheckoutForm({ quantity, locale, siteUrl }: Props) {
 
         {/* ── Desktop order summary sidebar ── */}
         <div className="co-summary-desktop">
-          <OrderSummary quantity={quantity} total={total} />
+          <OrderSummary quantity={quantity} total={total} kleinunternehmer={kleinunternehmer} />
         </div>
       </div>
     </>

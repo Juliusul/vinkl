@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
+import { getTemplateSettings } from "@/lib/supabase/settings";
 import Link from "next/link";
 
 interface Props {
@@ -14,6 +15,8 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 
   const quantity = Math.max(1, parseInt(qStr ?? "1") || 1);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const settings = await getTemplateSettings();
+  const kleinunternehmer = settings.seller_kleinunternehmer === "true";
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f5f0ea" }}>
@@ -31,7 +34,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
         </span>
       </header>
 
-      <CheckoutForm quantity={quantity} locale={locale} siteUrl={siteUrl} />
+      <CheckoutForm quantity={quantity} locale={locale} siteUrl={siteUrl} kleinunternehmer={kleinunternehmer} />
     </div>
   );
 }

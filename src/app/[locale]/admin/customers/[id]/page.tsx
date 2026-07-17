@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { CustomerActions } from "@/components/admin/customer-actions";
 import Link from "next/link";
 import type { Order } from "@/types/order";
 
@@ -47,8 +48,13 @@ export default async function AdminCustomerDetailPage({ params }: Props) {
             <div style={{ fontSize: 10, letterSpacing: 1, color: "#888", marginBottom: 12 }}>PROFIL</div>
             <div style={{ fontSize: 14, marginBottom: 4 }}>{customer.user_metadata?.name ?? "–"}</div>
             <div style={{ fontSize: 12, color: "#555", marginBottom: 4 }}>{customer.email}</div>
-            <div style={{ fontSize: 11, color: "#888" }}>
+            <div style={{ fontSize: 11, color: "#888", marginBottom: 4 }}>
               Registriert: {new Date(customer.created_at).toLocaleDateString("de-DE")}
+            </div>
+            <div style={{ fontSize: 10, letterSpacing: 1, color: customer.email_confirmed_at ? "#2d7a2d" : "#b85c00", fontWeight: "bold" }}>
+              {customer.email_confirmed_at
+                ? `BESTÄTIGT (${new Date(customer.email_confirmed_at).toLocaleDateString("de-DE")})`
+                : "E-MAIL UNBESTÄTIGT"}
             </div>
           </div>
           <div style={{ backgroundColor: "#fff", border: "1px solid #e0e0e0", padding: "20px 24px" }}>
@@ -82,6 +88,13 @@ export default async function AdminCustomerDetailPage({ params }: Props) {
             </Link>
           ))}
         </div>
+
+        <CustomerActions
+          customerId={customer.id}
+          customerEmail={customer.email ?? ""}
+          confirmed={!!customer.email_confirmed_at}
+          locale={locale}
+        />
       </main>
     </div>
   );

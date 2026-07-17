@@ -49,12 +49,12 @@ function ImprintDE() {
 
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            Umsatzsteuer-ID
+            Umsatzsteuer
           </h2>
           <div className="mt-4">
             <p>
-              Umsatzsteuer-Identifikationsnummer gemäß § 27a
-              Umsatzsteuergesetz: wird nachgetragen.
+              Als Kleinunternehmerin im Sinne von § 19 Abs. 1 UStG wird
+              keine Umsatzsteuer berechnet und ausgewiesen.
             </p>
           </div>
         </section>
@@ -188,12 +188,12 @@ function ImprintEN() {
 
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            VAT ID
+            VAT
           </h2>
           <div className="mt-4">
             <p>
-              VAT identification number pursuant to § 27a of the German VAT
-              Act: to be added.
+              As a small business pursuant to § 19 (1) of the German VAT Act
+              (UStG), no VAT is charged or shown.
             </p>
           </div>
         </section>

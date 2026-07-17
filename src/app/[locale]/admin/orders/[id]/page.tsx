@@ -123,7 +123,7 @@ export default async function AdminOrderDetailPage({ params }: Props) {
         <div style={{ backgroundColor: "#fff", border: "1px solid #e0e0e0", padding: "20px 24px", marginBottom: 24 }}>
           <div style={{ fontSize: 10, letterSpacing: 1, color: "#888", marginBottom: 16 }}>BESTELLPOSITIONEN</div>
           <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: 12, borderBottom: "1px solid #f0f0f0", marginBottom: 12 }}>
-            <span style={{ fontSize: 13 }}>VINKL Teak Wandregal</span>
+            <span style={{ fontSize: 13 }}>VLip — Teak-Wandregal</span>
             <span style={{ fontSize: 13, fontWeight: "bold" }}>
               {((order as Order).amount_total / 100).toFixed(2)} €
             </span>

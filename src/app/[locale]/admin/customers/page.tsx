@@ -47,7 +47,14 @@ export default async function AdminCustomersPage({ params }: Props) {
               href={`/${locale}/admin/customers/${u.id}`}
               style={{ display: "grid", gridTemplateColumns: "2fr 2fr 1fr 1fr", padding: "12px 16px", borderTop: "1px solid #f0f0f0", textDecoration: "none", color: "inherit", alignItems: "center" }}
             >
-              <span style={{ fontSize: 13 }}>{u.user_metadata?.name ?? "–"}</span>
+              <span style={{ fontSize: 13 }}>
+                {u.user_metadata?.name ?? "–"}
+                {!u.email_confirmed_at && (
+                  <span style={{ fontSize: 9, letterSpacing: 1, color: "#b85c00", marginLeft: 8, border: "1px solid #e8c9a8", padding: "1px 5px" }}>
+                    UNBESTÄTIGT
+                  </span>
+                )}
+              </span>
               <span style={{ fontSize: 12, color: "#555" }}>{u.email}</span>
               <span style={{ fontSize: 13 }}>{orderCounts[u.email ?? ""] ?? 0}</span>
               <span style={{ fontSize: 12, color: "#888" }}>{new Date(u.created_at).toLocaleDateString("de-DE")}</span>

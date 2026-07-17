@@ -8,12 +8,15 @@ interface Props {
 
 const FIELDS = [
   { section: "Firmeninformationen (Rechnung)" },
-  { key: "seller_name", label: "Firmenname / Name" },
+  { key: "seller_name", label: "Firmenname / Marke" },
+  { key: "seller_owner", label: "Inhaber/in (Pflicht bei Kleingewerbe)" },
   { key: "seller_address", label: "Adresse (einzeilig)" },
-  { key: "seller_vat_id", label: "USt-IdNr." },
+  { key: "seller_kleinunternehmer", label: "Kleinunternehmerregelung § 19 UStG aktiv (true/false)" },
+  { key: "seller_tax_number", label: "Steuernummer (bei Kleinunternehmer)" },
+  { key: "seller_vat_id", label: "USt-IdNr. (nur bei Regelbesteuerung)" },
   { key: "seller_iban", label: "IBAN" },
   { key: "seller_bank", label: "Bank" },
-  { key: "seller_tax_rate", label: "Mehrwertsteuersatz (%)" },
+  { key: "seller_tax_rate", label: "Mehrwertsteuersatz % (nur bei Regelbesteuerung)" },
   { section: "E-Mail Texte" },
   { key: "email_greeting", label: "Begrüßungstext (Bestellbestätigung)" },
   { key: "email_footer", label: "Fußzeile (alle E-Mails)" },

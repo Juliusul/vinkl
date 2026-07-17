@@ -29,6 +29,39 @@ const STATUS_COLORS: Record<string, string> = {
   refunded: "#c00",
 };
 
+/**
+ * Alles für den Steuerberater als ein ZIP: Bestell-CSV + sämtliche
+ * Rechnungs-PDFs des Zeitraums (regeneriert aus Stripe-Daten).
+ */
+function SteuerberaterExport() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const linkStyle: React.CSSProperties = {
+    padding: "6px 12px",
+    fontSize: 10,
+    letterSpacing: 1,
+    textDecoration: "none",
+    backgroundColor: "#fff",
+    color: "#444",
+    border: "1px solid #ddd",
+  };
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+      <span style={{ fontSize: 10, letterSpacing: 1, color: "#888" }}>STEUERBERATER-EXPORT:</span>
+      <a href={`/api/admin/export/steuerberater?year=${year}&month=${month}`} style={linkStyle}>
+        {String(month).padStart(2, "0")}/{year}
+      </a>
+      <a href={`/api/admin/export/steuerberater?year=${year}`} style={linkStyle}>
+        JAHR {year}
+      </a>
+      <a href={`/api/admin/export/steuerberater?year=${year - 1}`} style={linkStyle}>
+        JAHR {year - 1}
+      </a>
+    </div>
+  );
+}
+
 export default async function AdminPage({ params, searchParams }: Props) {
   const { locale } = await params;
   const { status = "all", q = "", page = "1" } = await searchParams;
@@ -73,9 +106,12 @@ export default async function AdminPage({ params, searchParams }: Props) {
       <AdminNav locale={locale} active="orders" userEmail={user.email ?? ""} />
 
       <main style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
-        <h1 style={{ fontSize: 18, margin: "0 0 24px", fontFamily: "Georgia, serif", fontWeight: 400 }}>
-          Bestellungen
-        </h1>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
+          <h1 style={{ fontSize: 18, margin: 0, fontFamily: "Georgia, serif", fontWeight: 400 }}>
+            Bestellungen
+          </h1>
+          <SteuerberaterExport />
+        </div>
 
         {/* Filter tabs */}
         <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
