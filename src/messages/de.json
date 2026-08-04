@@ -101,7 +101,7 @@
       "tagline": "Das Regal, das sich deinen Wänden anpasst.",
       "price": "399 €",
       "priceNote": "Massives Teak, kein Furnier. Gebaut, um zu bleiben.",
-      "availability": "Erste Auflage — Lieferung ab Anfang August",
+      "availability": "Erste Auflage — Lieferung ab Anfang September",
       "addToCart": "In den Warenkorb",
       "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe",
       "mounting": "Verdeckte Montage · Dübel inklusive · ohne Werkzeug nachstellbar",
@@ -138,7 +138,7 @@
     "use": {
       "label": "Anwendung",
       "heading": "Ein Regal. Jeder Winkel.",
-      "body": "Der integrierte Mechanismus gleicht Wandwinkel von 85 bis 95 Grad aus — unsichtbar, ohne Werkzeug nachstellbar. Ob Altbau-Charme oder Neubau-Präzision: VINKL sitzt.",
+      "body": "Der integrierte Mechanismus gleicht Wandwinkel von 85 bis 95 Grad aus — unsichtbar, ohne Werkzeug nachstellbar. Und mit dem Winkel ändert sich der Look: Dasselbe Regal wirkt in jeder Ecke anders. Ob Altbau-Charme oder Neubau-Präzision: VINKL sitzt.",
       "altbauLabel": "Altbau",
       "altbauAngle": "87°",
       "altbauDesc": "Schiefe Wände, voller Charakter.",
@@ -246,7 +246,7 @@
   },
   "waitlist": {
     "label": "Erste Auflage",
-    "heading": "Lieferbar ab Anfang August.",
+    "heading": "Lieferbar ab Anfang September.",
     "body": "Die erste Auflage ist klein. Trag dich ein — wir schreiben dir genau zweimal: wenn das Regal verfügbar ist, und falls sich der Termin verschiebt.",
     "placeholder": "E-Mail-Adresse",
     "cta": "Auf die Liste",

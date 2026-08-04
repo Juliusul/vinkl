@@ -8,12 +8,12 @@ export const siteConfig = {
 
 /**
  * Launch state — flips the site from pre-order to in-stock.
- * Set `preOrder: false` on launch day (early August 2026); the
+ * Set `preOrder: false` on launch day (early September 2026); the
  * product schema and availability messaging read from here.
  */
 export const launchConfig = {
   preOrder: true,
-  availabilityStarts: "2026-08-01",
+  availabilityStarts: "2026-09-01",
 } as const;
 
 export const siteMetadata: Record<Locale, { title: string; description: string }> = {

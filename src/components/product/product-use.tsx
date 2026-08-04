@@ -55,18 +55,21 @@ export function ProductUse() {
           </p>
         </Reveal>
 
-        {/* Scenario cards */}
-        <div className="mt-12 grid grid-cols-1 gap-px bg-border-default md:mt-14 md:grid-cols-3">
+        {/* Scenario cards — hairlines as real borders, NOT a gray container
+            bg behind gap-px: the reveal animation fades the cards in, and a
+            gray backdrop shines through every half-faded or untriggered card
+            (the tablet "gray bar" bug). Borders live on the cells instead. */}
+        <div className="mt-12 grid grid-cols-1 divide-y divide-border-default md:mt-14 md:grid-cols-3 md:divide-x md:divide-y-0">
           {scenarios.map((scenario) => (
-            <Reveal key={scenario.label}>
-              <div className="flex flex-col bg-bg-cream px-6 py-8 md:px-8 md:py-10">
+            <Reveal key={scenario.label} className="h-full">
+              <div className="flex h-full flex-col bg-bg-cream px-6 py-8 md:px-8 md:py-10">
                 <p className="font-heading text-[clamp(2.5rem,5vw,3.5rem)] font-normal leading-none tracking-tight text-terracotta">
                   {scenario.angle}
                 </p>
                 <p className="mt-4 text-xs font-medium uppercase tracking-widest text-ink-primary">
                   {scenario.label}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-secondary">
                   {scenario.desc}
                 </p>
                 <div className="relative mt-6 aspect-[3/2] overflow-hidden">

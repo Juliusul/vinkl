@@ -87,7 +87,9 @@ export function WaitlistForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t("placeholder")}
-          className="h-[52px] flex-1 border border-border-strong bg-transparent px-5 text-base text-ink-primary placeholder:text-ink-secondary focus:border-ink-primary focus:outline-none"
+          // flex-1 nur im Row-Layout: in der mobilen Column steuert
+          // flex-basis:0% die HÖHE und kollabiert das Feld auf ~21px.
+          className="h-[52px] border border-border-strong bg-transparent px-5 text-base text-ink-primary placeholder:text-ink-secondary focus:border-ink-primary focus:outline-none sm:flex-1"
         />
         <button
           type="submit"
