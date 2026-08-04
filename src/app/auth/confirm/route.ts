@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 /**
  * Supabase PKCE Auth Callback
@@ -20,9 +21,25 @@ export async function GET(request: NextRequest) {
 
   if (token_hash && type) {
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.verifyOtp({ token_hash, type });
+    const { data, error } = await supabase.auth.verifyOtp({ token_hash, type });
 
     if (!error) {
+      // Link any guest orders placed under this email before the account
+      // existed. Must happen here, not client-side after registration —
+      // there is never a session to authenticate that call with until
+      // this exact moment (accounts stay unconfirmed, sessionless, until
+      // this link is clicked).
+      if (type === "signup" && data.user?.email) {
+        try {
+          await supabaseAdmin
+            .from("orders")
+            .update({ customer_id: data.user.id })
+            .eq("customer_email", data.user.email)
+            .is("customer_id", null);
+        } catch (err) {
+          console.error("Order-linking on confirm failed:", err);
+        }
+      }
       return NextResponse.redirect(`${siteUrl}${next}`);
     }
   }

@@ -17,6 +17,8 @@ export async function getTemplateSettings(): Promise<Record<string, string>> {
     // stattdessen. "false" → regulärer Ausweis mit seller_tax_rate.
     seller_kleinunternehmer: process.env.SELLER_KLEINUNTERNEHMER ?? "true",
     email_greeting: "Vielen Dank für deine Bestellung!",
+    email_confirm_heading: "Bestätige dein Konto, {name}",
+    email_confirm_body: "Noch ein Klick, dann kannst du deine Bestellungen verfolgen und Rechnungen jederzeit herunterladen.",
     email_footer: "Bei Fragen antworte einfach auf diese E-Mail.",
     shipping_days_de: "3–5 Werktage",
     shipping_days_intl: "5–8 Werktage",

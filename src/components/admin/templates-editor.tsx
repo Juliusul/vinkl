@@ -19,6 +19,8 @@ const FIELDS = [
   { key: "seller_tax_rate", label: "Mehrwertsteuersatz % (nur bei Regelbesteuerung)" },
   { section: "E-Mail Texte" },
   { key: "email_greeting", label: "Begrüßungstext (Bestellbestätigung)" },
+  { key: "email_confirm_heading", label: "Überschrift (Konto bestätigen) — {name} wird ersetzt" },
+  { key: "email_confirm_body", label: "Text (Konto bestätigen)" },
   { key: "email_footer", label: "Fußzeile (alle E-Mails)" },
   { key: "shipping_days_de", label: "Lieferzeit Deutschland" },
   { key: "shipping_days_intl", label: "Lieferzeit Österreich/Schweiz" },

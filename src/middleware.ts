@@ -62,5 +62,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  // /auth is excluded — it's a locale-independent Supabase callback route
+  // (src/app/auth/confirm/route.ts) living outside [locale]. Without this,
+  // next-intl redirected /auth/confirm to /de/auth/confirm, which doesn't
+  // exist as a route → 404'd every account-confirmation link.
+  matcher: ["/((?!api|_next|_vercel|auth|.*\\..*).*)"],
 };

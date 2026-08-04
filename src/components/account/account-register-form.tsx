@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 interface Props {
   locale: string;
@@ -25,32 +24,13 @@ export function AccountRegisterForm({ locale, prefillEmail }: Props) {
     setError("");
 
     try {
-      const supabase = createSupabaseBrowserClient();
-      const siteUrl = window.location.origin;
-
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { name },
-          emailRedirectTo: `${siteUrl}/auth/confirm?next=/${locale}/account/orders`,
-        },
-      });
-
-      if (signUpError) { setError(signUpError.message); return; }
-
-      // Link existing orders to this account via API
-      await fetch("/api/account/link-orders", {
+      const res = await fetch("/api/account/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ name, email, password, locale }),
       });
-
-      const needsConfirmation = !data.session;
-      if (!needsConfirmation) {
-        window.location.href = `/${locale}/account/orders`;
-        return;
-      }
+      const data = await res.json();
+      if (!res.ok) { setError(data.error ?? "Registrierung fehlgeschlagen."); return; }
 
       setDone(true);
     } catch (err) {

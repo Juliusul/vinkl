@@ -223,26 +223,20 @@ export function CheckoutForm({ quantity, locale, siteUrl, kleinunternehmer }: Pr
       if (!loggedIn && createAccount && !accountCreated) {
         if (accountPw.length < 8) { setIntentError("Das Passwort muss mindestens 8 Zeichen haben."); return; }
         if (accountPw !== accountPw2) { setIntentError("Die Passwörter stimmen nicht überein."); return; }
-        const supabase = createSupabaseBrowserClient();
-        const origin = window.location.origin;
-        const { data, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password: accountPw,
-          options: {
-            data: { name },
-            emailRedirectTo: `${origin}/auth/confirm?next=/${locale}/account/orders`,
-          },
+        const regRes = await fetch("/api/account/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password: accountPw, locale }),
         });
-        // Bei aktivierter E-Mail-Bestätigung liefert Supabase für bereits
-        // registrierte Adressen einen User ohne identities (Anti-Enumeration).
-        const alreadyRegistered =
-          signUpError?.message?.toLowerCase().includes("already registered") ||
-          (data?.user && data.user.identities?.length === 0);
-        if (alreadyRegistered) {
-          setIntentError("Für diese E-Mail existiert bereits ein Konto. Melde dich oben an — oder entferne den Haken bei „Konto erstellen“.");
+        const regData = await regRes.json();
+        if (!regRes.ok) {
+          setIntentError(
+            regRes.status === 409
+              ? "Für diese E-Mail existiert bereits ein Konto. Melde dich oben an — oder entferne den Haken bei „Konto erstellen“."
+              : (regData.error ?? "Konto konnte nicht angelegt werden.")
+          );
           return;
         }
-        if (signUpError) { setIntentError(`Konto konnte nicht angelegt werden: ${signUpError.message}`); return; }
         setAccountCreated(true);
       }
 
