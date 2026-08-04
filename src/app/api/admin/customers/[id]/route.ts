@@ -2,6 +2,7 @@ import { isAdminEmail } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { sendConfirmationEmail } from "@/lib/auth/send-confirmation-email";
 
 export const runtime = "nodejs";
 
@@ -79,17 +80,15 @@ export async function POST(
     return NextResponse.json({ error: "Konto ist bereits bestätigt" }, { status: 400 });
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl-design.de";
-  // resend ist ein öffentlicher GoTrue-Endpoint — der Server-Client
-  // (anon key, ohne Session) reicht dafür aus.
-  const supabase = await createSupabaseServerClient();
-  const { error: resendError } = await supabase.auth.resend({
-    type: "signup",
-    email: customer.email,
-    options: { emailRedirectTo: `${siteUrl}/auth/confirm?next=/de/account/orders` },
+  // Nicht supabase.auth.resend() — das schickt Supabase's eigene,
+  // unbrandete Mail über GoTrue's /verify-Endpoint, dessen Redirect die
+  // Session-Tokens in einem URL-Fragment zurückgibt, das unsere Route
+  // (query-string token_hash) nie sieht. Gleiche Pipeline wie Registrierung.
+  const result = await sendConfirmationEmail(customer.email, {
+    name: customer.user_metadata?.name,
   });
-  if (resendError) {
-    return NextResponse.json({ error: resendError.message }, { status: 500 });
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
   }
 
   return NextResponse.json({ success: true });
