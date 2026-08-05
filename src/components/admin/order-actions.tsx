@@ -93,6 +93,15 @@ export function OrderActions({ order, locale }: Props) {
             Versand markieren
           </button>
         )}
+        {order.status === "shipped" && (
+          <button
+            style={btnStyle("#555")}
+            disabled={loading}
+            onClick={() => apiCall("return-instructions", {})}
+          >
+            Rücksende-Anleitung senden
+          </button>
+        )}
         {(order.status === "shipped") && (
           <button style={btnStyle("#555")} onClick={() => setActivePanel(activePanel === "return" ? null : "return")}>
             Rückgabe / Umtausch

@@ -3,6 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { stripe } from "@/lib/stripe/client";
+import { resend } from "@/lib/email/resend";
+import { REPLY_TO_EMAIL, senderAddress } from "@/lib/email/domain";
+import { RefundNotificationEmail } from "@/lib/email/templates/refund-notification";
+import { getTemplateSettings } from "@/lib/supabase/settings";
+import { render as renderEmail } from "@react-email/components";
+import React from "react";
 
 export const runtime = "nodejs";
 
@@ -41,6 +47,32 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     data: { refund_id: refund.id, amount: refund.amount, reason },
     created_by: user.email ?? "admin",
   });
+
+  // Kunde bekam bisher NIE eine Bestätigung, dass die Erstattung
+  // ausgelöst wurde, obwohl die Vorlage dafür schon existierte.
+  try {
+    const settings = await getTemplateSettings();
+    const html = await renderEmail(
+      React.createElement(RefundNotificationEmail, {
+        customerName: order.customer_name ?? order.customer_email,
+        invoiceNumber: order.invoice_number,
+        refundAmount: refund.amount / 100,
+        currency: (refund.currency ?? order.currency ?? "eur").toUpperCase(),
+        emailFooter: settings.email_footer,
+      })
+    );
+    await resend.emails.send({
+      from: senderAddress("bestellungen"),
+      replyTo: REPLY_TO_EMAIL,
+      to: order.customer_email,
+      subject: `Erstattung für Bestellung ${order.invoice_number}`,
+      html,
+    });
+  } catch (err) {
+    console.error("Refund notification email error:", err);
+    // Erstattung ist bereits erfolgt — ein Mailfehler darf die
+    // Admin-Aktion nicht als fehlgeschlagen melden.
+  }
 
   return NextResponse.json({ success: true, refund_id: refund.id });
 }

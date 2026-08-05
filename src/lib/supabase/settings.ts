@@ -19,6 +19,7 @@ export async function getTemplateSettings(): Promise<Record<string, string>> {
     email_greeting: "Vielen Dank für deine Bestellung!",
     email_confirm_heading: "Bestätige dein Konto, {name}",
     email_confirm_body: "Noch ein Klick, dann kannst du deine Bestellungen verfolgen und Rechnungen jederzeit herunterladen.",
+    email_return_body: "Schade, dass das VLip nicht bei dir bleibt. So schickst du es zurück:",
     email_footer: "Bei Fragen antworte einfach auf diese E-Mail.",
     shipping_days_de: "3–5 Werktage",
     shipping_days_intl: "5–8 Werktage",

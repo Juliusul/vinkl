@@ -21,6 +21,7 @@ const FIELDS = [
   { key: "email_greeting", label: "Begrüßungstext (Bestellbestätigung)" },
   { key: "email_confirm_heading", label: "Überschrift (Konto bestätigen) — {name} wird ersetzt" },
   { key: "email_confirm_body", label: "Text (Konto bestätigen)" },
+  { key: "email_return_body", label: "Text (Rücksende-Anleitung)" },
   { key: "email_footer", label: "Fußzeile (alle E-Mails)" },
   { key: "shipping_days_de", label: "Lieferzeit Deutschland" },
   { key: "shipping_days_intl", label: "Lieferzeit Österreich/Schweiz" },

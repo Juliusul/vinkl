@@ -34,7 +34,7 @@ export interface Order {
 export interface OrderEvent {
   id: string;
   order_id: string;
-  event_type: "confirmed" | "shipped" | "returned" | "exchanged" | "refunded" | "note_added" | "email_resent";
+  event_type: "confirmed" | "shipped" | "returned" | "exchanged" | "refunded" | "note_added" | "email_resent" | "return_instructions_sent";
   data: Record<string, unknown>;
   created_by: string;
   created_at: string;
