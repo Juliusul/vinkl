@@ -3,8 +3,10 @@ import { DataRow, EHeading, EText, EmailShell, Kicker, Panel } from "./_componen
 interface Props {
   customerName: string;
   invoiceNumber: string;
-  sellerName: string;
-  sellerAddress: string;
+  /** Lager-/Rücksendeadresse — bewusst nicht "seller*": das ist NICHT die
+   *  Impressum-/Rechnungsadresse, sondern der physische Versandort. */
+  returnToName: string;
+  returnToAddress: string;
   emailReturnBody?: string;
   emailFooter?: string;
 }
@@ -19,8 +21,8 @@ interface Props {
 export function ReturnInstructionsEmail({
   customerName,
   invoiceNumber,
-  sellerName,
-  sellerAddress,
+  returnToName,
+  returnToAddress,
   emailReturnBody = "Schade, dass das VLip nicht bei dir bleibt. So schickst du es zurück:",
   emailFooter = "Bei Fragen antworte einfach auf diese E-Mail.",
 }: Props) {
@@ -41,9 +43,9 @@ export function ReturnInstructionsEmail({
           label="Rücksendeadresse"
           value={
             <>
-              {sellerName}
+              {returnToName}
               <br />
-              {sellerAddress}
+              {returnToAddress}
             </>
           }
           last

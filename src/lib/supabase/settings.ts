@@ -13,6 +13,14 @@ export async function getTemplateSettings(): Promise<Record<string, string>> {
     seller_iban: process.env.SELLER_IBAN ?? "",
     seller_bank: process.env.SELLER_BANK ?? "",
     seller_tax_rate: process.env.SELLER_TAX_RATE ?? "19",
+    // Wo Regale physisch verschickt werden und wo Kunden sie zurückschicken
+    // müssen — bewusst GETRENNT von seller_address (Impressum/Rechnung,
+    // Larissas gemeldete Adresse). Beides in ein Feld zu packen hat schon
+    // einmal dazu geführt, dass die falsche Adresse in einer Kundenmail
+    // stand. Kein Platzhalter-Fallback hier — leer bleibt leer, bis
+    // jemand die echte Lageradresse einträgt.
+    fulfillment_name: process.env.FULFILLMENT_NAME ?? "",
+    fulfillment_address: process.env.FULFILLMENT_ADDRESS ?? "",
     // "true" → § 19 UStG: kein USt-Ausweis auf Rechnungen, Pflichthinweis
     // stattdessen. "false" → regulärer Ausweis mit seller_tax_rate.
     seller_kleinunternehmer: process.env.SELLER_KLEINUNTERNEHMER ?? "true",

@@ -30,16 +30,24 @@ export async function POST(
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
   const settings = await getTemplateSettings();
-  // Rücksendeadresse = Verkäuferadresse (Impressum). Bei Kleingewerbe ist
-  // das die Anschrift der Inhaberin, nicht ein Firmensitz.
-  const sellerName = settings.seller_owner || settings.seller_name;
+  // Lager-/Rücksendeadresse ist BEWUSST getrennt von seller_address
+  // (Impressum/Rechnung) — Regale werden nicht von der gemeldeten
+  // Adresse aus verschickt. Ohne konfigurierten Wert lieber hart
+  // abbrechen als versehentlich die falsche (rechtliche) Adresse in
+  // eine Kundenmail zu schreiben.
+  if (!settings.fulfillment_address) {
+    return NextResponse.json(
+      { error: "Keine Lager-/Rücksendeadresse konfiguriert. Bitte unter Admin → Templates → 'Versand & Rücksendung' eintragen." },
+      { status: 400 }
+    );
+  }
 
   const html = await renderEmail(
     React.createElement(ReturnInstructionsEmail, {
       customerName: order.customer_name ?? order.customer_email,
       invoiceNumber: order.invoice_number,
-      sellerName,
-      sellerAddress: settings.seller_address,
+      returnToName: settings.fulfillment_name || settings.seller_owner || settings.seller_name,
+      returnToAddress: settings.fulfillment_address,
       emailReturnBody: settings.email_return_body,
       emailFooter: settings.email_footer,
     })
