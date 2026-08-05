@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 export function Footer() {
   const t = useTranslations("common.nav");
   const tLegal = useTranslations("common.legal");
+  const tFooter = useTranslations("common.footer");
   const year = new Date().getFullYear();
 
   return (
@@ -66,10 +67,12 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 border-t border-border-default pt-6">
+        <div className="mt-12 flex flex-col gap-1 border-t border-border-default pt-6 md:flex-row md:items-center md:justify-between">
           <p className="text-xs text-ink-tertiary">
             &copy; {year} VINKL. All rights reserved.
           </p>
+          {/* Remove once product photography replaces the 3D renders/mockups. */}
+          <p className="text-xs text-ink-tertiary">{tFooter("visualsNote")}</p>
         </div>
       </div>
     </footer>

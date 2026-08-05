@@ -570,72 +570,163 @@ function PrivacyDE() {
           </div>
         </section>
 
-        {/* ── 11. Shopify ── */}
+        {/* ── 11. Stripe ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            11. Shopify
+            11. Stripe (Zahlungsabwicklung)
           </h2>
           <div className="mt-4">
             <p>
-              Für unseren Onlineshop nutzen wir die E-Commerce-Plattform
-              Shopify der Shopify International Limited, Victoria Buildings, 2nd
-              Floor, 1-2 Haddington Road, Dublin 4, D04 XN32, Irland
-              (&bdquo;Shopify&ldquo;). Shopify stellt uns die technische
-              Infrastruktur für den Betrieb unseres Onlineshops zur Verfügung,
-              einschließlich der Verarbeitung von Bestellungen und
-              Zahlungsabwicklung.
+              Für die Zahlungsabwicklung nutzen wir den Zahlungsdienstleister
+              Stripe, bereitgestellt von Stripe Payments Europe, Ltd., 1 Grand
+              Canal Street Lower, Grand Canal Dock, Dublin, D02 H210, Irland
+              (&bdquo;Stripe&ldquo;). Stripe verarbeitet die zur
+              Zahlungsabwicklung erforderlichen Daten in unserem Auftrag.
             </p>
             <p className="mt-2">
               <strong className="text-ink-primary">Erhobene Daten:</strong>
             </p>
             <ul className="mt-1 list-inside list-disc space-y-1">
-              <li>
-                Bestelldaten (Name, Adresse, E-Mail, Telefonnummer,
-                bestellte Produkte)
-              </li>
-              <li>Zahlungsdaten (werden von Shopify Payments verarbeitet)</li>
-              <li>Versanddaten</li>
-              <li>Kontoinformationen (sofern ein Kundenkonto angelegt wird)</li>
-              <li>Kommunikationsdaten (z.&nbsp;B. E-Mails im Rahmen der Bestellabwicklung)</li>
+              <li>Zahlungsdaten (z.&nbsp;B. Kartendaten bzw. Daten der gewählten Zahlungsmethode)</li>
+              <li>Name, E-Mail-Adresse</li>
+              <li>Rechnungs- und Lieferadresse</li>
+              <li>Bestellbetrag und Transaktionsdaten</li>
             </ul>
             <p className="mt-2">
               <strong className="text-ink-primary">Zweck:</strong>{" "}
-              Abwicklung von Bestellungen, Zahlungsabwicklung,
-              Versandabwicklung, Kundenservice und Erfüllung gesetzlicher
-              Aufbewahrungspflichten.
+              Abwicklung der Zahlung, Betrugsprävention.
             </p>
             <p className="mt-2">
               <strong className="text-ink-primary">Rechtsgrundlage:</strong>{" "}
-              Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) für die
-              Verarbeitung von Bestell- und Zahlungsdaten sowie Art. 6 Abs. 1
-              lit. c DSGVO (rechtliche Verpflichtung) für die Einhaltung
-              steuerrechtlicher Aufbewahrungspflichten.
+              Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
             </p>
             <p className="mt-2">
               <strong className="text-ink-primary">
                 Datenübermittlung:
               </strong>{" "}
-              Shopify kann Daten an Server in Kanada und den USA übermitteln.
-              Shopify ist unter dem EU-US Data Privacy Framework zertifiziert.
+              Stripe kann Daten an Server außerhalb der EU/des EWR
+              übermitteln, unter anderem in die USA. Stripe stützt sich
+              hierbei auf Standardvertragsklauseln der EU-Kommission bzw.
+              eine Zertifizierung unter dem EU-US Data Privacy Framework.
             </p>
             <p className="mt-2">
               Weitere Informationen:{" "}
               <a
-                href="https://www.shopify.com/legal/privacy"
+                href="https://stripe.com/de/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-ink-primary underline underline-offset-2"
               >
-                Shopify Datenschutzrichtlinie
+                Stripe Datenschutzrichtlinie
               </a>
             </p>
           </div>
         </section>
 
-        {/* ── 12. Rechte der Betroffenen ── */}
+        {/* ── 12. Supabase ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            12. Rechte der Betroffenen
+            12. Supabase (Datenbank &amp; Kontoverwaltung)
+          </h2>
+          <div className="mt-4">
+            <p>
+              Für die Speicherung von Bestelldaten und die Verwaltung von
+              Kundenkonten (Registrierung, Login) nutzen wir Supabase,
+              bereitgestellt von Supabase, Inc., USA (&bdquo;Supabase&ldquo;).
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Erhobene Daten:</strong>
+            </p>
+            <ul className="mt-1 list-inside list-disc space-y-1">
+              <li>Bestelldaten (Name, Adresse, E-Mail, bestellte Produkte)</li>
+              <li>Kontodaten (E-Mail-Adresse, verschlüsseltes Passwort), sofern ein Kundenkonto angelegt wird</li>
+            </ul>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Zweck:</strong>{" "}
+              Speicherung und Verwaltung von Bestellungen sowie
+              Kundenkonten.
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Rechtsgrundlage:</strong>{" "}
+              Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) sowie Art. 6
+              Abs. 1 lit. c DSGVO (gesetzliche Aufbewahrungspflichten) für
+              Bestelldaten; Art. 6 Abs. 1 lit. b DSGVO für Kontodaten.
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">
+                Datenübermittlung:
+              </strong>{" "}
+              Supabase kann Daten an Server außerhalb der EU/des EWR
+              übermitteln. Supabase stützt sich hierbei auf
+              Standardvertragsklauseln der EU-Kommission.
+            </p>
+            <p className="mt-2">
+              Weitere Informationen:{" "}
+              <a
+                href="https://supabase.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink-primary underline underline-offset-2"
+              >
+                Supabase Datenschutzrichtlinie
+              </a>
+            </p>
+          </div>
+        </section>
+
+        {/* ── 13. Resend ── */}
+        <section>
+          <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
+            13. Resend (E-Mail-Versand)
+          </h2>
+          <div className="mt-4">
+            <p>
+              Für den Versand von Bestellbestätigungen, Rechnungen und
+              weiteren transaktionalen E-Mails nutzen wir den Dienst Resend,
+              bereitgestellt von Resend, Inc., USA (&bdquo;Resend&ldquo;).
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Erhobene Daten:</strong>
+            </p>
+            <ul className="mt-1 list-inside list-disc space-y-1">
+              <li>E-Mail-Adresse, Name</li>
+              <li>Inhalt der versendeten E-Mail (z.&nbsp;B. Bestelldetails)</li>
+            </ul>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Zweck:</strong>{" "}
+              Versand transaktionaler E-Mails im Rahmen der
+              Vertragsabwicklung.
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Rechtsgrundlage:</strong>{" "}
+              Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">
+                Datenübermittlung:
+              </strong>{" "}
+              Resend kann Daten an Server außerhalb der EU/des EWR
+              übermitteln, unter anderem in die USA. Resend stützt sich
+              hierbei auf Standardvertragsklauseln der EU-Kommission.
+            </p>
+            <p className="mt-2">
+              Weitere Informationen:{" "}
+              <a
+                href="https://resend.com/legal/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink-primary underline underline-offset-2"
+              >
+                Resend Datenschutzrichtlinie
+              </a>
+            </p>
+          </div>
+        </section>
+
+        {/* ── 14. Rechte der Betroffenen ── */}
+        <section>
+          <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
+            14. Rechte der Betroffenen
           </h2>
           <div className="mt-4">
             <p>
@@ -733,10 +824,10 @@ function PrivacyDE() {
           </div>
         </section>
 
-        {/* ── 13. Beschwerderecht bei Aufsichtsbehörde ── */}
+        {/* ── 15. Beschwerderecht bei Aufsichtsbehörde ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            13. Beschwerderecht bei einer Aufsichtsbehörde
+            15. Beschwerderecht bei einer Aufsichtsbehörde
           </h2>
           <div className="mt-4">
             <p>
@@ -771,10 +862,10 @@ function PrivacyDE() {
           </div>
         </section>
 
-        {/* ── 14. Änderungen der Datenschutzerklärung ── */}
+        {/* ── 16. Änderungen der Datenschutzerklärung ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            14. Änderungen dieser Datenschutzerklärung
+            16. Änderungen dieser Datenschutzerklärung
           </h2>
           <div className="mt-4">
             <p>
@@ -1327,69 +1418,162 @@ function PrivacyEN() {
           </div>
         </section>
 
-        {/* ── 11. Shopify ── */}
+        {/* ── 11. Stripe ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            11. Shopify
+            11. Stripe (Payment Processing)
           </h2>
           <div className="mt-4">
             <p>
-              For our online shop, we use the e-commerce platform Shopify
-              provided by Shopify International Limited, Victoria Buildings, 2nd
-              Floor, 1-2 Haddington Road, Dublin 4, D04 XN32, Ireland
-              (&ldquo;Shopify&rdquo;). Shopify provides us with the technical
-              infrastructure for the operation of our online shop, including the
-              processing of orders and payment processing.
+              For payment processing, we use the payment service provider
+              Stripe, provided by Stripe Payments Europe, Ltd., 1 Grand
+              Canal Street Lower, Grand Canal Dock, Dublin, D02 H210,
+              Ireland (&ldquo;Stripe&rdquo;). Stripe processes the data
+              required for payment processing on our behalf.
             </p>
             <p className="mt-2">
               <strong className="text-ink-primary">Data collected:</strong>
             </p>
             <ul className="mt-1 list-inside list-disc space-y-1">
-              <li>
-                Order data (name, address, email, phone number, products
-                ordered)
-              </li>
-              <li>Payment data (processed by Shopify Payments)</li>
-              <li>Shipping data</li>
-              <li>Account information (if a customer account is created)</li>
-              <li>Communication data (e.g. emails related to order processing)</li>
+              <li>Payment data (e.g. card details or data of the selected payment method)</li>
+              <li>Name, email address</li>
+              <li>Billing and shipping address</li>
+              <li>Order amount and transaction data</li>
             </ul>
             <p className="mt-2">
               <strong className="text-ink-primary">Purpose:</strong>{" "}
-              Order processing, payment processing, shipping, customer service,
-              and compliance with statutory retention obligations.
+              Payment processing, fraud prevention.
             </p>
             <p className="mt-2">
               <strong className="text-ink-primary">Legal basis:</strong>{" "}
-              Art. 6(1)(b) GDPR (performance of a contract) for the processing
-              of order and payment data, and Art. 6(1)(c) GDPR (legal
-              obligation) for compliance with tax-related retention obligations.
+              Art. 6(1)(b) GDPR (performance of a contract).
             </p>
             <p className="mt-2">
               <strong className="text-ink-primary">
                 Data transfer:
               </strong>{" "}
-              Shopify may transfer data to servers in Canada and the USA. Shopify
-              is certified under the EU-US Data Privacy Framework.
+              Stripe may transfer data to servers outside the EU/EEA,
+              including the USA. Stripe relies on the European
+              Commission&apos;s Standard Contractual Clauses and/or
+              certification under the EU-US Data Privacy Framework.
             </p>
             <p className="mt-2">
               More information:{" "}
               <a
-                href="https://www.shopify.com/legal/privacy"
+                href="https://stripe.com/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-ink-primary underline underline-offset-2"
               >
-                Shopify Privacy Policy
+                Stripe Privacy Policy
               </a>
             </p>
           </div>
         </section>
 
-        {/* ── 12. Data Subject Rights ── */}
+        {/* ── 12. Supabase ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            12. Data Subject Rights
+            12. Supabase (Database &amp; Account Management)
+          </h2>
+          <div className="mt-4">
+            <p>
+              For storing order data and managing customer accounts
+              (registration, login), we use Supabase, provided by
+              Supabase, Inc., USA (&ldquo;Supabase&rdquo;).
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Data collected:</strong>
+            </p>
+            <ul className="mt-1 list-inside list-disc space-y-1">
+              <li>Order data (name, address, email, products ordered)</li>
+              <li>Account data (email address, encrypted password), if a customer account is created</li>
+            </ul>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Purpose:</strong>{" "}
+              Storage and management of orders and customer accounts.
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Legal basis:</strong>{" "}
+              Art. 6(1)(b) GDPR (performance of a contract) and Art. 6(1)(c)
+              GDPR (legal retention obligations) for order data; Art. 6(1)(b)
+              GDPR for account data.
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">
+                Data transfer:
+              </strong>{" "}
+              Supabase may transfer data to servers outside the EU/EEA.
+              Supabase relies on the European Commission&apos;s Standard
+              Contractual Clauses.
+            </p>
+            <p className="mt-2">
+              More information:{" "}
+              <a
+                href="https://supabase.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink-primary underline underline-offset-2"
+              >
+                Supabase Privacy Policy
+              </a>
+            </p>
+          </div>
+        </section>
+
+        {/* ── 13. Resend ── */}
+        <section>
+          <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
+            13. Resend (Email Delivery)
+          </h2>
+          <div className="mt-4">
+            <p>
+              For sending order confirmations, invoices, and other
+              transactional emails, we use Resend, provided by Resend,
+              Inc., USA (&ldquo;Resend&rdquo;).
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Data collected:</strong>
+            </p>
+            <ul className="mt-1 list-inside list-disc space-y-1">
+              <li>Email address, name</li>
+              <li>Content of the sent email (e.g. order details)</li>
+            </ul>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Purpose:</strong>{" "}
+              Sending transactional emails in connection with contract
+              fulfillment.
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">Legal basis:</strong>{" "}
+              Art. 6(1)(b) GDPR (performance of a contract).
+            </p>
+            <p className="mt-2">
+              <strong className="text-ink-primary">
+                Data transfer:
+              </strong>{" "}
+              Resend may transfer data to servers outside the EU/EEA,
+              including the USA. Resend relies on the European
+              Commission&apos;s Standard Contractual Clauses.
+            </p>
+            <p className="mt-2">
+              More information:{" "}
+              <a
+                href="https://resend.com/legal/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink-primary underline underline-offset-2"
+              >
+                Resend Privacy Policy
+              </a>
+            </p>
+          </div>
+        </section>
+
+        {/* ── 14. Data Subject Rights ── */}
+        <section>
+          <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
+            14. Data Subject Rights
           </h2>
           <div className="mt-4">
             <p>
@@ -1481,10 +1665,10 @@ function PrivacyEN() {
           </div>
         </section>
 
-        {/* ── 13. Right to Lodge a Complaint ── */}
+        {/* ── 15. Right to Lodge a Complaint ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            13. Right to Lodge a Complaint with a Supervisory Authority
+            15. Right to Lodge a Complaint with a Supervisory Authority
           </h2>
           <div className="mt-4">
             <p>
@@ -1518,10 +1702,10 @@ function PrivacyEN() {
           </div>
         </section>
 
-        {/* ── 14. Changes to this Privacy Policy ── */}
+        {/* ── 16. Changes to this Privacy Policy ── */}
         <section>
           <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-ink-primary">
-            14. Changes to this Privacy Policy
+            16. Changes to this Privacy Policy
           </h2>
           <div className="mt-4">
             <p>
