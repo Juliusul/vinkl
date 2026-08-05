@@ -33,13 +33,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     reason: reason === "duplicate" ? "duplicate" : reason === "fraudulent" ? "fraudulent" : "requested_by_customer",
   });
 
-  await supabaseAdmin.from("orders").update({
+  const { error: updateError } = await supabaseAdmin.from("orders").update({
     status: "refunded",
     refund_amount: refund.amount,
     stripe_refund_id: refund.id,
     refunded_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   }).eq("id", id);
+  // Das Geld ist bei diesem Punkt bereits bei Stripe erstattet — ein
+  // fehlgeschlagenes DB-Update darf trotzdem nicht unbemerkt bleiben,
+  // sonst zeigt der Admin weiterhin den alten Status.
+  if (updateError) {
+    return NextResponse.json({ error: `Stripe-Erstattung war erfolgreich (${refund.id}), aber die Bestellung konnte nicht aktualisiert werden: ${updateError.message}` }, { status: 500 });
+  }
 
   await supabaseAdmin.from("order_events").insert({
     order_id: id,

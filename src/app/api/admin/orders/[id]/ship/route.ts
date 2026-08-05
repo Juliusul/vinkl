@@ -23,13 +23,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { data: order } = await supabaseAdmin.from("orders").select("*").eq("id", id).single();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
-  await supabaseAdmin.from("orders").update({
+  const { error: updateError } = await supabaseAdmin.from("orders").update({
     status: "shipped",
     tracking_code: trackingCode,
     tracking_url: trackingUrl ?? null,
     shipped_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   }).eq("id", id);
+  // Ohne diesen Check blieb ein fehlgeschlagenes Update (z.B. fehlende
+  // Spalte) unbemerkt: order_events log sagte "versandt", orders.status
+  // blieb aber "paid" — genau der Zustand, der heute entdeckt wurde.
+  if (updateError) {
+    return NextResponse.json({ error: `Bestellung konnte nicht aktualisiert werden: ${updateError.message}` }, { status: 500 });
+  }
 
   await supabaseAdmin.from("order_events").insert({
     order_id: id,

@@ -14,12 +14,15 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { type, notes } = await req.json(); // type: 'returned' | 'exchanged'
   const status = type === "exchanged" ? "exchanged" : "returned";
 
-  await supabaseAdmin.from("orders").update({
+  const { error: updateError } = await supabaseAdmin.from("orders").update({
     status,
     returned_at: new Date().toISOString(),
     admin_notes: notes ?? null,
     updated_at: new Date().toISOString(),
   }).eq("id", id);
+  if (updateError) {
+    return NextResponse.json({ error: `Bestellung konnte nicht aktualisiert werden: ${updateError.message}` }, { status: 500 });
+  }
 
   await supabaseAdmin.from("order_events").insert({
     order_id: id,

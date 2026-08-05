@@ -1,4 +1,5 @@
 import type Stripe from "stripe";
+import { Link } from "@react-email/components";
 import {
   DataRow,
   EHeading,
@@ -9,6 +10,8 @@ import {
   Panel,
   email,
 } from "./_components";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vinkl-design.de";
 
 interface Props {
   paymentIntent: Stripe.PaymentIntent;
@@ -80,6 +83,16 @@ export function OrderConfirmationEmail({
 
       <EText style={{ margin: 0, fontSize: 13, color: email.inkTertiary }}>
         {emailFooter}
+      </EText>
+      <EText style={{ margin: "8px 0 0", fontSize: 13, color: email.inkTertiary }}>
+        Etwas passt nicht?{" "}
+        <Link
+          href={`${SITE_URL}/${meta.locale === "en" ? "en" : "de"}/returns`}
+          style={{ color: email.inkSecondary, textDecoration: "underline" }}
+        >
+          Rücksendung anfordern
+        </Link>
+        {" "}— auch ohne Konto, mit dieser Bestellnummer.
       </EText>
     </EmailShell>
   );

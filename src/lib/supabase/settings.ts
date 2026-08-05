@@ -21,6 +21,10 @@ export async function getTemplateSettings(): Promise<Record<string, string>> {
     // jemand die echte Lageradresse einträgt.
     fulfillment_name: process.env.FULFILLMENT_NAME ?? "",
     fulfillment_address: process.env.FULFILLMENT_ADDRESS ?? "",
+    // Informational padding on the 14-day Widerrufsfrist (see
+    // isWithinReturnWindow) — never blocks sending, just flags late
+    // requests for admin review before deciding on a refund.
+    return_window_days: process.env.RETURN_WINDOW_DAYS ?? "21",
     // "true" → § 19 UStG: kein USt-Ausweis auf Rechnungen, Pflichthinweis
     // stattdessen. "false" → regulärer Ausweis mit seller_tax_rate.
     seller_kleinunternehmer: process.env.SELLER_KLEINUNTERNEHMER ?? "true",

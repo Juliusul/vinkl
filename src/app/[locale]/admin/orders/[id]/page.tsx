@@ -30,6 +30,8 @@ const EVENT_LABELS: Record<string, string> = {
   refunded: "Rückerstattung ausgelöst",
   note_added: "Notiz hinzugefügt",
   email_resent: "Bestätigung erneut gesendet",
+  return_instructions_sent: "Rücksende-Anleitung gesendet (Admin)",
+  return_requested: "Rücksendung angefragt (Kunde, ohne Konto)",
 };
 
 export default async function AdminOrderDetailPage({ params }: Props) {
@@ -174,7 +176,14 @@ export default async function AdminOrderDetailPage({ params }: Props) {
                 {new Date(event.created_at).toLocaleDateString("de-DE")}
               </div>
               <div>
-                <div style={{ fontSize: 13 }}>{EVENT_LABELS[event.event_type] ?? event.event_type}</div>
+                <div style={{ fontSize: 13 }}>
+                  {EVENT_LABELS[event.event_type] ?? event.event_type}
+                  {event.event_type === "return_requested" && event.data?.within_window === false && (
+                    <span style={{ marginLeft: 8, fontSize: 10, letterSpacing: 1, color: "#b85c00", border: "1px solid #e8c9a8", padding: "1px 5px" }}>
+                      AUSSERHALB DES ÜBLICHEN FENSTERS
+                    </span>
+                  )}
+                </div>
                 {event.created_by !== "system" && (
                   <div style={{ fontSize: 11, color: "#888" }}>von {event.created_by}</div>
                 )}

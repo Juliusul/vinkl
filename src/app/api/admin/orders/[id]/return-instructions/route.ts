@@ -2,12 +2,7 @@ import { isAdminEmail } from "@/lib/admin-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { resend } from "@/lib/email/resend";
-import { REPLY_TO_EMAIL, senderAddress } from "@/lib/email/domain";
-import { ReturnInstructionsEmail } from "@/lib/email/templates/return-instructions";
-import { getTemplateSettings } from "@/lib/supabase/settings";
-import { render as renderEmail } from "@react-email/components";
-import React from "react";
+import { sendReturnInstructions } from "@/lib/orders/send-return-instructions";
 
 export const runtime = "nodejs";
 
@@ -29,39 +24,9 @@ export async function POST(
   const { data: order } = await supabaseAdmin.from("orders").select("*").eq("id", id).single();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
-  const settings = await getTemplateSettings();
-  // Lager-/Rücksendeadresse ist BEWUSST getrennt von seller_address
-  // (Impressum/Rechnung) — Regale werden nicht von der gemeldeten
-  // Adresse aus verschickt. Ohne konfigurierten Wert lieber hart
-  // abbrechen als versehentlich die falsche (rechtliche) Adresse in
-  // eine Kundenmail zu schreiben.
-  if (!settings.fulfillment_address) {
-    return NextResponse.json(
-      { error: "Keine Lager-/Rücksendeadresse konfiguriert. Bitte unter Admin → Templates → 'Versand & Rücksendung' eintragen." },
-      { status: 400 }
-    );
-  }
-
-  const html = await renderEmail(
-    React.createElement(ReturnInstructionsEmail, {
-      customerName: order.customer_name ?? order.customer_email,
-      invoiceNumber: order.invoice_number,
-      returnToName: settings.fulfillment_name || settings.seller_owner || settings.seller_name,
-      returnToAddress: settings.fulfillment_address,
-      emailReturnBody: settings.email_return_body,
-      emailFooter: settings.email_footer,
-    })
-  );
-
-  const { error: sendError } = await resend.emails.send({
-    from: senderAddress("bestellungen"),
-    replyTo: REPLY_TO_EMAIL,
-    to: order.customer_email,
-    subject: `Rücksendung für Bestellung ${order.invoice_number}`,
-    html,
-  });
-  if (sendError) {
-    return NextResponse.json({ error: sendError.message }, { status: 500 });
+  const result = await sendReturnInstructions(order);
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
   }
 
   await supabaseAdmin.from("order_events").insert({

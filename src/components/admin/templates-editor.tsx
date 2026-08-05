@@ -20,6 +20,7 @@ const FIELDS = [
   { section: "Versand & Rücksendung" },
   { key: "fulfillment_name", label: "Name/Zusatz fürs Paket (leer = Inhaber/in von oben)" },
   { key: "fulfillment_address", label: "Lager-/Rücksendeadresse — WICHTIG: separat vom Impressum oben, das ist der Ort, an den Kunden Regale zurückschicken" },
+  { key: "return_window_days", label: "Rückgabefenster in Tagen (nur Hinweis im Admin, blockiert nichts)" },
   { section: "E-Mail Texte" },
   { key: "email_greeting", label: "Begrüßungstext (Bestellbestätigung)" },
   { key: "email_confirm_heading", label: "Überschrift (Konto bestätigen) — {name} wird ersetzt" },
