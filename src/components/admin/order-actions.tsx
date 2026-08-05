@@ -37,8 +37,14 @@ export function OrderActions({ order, locale }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Fehler");
+      // An unhandled server exception (e.g. an uncaught Stripe API error)
+      // returns an empty body or an HTML error page, not JSON — res.json()
+      // on that throws an opaque "Unexpected end of JSON input" that hides
+      // the real cause.
+      const raw = await res.text();
+      let data: { error?: string } | null = null;
+      try { data = raw ? JSON.parse(raw) : null; } catch { /* not JSON */ }
+      if (!res.ok) throw new Error(data?.error ?? `Serverfehler (${res.status})`);
       setMessage("✓ Erfolgreich");
       setActivePanel(null);
       router.refresh();

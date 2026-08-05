@@ -17,14 +17,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { data: order } = await supabaseAdmin.from("orders").select("*").eq("id", id).single();
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
-  // Get payment intent from Stripe session
-  const session = await stripe.checkout.sessions.retrieve(order.stripe_session_id);
-  if (!session.payment_intent) {
-    return NextResponse.json({ error: "No payment intent found" }, { status: 400 });
-  }
-
+  // stripe_session_id stores the PaymentIntent id (checkout uses Stripe
+  // Elements + PaymentIntents directly, not Checkout Sessions — see
+  // resend-email/route.ts). Retrieving it via checkout.sessions.retrieve()
+  // threw a Stripe "resource_missing" error for every refund attempt.
   const refund = await stripe.refunds.create({
-    payment_intent: session.payment_intent as string,
+    payment_intent: order.stripe_session_id,
     ...(amount ? { amount } : {}),
     reason: reason === "duplicate" ? "duplicate" : reason === "fraudulent" ? "fraudulent" : "requested_by_customer",
   });
