@@ -45,9 +45,9 @@
   },
   "home": {
     "hero": {
-      "line1": "Deine Wände",
-      "line2": "sind nicht gerade.",
-      "line3": "Unsere Regale wissen das.",
+      "line1": "Deine Räume",
+      "line2": "ändern sich.",
+      "line3": "Dein Regal dreht sich mit.",
       "cta": "Zum Regal",
       "scroll": "Weiterscrollen"
     },
@@ -59,19 +59,19 @@
     "featured": {
       "label": "Erstes Objekt",
       "name": "VLip",
-      "description": "Massives Teak. Stufenlos verstellbar. Passt sich jeder Ecke an.",
+      "description": "Massives Teak. Drehbar gelagert. Ein Regal — Innenecke, Außenecke, gerade Wand.",
       "cta": "Objekt ansehen"
     },
     "adapts": {
       "label": "Konzept",
-      "heading": "Passt sich an.",
-      "headingLine2": "An jede Wand.",
-      "body": "Keine Wand ist wie die andere. Das Teak-Regal gleicht Unebenheiten aus — stufenlos, unsichtbar, präzise."
+      "heading": "Innenecke. Außenecke.",
+      "headingLine2": "Oder einfach Wand.",
+      "body": "In der Mitte sitzt ein Kugellager. VLip legt sich in die Ecke, greift um sie herum oder liegt flach an der Wand — und wenn dir nach Veränderung ist, drehst du es einfach in eine neue Form. Direkt an der Wand, ohne Abhängen, ohne Werkzeug."
     },
     "angle": {
       "label": "Präzision",
-      "range": "85°–95°",
-      "body": "Stufenlos einstellbar. Jede echte Ecke liegt dazwischen — Altbau, Neubau, Dachgeschoss."
+      "range": "90°–270°",
+      "body": "Stufenlos drehbar. Innenecke, gerade Wand, Außenecke — und Spielraum für jede schiefe Wand dazwischen."
     },
     "material": {
       "label": "Material",
@@ -101,7 +101,7 @@
     "hero": {
       "type": "Wandregal",
       "name": "VLip",
-      "tagline": "Das Regal, das sich deinen Wänden anpasst.",
+      "tagline": "Das Regal, das sich dreht: Innenecke, Außenecke, Wand.",
       "price": "399 €",
       "priceNote": "Massives Teak, kein Furnier. Gebaut, um zu bleiben.",
       "availability": "Erste Auflage — Lieferung ab Anfang September",
@@ -109,8 +109,8 @@
       "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe",
       "mounting": "Verdeckte Montage · Dübel inklusive · ohne Werkzeug nachstellbar",
       "trust": {
-        "adjustableValue": "85°–95°",
-        "adjustableLabel": "Stufenlos",
+        "adjustableValue": "90°–270°",
+        "adjustableLabel": "Drehbar",
         "materialValue": "Teak",
         "materialLabel": "Massiv",
         "loadValue": "15 kg",
@@ -132,7 +132,7 @@
       "materialLabel": "Material",
       "materialValue": "Massives Teakholz, geölt",
       "rangeLabel": "Verstellung",
-      "rangeValue": "Stufenlos, 85°–95°",
+      "rangeValue": "Stufenlos drehbar, Innenecke bis Außenecke (90°–270°), einklappbar",
       "mountingLabel": "Montage",
       "mountingValue": "Verdeckte Wandmontage · Dübel inklusive",
       "loadLabel": "Tragkraft",
@@ -141,16 +141,16 @@
     "use": {
       "label": "Anwendung",
       "heading": "Ein Regal. Jeder Winkel.",
-      "body": "Der integrierte Mechanismus gleicht Wandwinkel von 85 bis 95 Grad aus — unsichtbar, ohne Werkzeug nachstellbar. Und mit dem Winkel ändert sich der Look: Dasselbe Regal wirkt in jeder Ecke anders. Ob Altbau-Charme oder Neubau-Präzision: VINKL sitzt.",
-      "altbauLabel": "Altbau",
-      "altbauAngle": "87°",
-      "altbauDesc": "Schiefe Wände, voller Charakter.",
-      "neubauLabel": "Neubau",
-      "neubauAngle": "90°",
-      "neubauDesc": "Gerade Wände, saubere Linien.",
-      "dachLabel": "Dachschräge",
-      "dachAngle": "93°",
-      "dachDesc": "Dort, wo andere aufgeben."
+      "body": "In der Mitte von VLip sitzt ein Kugellager. Es dreht sich dahin, wo du es brauchst: in die Innenecke, um die Außenecke, flach an die Wand — oder eingeklappt auf eine Seite. Der Winkel bleibt jederzeit verstellbar, auch montiert. Mit jeder Drehung ändert sich der Look: ein Regal, an dem man sich nicht sattsieht. Und schiefe Wände gleicht es nebenbei aus — stufenlos, unsichtbar, ohne Werkzeug.",
+      "innenLabel": "Innenecke",
+      "innenAngle": "90°",
+      "innenDesc": "Legt sich in die Ecke. Schiefe Wände? Gleicht es stufenlos aus.",
+      "wandLabel": "Gerade Wand",
+      "wandAngle": "180°",
+      "wandDesc": "Ganz ohne Ecke — liegt flach an und wirkt wie ein Relief.",
+      "aussenLabel": "Außenecke",
+      "aussenAngle": "270°",
+      "aussenDesc": "Greift um die Ecke. Dort, wo andere aufgeben."
     }
   },
   "journal": {

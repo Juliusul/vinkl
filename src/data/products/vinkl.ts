@@ -14,9 +14,9 @@ export const vinklProduct: Product = {
   slug: "vinkl",
   title: "VLip",
   description:
-    "Corner wall shelf in solid teak with continuously adjustable angle mechanism. Adapts to any wall angle.",
+    "Solid teak wall shelf on a central pivot bearing. Mounts in inside corners, around outside corners, or flat on the wall — and can be reconfigured any time, even after mounting.",
   descriptionHtml:
-    "<p>Corner wall shelf in solid teak with continuously adjustable angle mechanism. Adapts to any wall angle.</p>",
+    "<p>Solid teak wall shelf on a central pivot bearing. Mounts in inside corners, around outside corners, or flat on the wall — and can be reconfigured any time, even after mounting.</p>",
   price: {
     amount: "399.00",
     currencyCode: "EUR",
@@ -63,12 +63,12 @@ export const vinklProduct: Product = {
       selectedOptions: [{ name: "Size", value: "80 × 25 × 30 cm" }],
     },
   ],
-  tags: ["shelf", "teak", "corner", "wall-mount", "adjustable"],
+  tags: ["shelf", "teak", "corner", "wall-mount", "adjustable", "pivoting"],
   productType: "Corner Wall Shelf",
   seo: {
     title: "VLip — Adjustable Teak Corner Shelf",
     description:
-      "Solid teak corner wall shelf with stepless invisible angle adjustment. Designed for real rooms.",
+      "Solid teak wall shelf on a pivot bearing: inside corner, outside corner, or flat wall. Change the look any time. Designed for real rooms.",
   },
   createdAt: "2025-01-01T00:00:00Z",
   updatedAt: "2025-01-01T00:00:00Z",

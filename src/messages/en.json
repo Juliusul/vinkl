@@ -45,9 +45,9 @@
   },
   "home": {
     "hero": {
-      "line1": "Your walls",
-      "line2": "aren't straight.",
-      "line3": "Our shelves know that.",
+      "line1": "Your rooms",
+      "line2": "keep changing.",
+      "line3": "Your shelf turns with them.",
       "cta": "View shelf",
       "scroll": "Scroll to explore"
     },
@@ -59,19 +59,19 @@
     "featured": {
       "label": "First Object",
       "name": "VLip",
-      "description": "Solid teak. Continuously adjustable. Adapts to every corner.",
+      "description": "Solid teak. Pivot-mounted. One shelf — inside corner, outside corner, flat wall.",
       "cta": "View object"
     },
     "adapts": {
       "label": "Concept",
-      "heading": "Adapts.",
-      "headingLine2": "To every wall.",
-      "body": "No two walls are alike. The teak shelf compensates for irregularities — continuously, invisibly, precisely."
+      "heading": "Inside corner. Outside corner.",
+      "headingLine2": "Or just a wall.",
+      "body": "At its center sits a ball bearing. VLip settles into the corner, wraps around it, or lies flat against the wall — and when you feel like a change, you simply turn it into a new shape. Right on the wall, no unmounting, no tools."
     },
     "angle": {
       "label": "Precision",
-      "range": "85°–95°",
-      "body": "Steplessly adjustable. Every real corner falls in between — old building, new build, attic."
+      "range": "90°–270°",
+      "body": "Continuously rotatable. Inside corner, flat wall, outside corner — with room for every crooked wall in between."
     },
     "material": {
       "label": "Material",
@@ -101,7 +101,7 @@
     "hero": {
       "type": "Wall Shelf",
       "name": "VLip",
-      "tagline": "The shelf that adapts to your walls.",
+      "tagline": "The shelf that turns: inside corner, outside corner, wall.",
       "price": "€399",
       "priceNote": "Solid teak, no veneer. Built to stay.",
       "availability": "First edition — ships early September",
@@ -109,8 +109,8 @@
       "shipping": "Free shipping in DE · 30-day returns",
       "mounting": "Concealed mount · Anchors included · Readjusts without tools",
       "trust": {
-        "adjustableValue": "85°–95°",
-        "adjustableLabel": "Stepless",
+        "adjustableValue": "90°–270°",
+        "adjustableLabel": "Pivoting",
         "materialValue": "Teak",
         "materialLabel": "Solid",
         "loadValue": "15 kg",
@@ -132,7 +132,7 @@
       "materialLabel": "Material",
       "materialValue": "Solid teak, oiled",
       "rangeLabel": "Adjustment",
-      "rangeValue": "Stepless, 85°–95°",
+      "rangeValue": "Continuous pivot, inside to outside corner (90°–270°), folds flat",
       "mountingLabel": "Mounting",
       "mountingValue": "Concealed wall mount · Anchors included",
       "loadLabel": "Load Capacity",
@@ -141,16 +141,16 @@
     "use": {
       "label": "Application",
       "heading": "One shelf. Every angle.",
-      "body": "The integrated mechanism compensates for wall angles from 85 to 95 degrees — invisibly, adjustable without tools. And as the angle changes, so does the look: the same shelf reads differently in every corner. Whether old-building charm or new-build precision: VINKL fits.",
-      "altbauLabel": "Old building",
-      "altbauAngle": "87°",
-      "altbauDesc": "Crooked walls, full of character.",
-      "neubauLabel": "New build",
-      "neubauAngle": "90°",
-      "neubauDesc": "Straight walls, clean lines.",
-      "dachLabel": "Sloped ceiling",
-      "dachAngle": "93°",
-      "dachDesc": "Where others give up."
+      "body": "At the heart of VLip sits a ball bearing. It turns to wherever you need it: into the inside corner, around the outside corner, flat against the wall — or folded onto one side. The angle stays adjustable at any time, even mounted. Every turn changes the look: a shelf you never tire of. And crooked walls? Compensated along the way — continuously, invisibly, without tools.",
+      "innenLabel": "Inside corner",
+      "innenAngle": "90°",
+      "innenDesc": "Settles into the corner. Crooked walls? Steplessly compensated.",
+      "wandLabel": "Flat wall",
+      "wandAngle": "180°",
+      "wandDesc": "No corner needed — lies flat and reads like a relief.",
+      "aussenLabel": "Outside corner",
+      "aussenAngle": "270°",
+      "aussenDesc": "Wraps around the corner. Where others give up."
     }
   },
   "journal": {

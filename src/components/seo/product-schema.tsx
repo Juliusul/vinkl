@@ -107,7 +107,7 @@ export function ProductSchema({ product, locale }: ProductSchemaProps) {
       {
         "@type": "PropertyValue",
         name: "Adjustment",
-        value: "Stepless, 85°–95°",
+        value: "Continuous pivot, inside to outside corner (90°–270°), folds flat",
       },
       {
         "@type": "PropertyValue",

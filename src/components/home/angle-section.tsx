@@ -4,7 +4,7 @@ import { Reveal } from "@/components/ui/reveal";
 /**
  * Angle — the precision moment.
  *
- * Centred, typographic impact. The numbers 85°–95° are
+ * Centred, typographic impact. The pivot range 90°–270° is
  * the visual anchor — displayed at display scale,
  * serif, terracotta accent. This section breathes.
  * No image. Pure confidence in the number.

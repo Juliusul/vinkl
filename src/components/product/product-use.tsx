@@ -3,39 +3,40 @@ import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/reveal";
 
 /**
- * Product Use — the architectural application.
+ * Product Use — the versatility story.
  *
- * Three scenario cards (Altbau, Neubau, Dachschräge)
- * with angle numbers in terracotta and product images.
+ * Three mounting scenarios (Innenecke 90°, Gerade Wand 180°,
+ * Außenecke 270°) with angle numbers in terracotta and the matching
+ * render for each configuration — the pivot bearing is the USP.
  */
 
-const SCENARIO_IMAGES = [
-  "/images/vinkl-regal-4.webp",
-  "/images/vinkl-regal-3.webp",
-  "/images/vinkl-regal-5.webp",
-] as const;
+const SCENARIO_IMAGES = {
+  innen: "/images/vinkl-regal-4.webp", // inside corner
+  wand: "/images/vinkl-regal-5.webp", // flat wall, fully open
+  aussen: "/images/vinkl-regal-3.webp", // wrapped around an outside corner
+} as const;
 
 export function ProductUse() {
   const t = useTranslations("vinkl.use");
 
   const scenarios = [
     {
-      label: t("altbauLabel"),
-      angle: t("altbauAngle"),
-      desc: t("altbauDesc"),
-      image: SCENARIO_IMAGES[0],
+      label: t("innenLabel"),
+      angle: t("innenAngle"),
+      desc: t("innenDesc"),
+      image: SCENARIO_IMAGES.innen,
     },
     {
-      label: t("neubauLabel"),
-      angle: t("neubauAngle"),
-      desc: t("neubauDesc"),
-      image: SCENARIO_IMAGES[1],
+      label: t("wandLabel"),
+      angle: t("wandAngle"),
+      desc: t("wandDesc"),
+      image: SCENARIO_IMAGES.wand,
     },
     {
-      label: t("dachLabel"),
-      angle: t("dachAngle"),
-      desc: t("dachDesc"),
-      image: SCENARIO_IMAGES[2],
+      label: t("aussenLabel"),
+      angle: t("aussenAngle"),
+      desc: t("aussenDesc"),
+      image: SCENARIO_IMAGES.aussen,
     },
   ];
 
