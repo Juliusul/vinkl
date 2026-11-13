@@ -108,6 +108,19 @@
       "addToCart": "Add to cart",
       "shipping": "Free shipping in DE · 30-day returns",
       "mounting": "Concealed mount · Anchors included · Readjusts without tools",
+      "finish": {
+        "label": "Finish",
+        "intro": "Teak naturally contains oils, making it exceptionally resistant to moisture and the elements.",
+        "natural": {
+          "name": "Untreated",
+          "description": "Teak in its original form: naturally robust, durable, and full of character. The natural grain and warm tone remain untouched. Over time the wood develops a natural patina — depending on its surroundings it may become slightly lighter or more matte."
+        },
+        "oiled": {
+          "name": "Oiled",
+          "description": "An additional oil treatment deepens the natural grain and gives the teak a richer, slightly darker tone. It also adds extra protection against moisture and stains."
+        },
+        "care": "Care: depending on use, oiled wood should be re-oiled from time to time."
+      },
       "trust": {
         "adjustableValue": "90°–270°",
         "adjustableLabel": "Pivoting",
@@ -130,7 +143,7 @@
       "weightLabel": "Weight",
       "weightValue": "4.8 kg",
       "materialLabel": "Material",
-      "materialValue": "Solid teak, oiled",
+      "materialValue": "Solid teak — untreated or oiled",
       "rangeLabel": "Adjustment",
       "rangeValue": "Continuous pivot, inside to outside corner (90°–270°), folds flat",
       "mountingLabel": "Mounting",
@@ -292,7 +305,11 @@
     "shipping": "Shipping calculated at checkout",
     "close": "Close",
     "continueShopping": "Continue shopping",
-    "adding": "Adding..."
+    "adding": "Adding...",
+    "finish": {
+      "natural": "Untreated",
+      "oiled": "Oiled"
+    }
   },
   "notFound": {
     "title": "Page not found",

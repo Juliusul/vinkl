@@ -23,32 +23,42 @@ interface StoredLine {
 }
 
 function buildCart(lines: StoredLine[]): Cart {
-  const variant = vinklProduct.variants[0];
-  const pricePerUnit = parseFloat(vinklProduct.price.amount);
   const currency = vinklProduct.price.currencyCode;
   const totalQuantity = lines.reduce((sum, l) => sum + l.quantity, 0);
-  const totalAmount = (pricePerUnit * totalQuantity).toFixed(2);
 
-  const cartLines: CartLine[] = lines.map((l) => ({
-    id: l.lineId,
-    quantity: l.quantity,
-    cost: {
-      totalAmount: {
-        amount: (pricePerUnit * l.quantity).toFixed(2),
-        currencyCode: currency,
+  // Resolve each line's variant; fall back to the first variant for
+  // ids from older stored carts (e.g. the retired "vinkl-default").
+  const resolveVariant = (variantId: string) =>
+    vinklProduct.variants.find((v) => v.id === variantId) ??
+    vinklProduct.variants[0];
+
+  let subtotal = 0;
+  const cartLines: CartLine[] = lines.map((l) => {
+    const variant = resolveVariant(l.variantId);
+    const pricePerUnit = parseFloat(variant.price.amount);
+    subtotal += pricePerUnit * l.quantity;
+    return {
+      id: l.lineId,
+      quantity: l.quantity,
+      cost: {
+        totalAmount: {
+          amount: (pricePerUnit * l.quantity).toFixed(2),
+          currencyCode: currency,
+        },
       },
-    },
-    merchandise: {
-      id: variant.id,
-      title: variant.title,
-      selectedOptions: variant.selectedOptions,
-      product: {
-        title: vinklProduct.title,
-        slug: vinklProduct.slug,
-        featuredImage: vinklProduct.images[0],
+      merchandise: {
+        id: variant.id,
+        title: variant.title,
+        selectedOptions: variant.selectedOptions,
+        product: {
+          title: vinklProduct.title,
+          slug: vinklProduct.slug,
+          featuredImage: vinklProduct.images[0],
+        },
       },
-    },
-  }));
+    };
+  });
+  const totalAmount = subtotal.toFixed(2);
 
   return {
     id: "local",

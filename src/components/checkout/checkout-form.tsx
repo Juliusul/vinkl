@@ -122,7 +122,15 @@ function LoginWidget({ onLoggedIn }: { onLoggedIn: (name: string, email: string)
 }
 
 // ─── Order summary ────────────────────────────────────────────────────────────
-function OrderSummary({ quantity, total, collapsible, kleinunternehmer }: { quantity: number; total: number; collapsible?: boolean; kleinunternehmer?: boolean }) {
+/** "Naturbelassen × 2 · Geölt × 1" — empty when no finish info is present. */
+function finishSummary(natural: number, oiled: number): string {
+  const parts: string[] = [];
+  if (natural > 0) parts.push(`Naturbelassen × ${natural}`);
+  if (oiled > 0) parts.push(`Geölt × ${oiled}`);
+  return parts.join(" · ");
+}
+
+function OrderSummary({ quantity, total, finishNatural = 0, finishOiled = 0, collapsible, kleinunternehmer }: { quantity: number; total: number; finishNatural?: number; finishOiled?: number; collapsible?: boolean; kleinunternehmer?: boolean }) {
   const [open, setOpen] = useState(!collapsible);
 
   return (
@@ -150,6 +158,11 @@ function OrderSummary({ quantity, total, collapsible, kleinunternehmer }: { quan
             <div>
               <p style={{ fontSize: 13, color: "#1a1a1a", margin: "0 0 3px", fontWeight: 500 }}>{PRODUCT_NAME}</p>
               <p style={{ fontSize: 11, color: "#888", margin: "0 0 3px", lineHeight: 1.5 }}>{PRODUCT_DESC}</p>
+              {finishSummary(finishNatural, finishOiled) && (
+                <p style={{ fontSize: 11, color: "#888", margin: "0 0 3px", lineHeight: 1.5 }}>
+                  Oberfläche: {finishSummary(finishNatural, finishOiled)}
+                </p>
+              )}
               <p style={{ fontSize: 11, color: "#888", margin: 0, fontFamily: "monospace" }}>Menge: {quantity}</p>
             </div>
           </div>
@@ -176,9 +189,9 @@ function OrderSummary({ quantity, total, collapsible, kleinunternehmer }: { quan
 }
 
 // ─── Main checkout form ───────────────────────────────────────────────────────
-interface Props { quantity: number; locale: string; siteUrl: string; kleinunternehmer?: boolean; }
+interface Props { quantity: number; finishNatural?: number; finishOiled?: number; locale: string; siteUrl: string; kleinunternehmer?: boolean; }
 
-export function CheckoutForm({ quantity, locale, siteUrl, kleinunternehmer }: Props) {
+export function CheckoutForm({ quantity, finishNatural = 0, finishOiled = 0, locale, siteUrl, kleinunternehmer }: Props) {
   const [step, setStep] = useState<"info" | "payment">("info");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loadingIntent, setLoadingIntent] = useState(false);
@@ -243,7 +256,7 @@ export function CheckoutForm({ quantity, locale, siteUrl, kleinunternehmer }: Pr
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity, locale, name, email, address: { line1, city, postal_code: postal, country } }),
+        body: JSON.stringify({ quantity, finishNatural, finishOiled, locale, name, email, address: { line1, city, postal_code: postal, country } }),
       });
       const data = await res.json();
       if (!res.ok || !data.clientSecret) { setIntentError(data.detail ?? "Fehler beim Starten des Checkouts."); return; }
@@ -251,7 +264,7 @@ export function CheckoutForm({ quantity, locale, siteUrl, kleinunternehmer }: Pr
       setStep("payment");
     } catch { setIntentError("Netzwerkfehler. Bitte versuche es erneut."); }
     finally { setLoadingIntent(false); }
-  }, [quantity, locale, name, email, line1, city, postal, country, loggedIn, createAccount, accountCreated, accountPw, accountPw2]);
+  }, [quantity, finishNatural, finishOiled, locale, name, email, line1, city, postal, country, loggedIn, createAccount, accountCreated, accountPw, accountPw2]);
 
   return (
     <>
@@ -338,7 +351,7 @@ export function CheckoutForm({ quantity, locale, siteUrl, kleinunternehmer }: Pr
       <div className="co-wrap">
         {/* ── Mobile order summary (collapsible) ── */}
         <div className="co-summary-mobile">
-          <OrderSummary quantity={quantity} total={total} collapsible kleinunternehmer={kleinunternehmer} />
+          <OrderSummary quantity={quantity} total={total} finishNatural={finishNatural} finishOiled={finishOiled} collapsible kleinunternehmer={kleinunternehmer} />
         </div>
 
         {/* ── Form column ── */}
@@ -483,7 +496,7 @@ export function CheckoutForm({ quantity, locale, siteUrl, kleinunternehmer }: Pr
 
         {/* ── Desktop order summary sidebar ── */}
         <div className="co-summary-desktop">
-          <OrderSummary quantity={quantity} total={total} kleinunternehmer={kleinunternehmer} />
+          <OrderSummary quantity={quantity} total={total} finishNatural={finishNatural} finishOiled={finishOiled} kleinunternehmer={kleinunternehmer} />
         </div>
       </div>
     </>

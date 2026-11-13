@@ -52,15 +52,33 @@ export const vinklProduct: Product = {
   ],
   variants: [
     {
-      id: "gid://shopify/ProductVariant/vinkl-default",
-      title: "Default",
+      id: "gid://shopify/ProductVariant/vinkl-natural",
+      title: "Naturbelassen",
       available: true,
       price: {
         amount: "399.00",
         currencyCode: "EUR",
       },
       compareAtPrice: null,
-      selectedOptions: [{ name: "Size", value: "80 × 25 × 30 cm" }],
+      selectedOptions: [
+        // "finish" is a stable key, translated in the UI (natural | oiled)
+        { name: "finish", value: "natural" },
+        { name: "Size", value: "80 × 25 × 30 cm" },
+      ],
+    },
+    {
+      id: "gid://shopify/ProductVariant/vinkl-oiled",
+      title: "Geölt",
+      available: true,
+      price: {
+        amount: "399.00",
+        currencyCode: "EUR",
+      },
+      compareAtPrice: null,
+      selectedOptions: [
+        { name: "finish", value: "oiled" },
+        { name: "Size", value: "80 × 25 × 30 cm" },
+      ],
     },
   ],
   tags: ["shelf", "teak", "corner", "wall-mount", "adjustable", "pivoting"],

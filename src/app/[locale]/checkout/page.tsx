@@ -5,15 +5,19 @@ import Link from "next/link";
 
 interface Props {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ quantity?: string }>;
+  searchParams: Promise<{ quantity?: string; natural?: string; oiled?: string }>;
 }
 
 export default async function CheckoutPage({ params, searchParams }: Props) {
   const { locale } = await params;
-  const { quantity: qStr } = await searchParams;
+  const { quantity: qStr, natural: nStr, oiled: oStr } = await searchParams;
   setRequestLocale(locale);
 
   const quantity = Math.max(1, parseInt(qStr ?? "1") || 1);
+  // Finish breakdown (untreated/oiled teak). Links without these
+  // params leave both at 0 — the order then carries no finish info.
+  const finishNatural = Math.max(0, parseInt(nStr ?? "0") || 0);
+  const finishOiled = Math.max(0, parseInt(oStr ?? "0") || 0);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const settings = await getTemplateSettings();
   const kleinunternehmer = settings.seller_kleinunternehmer === "true";
@@ -34,7 +38,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
         </span>
       </header>
 
-      <CheckoutForm quantity={quantity} locale={locale} siteUrl={siteUrl} kleinunternehmer={kleinunternehmer} />
+      <CheckoutForm
+        quantity={quantity}
+        finishNatural={finishNatural}
+        finishOiled={finishOiled}
+        locale={locale}
+        siteUrl={siteUrl}
+        kleinunternehmer={kleinunternehmer}
+      />
     </div>
   );
 }

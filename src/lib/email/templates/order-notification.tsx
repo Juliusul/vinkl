@@ -55,6 +55,7 @@ export function OrderNotificationEmail({ paymentIntent: pi, invoiceNumber }: Pro
           }
         />
         <DataRow label="Menge" value={meta.quantity ?? "1"} />
+        {meta.finish ? <DataRow label="Oberfläche" value={meta.finish} /> : null}
         <DataRow
           label="Betrag"
           value={<span style={{ fontSize: 16, fontWeight: 500 }}>{gross} €</span>}

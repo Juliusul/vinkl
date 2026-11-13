@@ -19,16 +19,11 @@ export function AddToCartBar() {
   const tCart = useTranslations("cart");
   const { addItem, isAdding } = useCart();
   const [visible, setVisible] = useState(false);
-  const [variantId, setVariantId] = useState<string | null>(null);
 
   useEffect(() => {
     // Look for the main add-to-cart button by data attribute
     const mainCta = document.querySelector("[data-product-cta]");
     if (!mainCta) return;
-
-    // Read the variant ID from the button's data attribute or from the DOM
-    const vid = mainCta.getAttribute("data-variant-id");
-    if (vid) setVariantId(vid);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -43,7 +38,13 @@ export function AddToCartBar() {
   }, []);
 
   async function handleClick() {
-    if (!variantId || isAdding) return;
+    if (isAdding) return;
+    // Read at click time — the main CTA's variant changes with the
+    // selected finish, so a value captured on mount would go stale.
+    const variantId = document
+      .querySelector("[data-product-cta]")
+      ?.getAttribute("data-variant-id");
+    if (!variantId) return;
     await addItem(variantId);
   }
 

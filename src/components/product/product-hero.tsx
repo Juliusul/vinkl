@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ProductGallery } from "./product-gallery";
-import { AddToCartButton } from "./add-to-cart-button";
+import { FinishSelector } from "./finish-selector";
 import { WaitlistForm } from "@/components/waitlist/waitlist-form";
 import type { Product } from "@/types";
 
@@ -73,14 +73,11 @@ export function ProductHero({ product }: ProductHeroProps) {
               {t("availability")}
             </p>
 
-            {/* Add to cart */}
-            <AddToCartButton
-              variantId={product.variants[0]?.id ?? ""}
+            {/* Finish choice (untreated / oiled) + add to cart */}
+            <FinishSelector
+              variants={product.variants}
               available={product.available}
-              className="mt-6 w-full bg-ink-primary px-8 py-4 text-xs font-medium uppercase tracking-widest text-ink-inverse transition-[background-color,transform] duration-[--duration-normal] ease-[--ease-out] hover:bg-terracotta active:translate-y-px active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink-primary"
-            >
-              {t("addToCart")}
-            </AddToCartButton>
+            />
 
             {/* Shipping + mounting reassurance */}
             <p className="mt-4 text-center text-xs text-ink-tertiary">

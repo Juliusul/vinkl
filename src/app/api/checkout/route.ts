@@ -4,8 +4,17 @@ import { vinklProduct } from "@/data/products/vinkl";
 
 export async function POST(req: NextRequest) {
   try {
-    const { quantity, locale, name, email, address } = await req.json();
+    const { quantity, finishNatural, finishOiled, locale, name, email, address } = await req.json();
     const qty = Math.max(1, parseInt(quantity) || 1);
+
+    // Finish breakdown (untreated/oiled teak) — human-readable for
+    // the owner notification and the invoice line.
+    const qtyNatural = Math.max(0, parseInt(finishNatural) || 0);
+    const qtyOiled = Math.max(0, parseInt(finishOiled) || 0);
+    const finishParts: string[] = [];
+    if (qtyNatural > 0) finishParts.push(`Naturbelassen × ${qtyNatural}`);
+    if (qtyOiled > 0) finishParts.push(`Geölt × ${qtyOiled}`);
+    const finish = finishParts.join(" · ");
 
     // Single source of truth: the product data (EUR -> cents)
     const unitAmount = Math.round(parseFloat(vinklProduct.price.amount) * 100);
@@ -17,6 +26,7 @@ export async function POST(req: NextRequest) {
       automatic_payment_methods: { enabled: true },
       metadata: {
         quantity: String(qty),
+        finish,
         locale: locale ?? "de",
         customer_name: name ?? "",
         customer_email: email ?? "",

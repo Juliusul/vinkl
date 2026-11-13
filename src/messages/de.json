@@ -108,6 +108,19 @@
       "addToCart": "In den Warenkorb",
       "shipping": "Kostenloser Versand in DE · 30 Tage Rückgabe",
       "mounting": "Verdeckte Montage · Dübel inklusive · ohne Werkzeug nachstellbar",
+      "finish": {
+        "label": "Oberfläche",
+        "intro": "Teak enthält von Natur aus Öle und ist dadurch besonders widerstandsfähig gegen Feuchtigkeit und äußere Einflüsse.",
+        "natural": {
+          "name": "Naturbelassen",
+          "description": "Teak in seiner ursprünglichen Form: von Natur aus robust, langlebig und charakterstark. Die natürliche Maserung und der warme Holzton bleiben unverfälscht erhalten. Mit der Zeit entwickelt das Holz eine natürliche Patina — je nach Umgebung kann es etwas heller oder matter werden."
+        },
+        "oiled": {
+          "name": "Geölt",
+          "description": "Eine zusätzliche Ölbehandlung intensiviert die natürliche Maserung und verleiht dem Teakholz einen satteren, etwas dunkleren Farbton. Gleichzeitig bietet sie zusätzlichen Schutz vor Feuchtigkeit und Flecken."
+        },
+        "care": "Pflege: Geöltes Holz sollte je nach Beanspruchung gelegentlich nachgeölt werden."
+      },
       "trust": {
         "adjustableValue": "90°–270°",
         "adjustableLabel": "Drehbar",
@@ -130,7 +143,7 @@
       "weightLabel": "Gewicht",
       "weightValue": "4,8 kg",
       "materialLabel": "Material",
-      "materialValue": "Massives Teakholz, geölt",
+      "materialValue": "Massives Teakholz — naturbelassen oder geölt",
       "rangeLabel": "Verstellung",
       "rangeValue": "Stufenlos drehbar, Innenecke bis Außenecke (90°–270°), einklappbar",
       "mountingLabel": "Montage",
@@ -292,7 +305,11 @@
     "shipping": "Versand wird an der Kasse berechnet",
     "close": "Schliessen",
     "continueShopping": "Weiter einkaufen",
-    "adding": "Wird hinzugefügt..."
+    "adding": "Wird hinzugefügt...",
+    "finish": {
+      "natural": "Naturbelassen",
+      "oiled": "Geölt"
+    }
   },
   "notFound": {
     "title": "Seite nicht gefunden",

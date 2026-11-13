@@ -229,7 +229,10 @@ export async function generateInvoicePdfFromPaymentIntent(
         <View style={styles.tableRow}>
           <View style={styles.col1}>
             <Text style={styles.itemName}>VLip — Teak-Wandregal</Text>
-            <Text style={styles.itemDesc}>80 × 25 × 30 cm · Teakholz massiv · stufenlos verstellbar</Text>
+            <Text style={styles.itemDesc}>
+              80 × 25 × 30 cm · Teakholz massiv · stufenlos verstellbar
+              {meta.finish ? ` · ${meta.finish}` : ""}
+            </Text>
           </View>
           <Text style={[styles.cellText, styles.col2]}>{qty}</Text>
           <Text style={[styles.cellText, styles.col3]}>{fmt(lineAmount / parseInt(qty))}</Text>

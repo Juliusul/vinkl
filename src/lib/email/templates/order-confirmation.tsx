@@ -50,6 +50,7 @@ export function OrderConfirmationEmail({
           label="Produkt"
           value={`VLip Teak-Wandregal × ${meta.quantity ?? "1"}`}
         />
+        {meta.finish ? <DataRow label="Oberfläche" value={meta.finish} /> : null}
         <DataRow
           label="Gesamt"
           value={

@@ -17,7 +17,20 @@ export function CartSummary() {
 
   function handleCheckout() {
     closeCart();
-    router.push(`/${locale}/checkout?quantity=${totalQty}`);
+    // Per-finish quantities so the order records what to produce
+    const qtyOf = (finish: string) =>
+      cart!.lines
+        .filter((l) =>
+          l.merchandise.selectedOptions.some(
+            (o) => o.name === "finish" && o.value === finish,
+          ),
+        )
+        .reduce((sum, l) => sum + l.quantity, 0);
+    const natural = qtyOf("natural");
+    const oiled = qtyOf("oiled");
+    router.push(
+      `/${locale}/checkout?quantity=${totalQty}&natural=${natural}&oiled=${oiled}`,
+    );
   }
 
   return (

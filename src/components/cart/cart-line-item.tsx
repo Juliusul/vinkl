@@ -44,11 +44,22 @@ export function CartLineItem({ line }: CartLineItemProps) {
         <div className="flex items-start justify-between gap-2">
           <div>
             <p className="text-sm font-medium text-ink-primary">{productTitle}</p>
-            {line.merchandise.title !== "Default" && (
-              <p className="mt-0.5 text-xs text-ink-tertiary">
-                {line.merchandise.title}
-              </p>
-            )}
+            {(() => {
+              // Translate the finish option; fall back to the raw variant
+              // title for variants without one.
+              const finish = line.merchandise.selectedOptions.find(
+                (o) => o.name === "finish",
+              )?.value;
+              const label =
+                finish === "natural" || finish === "oiled"
+                  ? t(`finish.${finish}`)
+                  : line.merchandise.title !== "Default"
+                    ? line.merchandise.title
+                    : null;
+              return label ? (
+                <p className="mt-0.5 text-xs text-ink-tertiary">{label}</p>
+              ) : null;
+            })()}
           </div>
           <p className="text-sm tabular-nums text-ink-primary">{linePrice}</p>
         </div>
